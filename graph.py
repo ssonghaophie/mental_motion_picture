@@ -1,9 +1,12 @@
 """
+Original code from:
 https://www.python-course.eu/graphs_python.php
 
-A Python Class
-A simple Python graph class, demonstrating the essential
-facts and functionalities of graphs.
+A simple Python graph class.
+
+Changes:
+1. method name changed from add_edge() to add_reflex_edge()
+since the edge added by this method is always REFLEXIVE!
 """
 
 
@@ -39,9 +42,12 @@ class Graph(object):
         if vertex not in self._graph_dict:
             self._graph_dict[vertex] = []
 
-    def add_edge(self, edge):
+    def add_reflex_edge(self, edge):
         """ assumes that edge is of type set, tuple or list;
             between two vertices can be multiple edges!
+
+            method name changed from add_edge() to add_reflex_edge()
+            since the edge added by this method is always REFLEXIVE!
         """
         edge = set(edge)
         vertex1, vertex2 = tuple(edge)
