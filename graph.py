@@ -1,12 +1,6 @@
 """
-Original code from:
+The Graph class is adapted from
 https://www.python-course.eu/graphs_python.php
-
-A simple Python graph class.
-
-Changes:
-1. method name changed from add_edge() to add_reflex_edge()
-since the edge added by this method is always REFLEXIVE!
 """
 
 
@@ -21,37 +15,34 @@ class Graph(object):
             graph_dict = {}
         self._graph_dict = graph_dict
 
-    def edges(self, vertice):
+    def edges(self, object):
         """ returns a list of all the edges of a vertice"""
-        return self._graph_dict[vertice]
-
-    def all_vertices(self):
-        """ returns the vertices of a graph as a set """
-        return set(self._graph_dict.keys())
+        return self._graph_dict[object]
 
     def all_edges(self):
         """ returns the edges of a graph """
         return self.__generate_edges()
 
-    def add_vertex(self, vertex):
-        """ If the vertex "vertex" is not in
-            self._graph_dict, a key "vertex" with an empty
+    def all_objects(self):
+        """ returns the vertices of a graph as a set """
+        return set(self._graph_dict.keys())
+
+    def add_object(self, object):
+        """ If the object "object" is not in
+            self._graph_dict, a key "object" with an empty
             list as a value is added to the dictionary.
             Otherwise nothing has to be done.
         """
-        if vertex not in self._graph_dict:
-            self._graph_dict[vertex] = []
+        if object not in self._graph_dict:
+            self._graph_dict[object] = []
 
-    def add_reflex_edge(self, edge):
-        """ assumes that edge is of type set, tuple or list;
-            between two vertices can be multiple edges!
-
-            method name changed from add_edge() to add_reflex_edge()
-            since the edge added by this method is always REFLEXIVE!
+    def connect(self, edge):
+        """ connect two objects with a reflexive edge;
+            edge is of type tuple, like (obj1, obj2);
         """
         edge = set(edge)
-        vertex1, vertex2 = tuple(edge)
-        for x, y in [(vertex1, vertex2), (vertex2, vertex1)]:
+        obj1, obj2 = tuple(edge)
+        for x, y in [(obj1, obj2), (obj2, obj1)]:
             if x in self._graph_dict:
                 self._graph_dict[x].add(y)
             else:
@@ -64,10 +55,10 @@ class Graph(object):
             vertices
         """
         edges = []
-        for vertex in self._graph_dict:
-            for neighbour in self._graph_dict[vertex]:
-                if {neighbour, vertex} not in edges:
-                    edges.append({vertex, neighbour})
+        for object in self._graph_dict:
+            for neighbour in self._graph_dict[object]:
+                if (neighbour, object) not in edges:
+                    edges.append((object, neighbour))
         return edges
 
     def __iter__(self):
@@ -79,7 +70,7 @@ class Graph(object):
         return next(self._iter_obj)
 
     def __str__(self):
-        res = "vertices: "
+        res = "objects: "
         for k in self._graph_dict:
             res += str(k) + " "
         res += "\nedges: "
