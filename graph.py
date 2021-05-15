@@ -44,7 +44,7 @@ class Graph(object):
         obj1, obj2 = tuple(edge)
         for x, y in [(obj1, obj2), (obj2, obj1)]:
             if x in self._graph_dict:
-                self._graph_dict[x].add(y)
+                self._graph_dict[x].append(y)
             else:
                 self._graph_dict[x] = [y]
 

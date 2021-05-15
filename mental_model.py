@@ -1,4 +1,4 @@
-from map import Containment, Space
+from map import Containment, Space, Touching
 
 """
 The Mental_map class is adapted from the linked_list class from
@@ -7,22 +7,24 @@ https://github.com/bfaure/Python3_Data_Structures/blob/master/Linked_List/main.p
 
 
 class Time_step:
-    def __init__(self, containment, space):
+    def __init__(self, containment, space, touching):
         self.containment = containment
         self.space = space
+        self.touching = touching
         self.next = None
 
 
 class Mental_model:
-    def __init__(self, containment, space):
-        self.head = Time_step(containment, space)
+    def __init__(self, containment, space, touching):
+        self.head = Time_step(containment, space, touching)
 
     def advance_time(self):
         """copy the current Time_step to a new Time_step"""
         cur = self.head
         while cur.next is not None:
             cur = cur.next
-        new_node = Time_step(cur.containment.copy(), cur.space.copy())
+        new_node = Time_step(cur.containment.copy(),
+                             cur.space.copy(), cur.touching.copy())
         cur.next = new_node
 
     # def append(self, containment, space):
@@ -72,6 +74,10 @@ class Mental_model:
         """Returns the space map of the time_stamp at index"""
         return self.get(index).space
 
+    def get_touching(self, index):
+        """Returns the space map of the time_stamp at index"""
+        return self.get(index).touching
+
     def add_object(self, object):
         """add object to all maps of the last time_step"""
         cur = self.head
@@ -79,6 +85,7 @@ class Mental_model:
             cur = cur.next
         cur.containment.add_object(object)
         cur.space.add_object(object)
+        cur.touching.add_object(object)
 
     def contain(self, edge):
         """add an adge to the containment map of the last time_step"""
@@ -90,7 +97,15 @@ class Mental_model:
             if object not in cur.containment._graph_dict:
                 cur.containment.add_object(object)
                 cur.space.add_object(object)
+                cur.touching.add_object(object)
         cur.containment.contain(edge)
+
+    def x_contain(self, edge):
+        """remove an adge from the containment map of the last time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+        cur.containment.x_contain(edge)
 
     def above(self, edge):
         """add an adge to the space map of the last time_step"""
@@ -102,7 +117,15 @@ class Mental_model:
             if object not in cur.containment._graph_dict:
                 cur.containment.add_object(object)
                 cur.space.add_object(object)
+                cur.touching.add_object(object)
         cur.space.above(edge)
+
+    def x_above(self, edge):
+        """remove an adge from the space map of the last time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+        cur.space.x_above(edge)
 
     def under(self, edge):
         """add an adge to the space map of the last time_step"""
@@ -114,7 +137,35 @@ class Mental_model:
             if object not in cur.containment._graph_dict:
                 cur.containment.add_object(object)
                 cur.space.add_object(object)
+                cur.touching.add_object(object)
         cur.space.under(edge)
+
+    def x_under(self, edge):
+        """remove an adge from the space map of the last time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+        cur.space.x_under(edge)
+
+    def touch(self, edge):
+        """add an adge to the touching map of the last time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+
+        for object in edge:
+            if object not in cur.containment._graph_dict:
+                cur.containment.add_object(object)
+                cur.space.add_object(object)
+                cur.touching.add_object(object)
+        cur.touching.touch(edge)
+
+    def x_touch(self, edge):
+        """remove an adge from the touching map of the last time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+        cur.touching.x_touch(edge)
 
     def print(self, index):
         """ print the containment mape and space map
@@ -122,18 +173,21 @@ class Mental_model:
         """
         time_step = self.get(index)
 
-        print("CONTAINMENT RELATIONSHIP --------------------")
+        print("\nCONTAINMENT RELATIONSHIP --------------------")
         print(time_step.containment)
 
         print("\nSPATIAL RELATIONSHIP ------------------------")
         print(time_step.space)
+
+        print("\nTOUCHING RELATIONSHIP ------------------------")
+        print(time_step.touching)
 
     def __getitem__(self, index):
         """Allows for bracket operator syntax (i.e. a[0] = first item)"""
         return self.get(index)
 
 
-model = Mental_model(Containment(), Space())
+model = Mental_model(Containment(), Space(), Touching())
 model.add_object("water")
 
 model.advance_time()
@@ -150,4 +204,10 @@ model.contain(("soil", "rock"))  # soil contains rock
 model.above(("air", "rock"))  # air is above rock
 model.under(("soil", "sky"))  # soil is under sky
 
-model.print(1)
+model.touch(("soil", "air"))
+
+# model.x_contain(('soil', 'rock'))
+# model.x_under(('soil', 'air'))
+# model.x_touch(("soil", "air"))
+
+model.print(2)
