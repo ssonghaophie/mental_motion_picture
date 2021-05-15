@@ -25,13 +25,13 @@ class Mental_model:
         new_node = Time_step(cur.containment.copy(), cur.space.copy())
         cur.next = new_node
 
-    def append(self, containment, space):
-        """add a new Time_step"""
-        new_node = Time_step(containment, space)
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
-        cur.next = new_node
+    # def append(self, containment, space):
+    #     """add a new Time_step"""
+    #     new_node = Time_step(containment, space)
+    #     cur = self.head
+    #     while cur.next is not None:
+    #         cur = cur.next
+    #     cur.next = new_node
 
     def length(self):
         """return the total number of Time_steps"""
@@ -53,7 +53,7 @@ class Mental_model:
 
     def get(self, index):
         """Returns the value of the Time_step at a certain index"""
-        if index >= self.length() or index < 0:  # added 'index<0' post-video
+        if index >= self.length() or index < 0:
             print("ERROR: Index out of range!")
             return None
         cur_idx = 0
@@ -73,20 +73,58 @@ class Mental_model:
         return self.get(index).space
 
     def add_object(self, object):
-        """add object to both containment and space map of the last time_step"""
+        """add object to all maps of the last time_step"""
         cur = self.head
         while cur.next is not None:
             cur = cur.next
         cur.containment.add_object(object)
         cur.space.add_object(object)
 
+    def contain(self, edge):
+        """add an adge to the containment map of the last time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+
+        for object in edge:
+            if object not in cur.containment._graph_dict:
+                cur.containment.add_object(object)
+                cur.space.add_object(object)
+        cur.containment.contain(edge)
+
+    def above(self, edge):
+        """add an adge to the space map of the last time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+
+        for object in edge:
+            if object not in cur.containment._graph_dict:
+                cur.containment.add_object(object)
+                cur.space.add_object(object)
+        cur.space.above(edge)
+
+    def under(self, edge):
+        """add an adge to the space map of the last time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+
+        for object in edge:
+            if object not in cur.containment._graph_dict:
+                cur.containment.add_object(object)
+                cur.space.add_object(object)
+        cur.space.under(edge)
+
     def print(self, index):
         """ print the containment mape and space map
             of the Time_step at a certain index
         """
         time_step = self.get(index)
+
         print("CONTAINMENT RELATIONSHIP --------------------")
         print(time_step.containment)
+
         print("\nSPATIAL RELATIONSHIP ------------------------")
         print(time_step.space)
 
@@ -95,22 +133,21 @@ class Mental_model:
         return self.get(index)
 
 
-model1 = Mental_model(Containment(), Space())
-model1.add_object("water")
+model = Mental_model(Containment(), Space())
+model.add_object("water")
 
-model1.advance_time()
-model1.add_object("soil")
-model1.add_object("air")
-model1[1].containment.contain(("soil", "water"))
-model1[1].containment.contain(("air", "oxygen"))
-model1[1].space.above(("air", "soil"))  # air is above soil
+model.advance_time()
+model.add_object("soil")
+model.add_object("air")
+model.contain(("soil", "water"))
+model.contain(("air", "oxygen"))
+model.above(("air", "soil"))  # air is above soil
 
-model1.advance_time()
-model1.add_object("rock")
-model1.add_object("rock")
-model1.add_object("sky")
-model1[2].containment.contain(("soil", "rock"))  # soil contains rock
-model1[2].space.above(("air", "rock"))  # air is above rock
-model1[2].space.under(("soil", "sky"))  # soil is under sky
+model.advance_time()
+model.add_object("rock")
+model.add_object("sky")
+model.contain(("soil", "rock"))  # soil contains rock
+model.above(("air", "rock"))  # air is above rock
+model.under(("soil", "sky"))  # soil is under sky
 
-model1.print(2)
+model.print(1)
