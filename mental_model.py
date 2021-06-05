@@ -7,10 +7,13 @@ https://github.com/bfaure/Python3_Data_Structures/blob/master/Linked_List/main.p
 
 
 class Time_step:
+
     def __init__(self, containment, space, touching):
         self.containment = containment
         self.space = space
         self.touching = touching
+        self.action = {"PTRANS": [], "PSTOP": [],
+                       "INGEST": [], "EXPEL": [], "STATECHANGE": []}
         self.next = None
 
 
@@ -66,6 +69,13 @@ class Mental_model:
             cur_node = cur_node.next
             cur_idx += 1
 
+    def get_current(self):
+        """Return the current/last Time_step"""
+        cur = self.head
+        while cur.next is not None:
+            cur = cur.next
+        return cur
+
     def get_containment(self, index):
         """Returns the containment map of the time_stamp at index"""
         return self.get(index).containment
@@ -80,18 +90,14 @@ class Mental_model:
 
     def add_object(self, object):
         """add object to all maps of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
         cur.containment.add_object(object)
         cur.space.add_object(object)
         cur.touching.add_object(object)
 
     def contain(self, edge):
         """add an adge to the containment map of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
 
         for object in edge:
             if object not in cur.containment._graph_dict:
@@ -102,16 +108,12 @@ class Mental_model:
 
     def x_contain(self, edge):
         """remove an adge from the containment map of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
         cur.containment.x_contain(edge)
 
     def above(self, edge):
         """add an adge to the space map of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
 
         for object in edge:
             if object not in cur.containment._graph_dict:
@@ -122,16 +124,12 @@ class Mental_model:
 
     def x_above(self, edge):
         """remove an adge from the space map of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
         cur.space.x_above(edge)
 
     def under(self, edge):
         """add an adge to the space map of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
 
         for object in edge:
             if object not in cur.containment._graph_dict:
@@ -142,16 +140,12 @@ class Mental_model:
 
     def x_under(self, edge):
         """remove an adge from the space map of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
         cur.space.x_under(edge)
 
     def touch(self, edge):
         """add an adge to the touching map of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
 
         for object in edge:
             if object not in cur.containment._graph_dict:
@@ -162,9 +156,7 @@ class Mental_model:
 
     def x_touch(self, edge):
         """remove an adge from the touching map of the last time_step"""
-        cur = self.head
-        while cur.next is not None:
-            cur = cur.next
+        cur = self.get_current()
         cur.touching.x_touch(edge)
 
     def print(self, index):
@@ -173,41 +165,86 @@ class Mental_model:
         """
         time_step = self.get(index)
 
-        print("\nCONTAINMENT RELATIONSHIP --------------------")
+        print("\nCONTAINMENT RELATIONSHIP ---------------------")
         print(time_step.containment)
 
-        print("\nSPATIAL RELATIONSHIP ------------------------")
+        print("\nSPATIAL RELATIONSHIP -------------------------")
         print(time_step.space)
 
         print("\nTOUCHING RELATIONSHIP ------------------------")
         print(time_step.touching)
 
+        print("\nPRIMITIVE ACTIONS ----------------------------")
+        for action in time_step.action:
+            print(action, time_step.action[action])
+
     def __getitem__(self, index):
         """Allows for bracket operator syntax (i.e. a[0] = first item)"""
         return self.get(index)
+
+    def PTRANS(self, object, to=None, From=None):
+        cur = self.get_current()
+        cur.action["PTRANS"].append({})
+        cur.action["PTRANS"][-1]["object"] = object
+        cur.action["PTRANS"][-1]["to"] = to
+        cur.action["PTRANS"][-1]["from"] = From
+
+    def PSTOP(self, object):
+        cur = self.get_current()
+        cur.action["PSTOP"].append({})
+        cur.action["PSTOP"][-1]["object"] = object
+
+    def INGEST(self, object, container):
+        cur = self.get_current()
+        cur.action["INGEST"].append({})
+        cur.action["INGEST"][-1]["object"] = object
+        cur.action["INGEST"][-1]["container"] = container
+
+    def EXPEL(self, object, container):
+        cur = self.get_current()
+        cur.action["EXPEL"].append({})
+        cur.action["EXPEL"][-1]["object"] = object
+        cur.action["EXPEL"][-1]["container"] = container
+
+    def STATECHANGE(self, object, to):
+        cur = self.get_current()
+        cur.action["STATECHANGE"].append({})
+        cur.action["STATECHANGE"][-1]["object"] = object
+        cur.action["STATECHANGE"][-1]["to"] = to
 
 
 model = Mental_model(Containment(), Space(), Touching())
 model.add_object("water")
 
+# 1
 model.advance_time()
 model.add_object("soil")
 model.add_object("air")
+
 model.contain(("soil", "water"))
 model.contain(("air", "oxygen"))
 model.above(("air", "soil"))  # air is above soil
 
+model.INGEST(object="rock", container="soil")
+model.INGEST(object="oxygen", container="air")
+model.PSTOP(object="oxygen")
+
+# 2
 model.advance_time()
 model.add_object("rock")
 model.add_object("sky")
+
 model.contain(("soil", "rock"))  # soil contains rock
 model.above(("air", "rock"))  # air is above rock
 model.under(("soil", "sky"))  # soil is under sky
 
 model.touch(("soil", "air"))
 
+model.INGEST(object="water", container="soil")
+model.PTRANS(object="water", to="soil")
+
 # model.x_contain(('soil', 'rock'))
 # model.x_under(('soil', 'air'))
 # model.x_touch(("soil", "air"))
 
-model.print(2)
+model.print(1)
