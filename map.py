@@ -1,3 +1,20 @@
+"""
+Each time_step has three maps stored in it
+
+1. containment map: edge [M, N] means object M contains N
+
+2. spatial map: edge [M, N] means object M is closer to the center
+of the planet than object N is (i.e. M is lower than N)
+
+3. touching map: edge [M, N] means object M and N are touching each
+other at that particular time_step
+
+Each method that adds an edge to a map should also have a 
+correspoinding x_method that removes an edge from the map. For example,
+contain() adds an edge to the containment map and x_contain() removes
+an edge from the containment map.
+"""
+
 from graph import Graph
 
 
