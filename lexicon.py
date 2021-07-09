@@ -6,8 +6,14 @@ from map import Containment, Touching, Space
 # key - the word
 # value - definition of the word (a list of request objects)
 lex = {}
-lex["JACK"] = [Request(test=True, assign=None, next_packet=None)]
+lex["JACK"] = [Request(test=True, text="noun JACK", assign=None, next_packet=None)]
+lex["AND"] = [Request(test=True, text="conjunction AND", assign=None, next_packet=None)]
+lex["SUSAN"] = [Request(test=True, text="noun SUSAN", assign=None, next_packet=None)]
+lex["HAVE"] = [Request(test=True, text="verb HAVE", assign=None, next_packet=None)]
+lex["A"] = [Request(test=True, text="particle A", assign=None, next_packet=None)]
+lex["BALL"] = [Request(test=True, text="noun BALL", assign=None, next_packet=None)]
 
 analyzer = Analyzer(lexicon=lex)
 
-print(analyzer.parse("   !!!  Jack susan   HAVE a baLL   !!.;  ; ... ,"))
+print(analyzer.parse("   !!!  Jack And    susan   HAVE a baLL   !!.;  ; ... ,"))
+# print(analyzer.SENTENCE)
