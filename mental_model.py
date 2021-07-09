@@ -96,7 +96,7 @@ class Mental_model:
         cur.touching.add_object(object)
 
     def contain(self, edge):
-        """add an adge to the containment map of the last time_step"""
+        """add an edge to the containment map of the last time_step"""
         cur = self.get_current()
 
         for object in edge:
@@ -107,12 +107,12 @@ class Mental_model:
         cur.containment.contain(edge)
 
     def x_contain(self, edge):
-        """remove an adge from the containment map of the last time_step"""
+        """remove an edge from the containment map of the last time_step"""
         cur = self.get_current()
         cur.containment.x_contain(edge)
 
     def above(self, edge):
-        """add an adge to the space map of the last time_step"""
+        """add an edge to the space map of the last time_step"""
         cur = self.get_current()
 
         for object in edge:
@@ -123,12 +123,12 @@ class Mental_model:
         cur.space.above(edge)
 
     def x_above(self, edge):
-        """remove an adge from the space map of the last time_step"""
+        """remove an edge from the space map of the last time_step"""
         cur = self.get_current()
         cur.space.x_above(edge)
 
     def under(self, edge):
-        """add an adge to the space map of the last time_step"""
+        """add an edge to the space map of the last time_step"""
         cur = self.get_current()
 
         for object in edge:
@@ -139,12 +139,12 @@ class Mental_model:
         cur.space.under(edge)
 
     def x_under(self, edge):
-        """remove an adge from the space map of the last time_step"""
+        """remove an edge from the space map of the last time_step"""
         cur = self.get_current()
         cur.space.x_under(edge)
 
     def touch(self, edge):
-        """add an adge to the touching map of the last time_step"""
+        """add an edge to the touching map of the last time_step"""
         cur = self.get_current()
 
         for object in edge:
@@ -155,7 +155,7 @@ class Mental_model:
         cur.touching.touch(edge)
 
     def x_touch(self, edge):
-        """remove an adge from the touching map of the last time_step"""
+        """remove an edge from the touching map of the last time_step"""
         cur = self.get_current()
         cur.touching.x_touch(edge)
 
