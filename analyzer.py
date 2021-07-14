@@ -1,20 +1,17 @@
 # Each word entry in the lexicon is a list of Request objects
-
 class Request:
 
-    def __init__(self, test=False, text=None, assign=None, next_packet=None):
-        self.TEST = test
-        self.TEST_TEXT = text
-        self.ASSIGN = assign
+    def __init__(self, text=None, test=False, test_val=None, assign_val=None, next_packet=None):
+        self.TEXT = text  # short explanation of the Request
+        self.TEST = test  # boolean
+        self.TEST_VAL = test_val  # if all evaluations pass, set test to be True
+        self.ASSIGN_VAL = assign_val  # assignments to complete if test==True
         self.NEXT_PACKET = next_packet
 
 
 # the ELI analyzer
-
 class Analyzer:
-    # Global variables
-    part_of_speech = None
-    CD = None
+    val = {"CD": None, "part-of-speech": None}
 
     def __init__(self, lexicon: {}):
         self.SENTENCE = []  # list of words
@@ -46,9 +43,9 @@ class Analyzer:
                 trig_flag, trig_req = self.check_trig_req(self.STACK[-1])
                 if trig_flag:
                     self.TRIGGERED.append(trig_req)
-                    self.print_req(trig_req)
                     self.STACK.pop()
-                    self.execute_req(trig_req)
+                    if trig_req.ASSIGN_VAL:
+                        self.execute_assign(trig_req)
                 else:
                     break
 
@@ -59,10 +56,13 @@ class Analyzer:
                     self.STACK.append(cur_request.NEXT_PACKET)
 
         # if anything left on the stack, print it
-        print("THE END..............................\n")
+        print("\n________________________________________________________")
+        print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+        print("|||||||||||||||||||||| THE END |||||||||||||||||||||||||")
+        print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n")
         print(len(self.STACK), "word packet(s) left on STACK:")
         for packet in self.STACK:
-            print(" -", packet[0].TEST_TEXT)
+            print(" -", packet[0].TEXT)
 
     def split(self, sentence: str):
         """
@@ -88,7 +88,8 @@ class Analyzer:
         @return:
         """
         word = self.SENTENCE[self.pointer]
-        print("\nREAD WORD \"%s\"" % word)
+        print("--------------------------------------------------------")
+        print("READ WORD \"%s\"" % word)
 
         # check if the word has an entry in the lexicon
         if word in self.LEXICON:
@@ -100,8 +101,7 @@ class Analyzer:
         self.pointer += 1
         return packet
 
-    @staticmethod
-    def check_trig_req(packet: [Request]) -> (bool, Request):
+    def check_trig_req(self, packet: [Request]) -> (bool, Request):
         """
         check if there is a triggered Request in the packet. If yes, return the
         first triggered Request. If no, return an empty Request
@@ -110,25 +110,35 @@ class Analyzer:
         @return: (boolean, Request)
         """
         for req in packet:
+            if req.TEST_VAL:
+                self.evaluate_test_val(req)
+
+        # at this moment, the first request in the packet that has a True test
+        # value will be triggered and returned. However, it is possible that multiple
+        # requests in the packet have a True test value. We may need an algorithm to
+        # help decide the request that has the highest priority.
+        for req in packet:
             if req.TEST:
+                print("\nREQUEST TRIGGERED: %s" % req.TEXT)
                 return True, req
 
         return False, Request()
 
-    def execute_req(self, req: Request):
+    def evaluate_test_val(self, req: Request):
+        req.TEST = True
+        for var in req.TEST_VAL:
+            if req.TEST_VAL[var] != self.val[var]:
+                req.TEST = False
+                break
+
+    def execute_assign(self, req: Request):
         """
         execute assignments in the Request
 
         @param req:
         @return:
         """
-        Analyzer.print_exe(req)
-        pass
-
-    @staticmethod
-    def print_req(request: Request):
-        print(" - REQUEST TRIGGERED: \"%s\"" % request.TEST_TEXT)
-
-    @staticmethod
-    def print_exe(request: Request):
-        pass
+        print("\nASSIGNMENTS EXECUTED:")
+        for var in req.ASSIGN_VAL:
+            self.val[var] = req.ASSIGN_VAL[var]
+            print(" - SET %s TO %s" % (var, req.ASSIGN_VAL[var]))
