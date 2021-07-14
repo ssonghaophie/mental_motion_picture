@@ -1,4 +1,4 @@
-# Each word entry in the lexicon is a list of Request obecjects
+# Each word entry in the lexicon is a list of Request objects
 
 class Request:
 
@@ -45,6 +45,7 @@ class Analyzer:
             while self.STACK:
                 trig_flag, trig_req = self.check_trig_req(self.STACK[-1])
                 if trig_flag:
+                    self.TRIGGERED.append(trig_req)
                     self.print_req(trig_req)
                     self.STACK.pop()
                     self.execute_req(trig_req)
@@ -53,13 +54,15 @@ class Analyzer:
 
             # loop 3
             while self.TRIGGERED:
-                pass
+                cur_request = self.TRIGGERED.pop()
+                if cur_request.NEXT_PACKET:
+                    self.STACK.append(cur_request.NEXT_PACKET)
 
         # if anything left on the stack, print it
         print("THE END..............................\n")
         print(len(self.STACK), "word packet(s) left on STACK:")
         for packet in self.STACK:
-            print(" - ", packet[0].TEST_TEXT)
+            print(" -", packet[0].TEST_TEXT)
 
     def split(self, sentence: str):
         """
@@ -69,9 +72,9 @@ class Analyzer:
         @param sentence: input sentence
         @return:
         """
-
         # remove leading and trailing characters and put into uppercase
-        sentence = sentence.strip(".,?!;:/\\ ").upper()
+        sentence = "*START* " + sentence.strip(".,?;:/\\ !@#$%^&*").upper()
+
         # split on whitespace characters
         split = sentence.split()
         self.SENTENCE.extend(split)
@@ -85,7 +88,7 @@ class Analyzer:
         @return:
         """
         word = self.SENTENCE[self.pointer]
-        print("READ WORD \"%s\"" % word)
+        print("\nREAD WORD \"%s\"" % word)
 
         # check if the word has an entry in the lexicon
         if word in self.LEXICON:
@@ -124,7 +127,7 @@ class Analyzer:
 
     @staticmethod
     def print_req(request: Request):
-        print("REQUEST TRIGGERED: \"%s\"" % request.TEST_TEXT)
+        print(" - REQUEST TRIGGERED: \"%s\"" % request.TEST_TEXT)
 
     @staticmethod
     def print_exe(request: Request):
