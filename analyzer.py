@@ -55,6 +55,12 @@ class Analyzer:
             while self.TRIGGERED:
                 pass
 
+        # if anything left on the stack, print it
+        print("THE END..............................\n")
+        print(len(self.STACK), "word packet(s) left on STACK:")
+        for packet in self.STACK:
+            print(" - ", packet[0].TEST_TEXT)
+
     def split(self, sentence: str):
         """
         the input sentence is put into uppercase and split on all
