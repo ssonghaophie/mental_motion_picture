@@ -1,17 +1,23 @@
+from map import Containment, Space, Touching
+from mental_model import Time_step, Mental_model
+
+
 # Each word entry in the lexicon is a list of Request objects
 class Request:
 
-    def __init__(self, text=None, test=False, test_val=None, assign_val=None, next_packet=None):
+    def __init__(self, text=None, test_flag=False, tests=None, assigns=None, calls=None, next_packet=None):
         self.TEXT = text  # short explanation of the Request
-        self.TEST = test  # boolean
-        self.TEST_VAL = test_val  # if all evaluations pass, set test to be True
-        self.ASSIGN_VAL = assign_val  # assignments to complete if test==True
+        self.TEST_FLAG = test_flag  # boolean
+        self.TESTS = tests  # if all evaluations pass, set test to be True
+        self.ASSIGNS = assigns  # assignments to complete if test==True
+        self.CALLS = calls  # mental model function calls
         self.NEXT_PACKET = next_packet
 
 
 # the ELI analyzer
 class Analyzer:
-    val = {"CD": None, "part-of-speech": None}
+    vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None, "OBJECT": None}
+    model = Mental_model(Containment(), Space(), Touching())
 
     def __init__(self, lexicon: {}):
         self.SENTENCE = []  # list of words
@@ -29,7 +35,7 @@ class Analyzer:
         construct and run an analyzer
 
         @param sentence: input sentence
-        @return:
+        # @return:
         """
         self.split(sentence)
 
@@ -44,8 +50,11 @@ class Analyzer:
                 if trig_flag:
                     self.TRIGGERED.append(trig_req)
                     self.STACK.pop()
-                    if trig_req.ASSIGN_VAL:
+                    if trig_req.ASSIGNS:
                         self.execute_assign(trig_req)
+                    if trig_req.CALLS:
+                        self.function_call(trig_req)
+
                 else:
                     break
 
@@ -63,6 +72,10 @@ class Analyzer:
         print(len(self.STACK), "word packet(s) left on STACK:")
         for packet in self.STACK:
             print(" -", packet[0].TEXT)
+
+        # print the resulting mental model
+        print("\nmental model generated:")
+        print(self.model.print_latest())
 
     def split(self, sentence: str):
         """
@@ -89,7 +102,7 @@ class Analyzer:
         """
         word = self.SENTENCE[self.pointer]
         print("--------------------------------------------------------")
-        print("READ WORD \"%s\"" % word)
+        print("READ WORD: %s" % word)
 
         # check if the word has an entry in the lexicon
         if word in self.LEXICON:
@@ -110,25 +123,25 @@ class Analyzer:
         @return: (boolean, Request)
         """
         for req in packet:
-            if req.TEST_VAL:
-                self.evaluate_test_val(req)
+            if req.TESTS:
+                self.evaluate_tests(req)
 
         # at this moment, the first request in the packet that has a True test
         # value will be triggered and returned. However, it is possible that multiple
         # requests in the packet have a True test value. We may need an algorithm to
         # help decide the request that has the highest priority.
         for req in packet:
-            if req.TEST:
+            if req.TEST_FLAG:
                 print("\nREQUEST TRIGGERED: %s" % req.TEXT)
                 return True, req
 
         return False, Request()
 
-    def evaluate_test_val(self, req: Request):
-        req.TEST = True
-        for var in req.TEST_VAL:
-            if req.TEST_VAL[var] != self.val[var]:
-                req.TEST = False
+    def evaluate_tests(self, req: Request):
+        req.TEST_FLAG = True
+        for var in req.TESTS:
+            if req.TESTS[var] != self.vars[var]:
+                req.TEST_FLAG = False
                 break
 
     def execute_assign(self, req: Request):
@@ -138,7 +151,20 @@ class Analyzer:
         @param req:
         @return:
         """
-        print("\nASSIGNMENTS EXECUTED:")
-        for var in req.ASSIGN_VAL:
-            self.val[var] = req.ASSIGN_VAL[var]
-            print(" - SET %s TO %s" % (var, req.ASSIGN_VAL[var]))
+        print("\nASSIGNMENT(S) EXECUTED:")
+        for var in req.ASSIGNS:
+            # print(req.ASSIGNS[var])
+            if req.ASSIGNS[var][0] == "*":
+                s = self.vars[req.ASSIGNS[var][1:]]
+                self.vars[var] = s
+                print(" - SET %s TO %s(=%s)" % (var, req.ASSIGNS[var][1:], s))
+            else:
+                self.vars[var] = req.ASSIGNS[var]
+                print(" - SET %s TO %s" % (var, req.ASSIGNS[var]))
+
+    def function_call(self, req: Request):
+        print("FUNCTION CALL(S) TO MENTAL MODEL:")
+        if req.CALLS == "CONTAIN":
+            print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+            self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
+            self.model.INGEST(object=self.vars["CD"], container=self.vars["SUBJECT"])
