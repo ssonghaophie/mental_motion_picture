@@ -160,10 +160,26 @@ class Mental_model:
         cur.touching.x_touch(edge)
 
     def print(self, index):
-        """ print the containment mape and space map
+        """ print the containment map and space map
             of the Time_step at a certain index
         """
         time_step = self.get(index)
+
+        print("\nCONTAINMENT RELATIONSHIP ---------------------")
+        print(time_step.containment)
+
+        print("\nSPATIAL RELATIONSHIP -------------------------")
+        print(time_step.space)
+
+        print("\nTOUCHING RELATIONSHIP ------------------------")
+        print(time_step.touching)
+
+        print("\nPRIMITIVE ACTIONS ----------------------------")
+        for action in time_step.action:
+            print(action, time_step.action[action])
+
+    def print_latest(self):
+        time_step = self.get_current()
 
         print("\nCONTAINMENT RELATIONSHIP ---------------------")
         print(time_step.containment)
