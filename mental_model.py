@@ -212,18 +212,39 @@ class Mental_model:
 
     def INGEST(self, object, container):
         cur = self.get_current()
+
+        for thing in [object, container]:
+            if thing not in cur.containment._graph_dict:
+                cur.containment.add_object(thing)
+                cur.space.add_object(thing)
+                cur.touching.add_object(thing)
+
         cur.action["INGEST"].append({})
         cur.action["INGEST"][-1]["object"] = object
         cur.action["INGEST"][-1]["container"] = container
 
     def EXPEL(self, object, container):
         cur = self.get_current()
+
+        for thing in [object, container]:
+            if thing not in cur.containment._graph_dict:
+                cur.containment.add_object(thing)
+                cur.space.add_object(thing)
+                cur.touching.add_object(thing)
+
         cur.action["EXPEL"].append({})
         cur.action["EXPEL"][-1]["object"] = object
         cur.action["EXPEL"][-1]["container"] = container
 
     def STATECHANGE(self, object, to):
         cur = self.get_current()
+
+        for thing in [object, to]:
+            if thing not in cur.containment._graph_dict:
+                cur.containment.add_object(thing)
+                cur.space.add_object(thing)
+                cur.touching.add_object(thing)
+
         cur.action["STATECHANGE"].append({})
         cur.action["STATECHANGE"][-1]["object"] = object
         cur.action["STATECHANGE"][-1]["to"] = to
