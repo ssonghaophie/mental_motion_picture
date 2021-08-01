@@ -38,6 +38,12 @@ class Analyzer:
         # @return:
         """
         self.split(sentence)
+        # print the sentence
+        print("--------------------------------------------------------")
+        print("SENTENCE:", end=" ")
+        for word in self.SENTENCE[1:]:
+            print(word, end=" ")
+        print()
 
         # loop 1 - terminates when SENTENCE is empty
         while self.pointer < self.length:
@@ -55,6 +61,9 @@ class Analyzer:
                     if trig_req.CALLS:
                         self.function_call(trig_req)
 
+                elif not self.STACK[-1]:
+                    self.STACK.pop()
+                    break
                 else:
                     break
 
@@ -65,16 +74,18 @@ class Analyzer:
                     self.STACK.append(cur_request.NEXT_PACKET)
 
         # if anything left on the stack, print it
-        print("\n________________________________________________________")
-        print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+        print("\n--------------------------------------------------------")
         print("|||||||||||||||||||||| THE END |||||||||||||||||||||||||")
-        print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n")
+        print("--------------------------------------------------------\n")
+
+        # print("\n\n\n--------------------------------------------------------")
         print(len(self.STACK), "word packet(s) left on STACK:")
         for packet in self.STACK:
             print(" -", packet[0].TEXT)
 
         # print the resulting mental model
-        print("\nmental model generated:")
+        print("\n--------------------------------------------------------")
+        print("mental model generated:")
         print(self.model.print_latest())
 
     def split(self, sentence: str):
@@ -109,7 +120,7 @@ class Analyzer:
             packet = self.LEXICON[word]
         else:
             print(word, "not found in lexicon!")
-            return
+            packet = None
 
         self.pointer += 1
         return packet
@@ -122,6 +133,9 @@ class Analyzer:
         @param packet: word packet, a list of Requests
         @return: (boolean, Request)
         """
+        if not packet:
+            return False, None
+
         for req in packet:
             if req.TESTS:
                 self.evaluate_tests(req)
@@ -163,8 +177,25 @@ class Analyzer:
                 print(" - SET %s TO %s" % (var, req.ASSIGNS[var]))
 
     def function_call(self, req: Request):
-        print("FUNCTION CALL(S) TO MENTAL MODEL:")
-        if req.CALLS == "CONTAIN":
+        print("\nFUNCTION CALL(S) TO MENTAL MODEL:")
+        if req.CALLS[0] == "CONTAIN":
             print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
             self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
             self.model.INGEST(object=self.vars["CD"], container=self.vars["SUBJECT"])
+
+        elif req.CALLS[0] == "STATECHANGE":
+            print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+            self.model.STATECHANGE(object=self.vars["SUBJECT"], to=self.vars["CD"])
+
+        elif req.CALLS[0] == "ABOVE":
+            print(" - %s IS/ARE ABOVE %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+            self.model.above((self.vars["SUBJECT"], self.vars["CD"]))
+
+        elif req.CALLS[0] == "PTRANS":
+            to = req.CALLS[1]
+            From = req.CALLS[2]
+            print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], From, to))
+            self.model.PTRANS(object=self.vars["SUBJECT"], to=to, From=From)
+
+        elif req.CALLS == "":
+            pass
