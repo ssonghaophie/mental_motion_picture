@@ -28,6 +28,17 @@ class Mental_model:
             cur = cur.next
         new_node = Time_step(cur.containment.copy(),
                              cur.space.copy(), cur.touching.copy())
+
+        # copy PTRANS actions to the new time_step
+        if len(cur.action["PTRANS"]) > 0:
+            new_node.action["PTRANS"] = cur.action["PTRANS"].copy()
+
+        if len(cur.action["PSTOP"]) > 0:
+            for action_s in cur.action["PSTOP"]:
+                for action_t in new_node.action["PTRANS"]:
+                    if action_t["object"] == action_s["object"]:
+                        new_node.action["PTRANS"].remove(action_t)
+                        break
         cur.next = new_node
 
     # def append(self, containment, space):
@@ -200,13 +211,24 @@ class Mental_model:
 
     def PTRANS(self, object, to=None, From=None):
         cur = self.get_current()
-        cur.action["PTRANS"].append({})
-        cur.action["PTRANS"][-1]["object"] = object
-        cur.action["PTRANS"][-1]["to"] = to
-        cur.action["PTRANS"][-1]["from"] = From
+
+        if object not in cur.containment._graph_dict:
+            cur.containment.add_object(object)
+            cur.space.add_object(object)
+            cur.touching.add_object(object)
+
+        # new_dict = ["object " + object, "from " + From, "to " + to]
+        new_dict = {"object": object, "from": From, "to": to}
+        cur.action["PTRANS"].append(new_dict)
 
     def PSTOP(self, object):
         cur = self.get_current()
+
+        if object not in cur.containment._graph_dict:
+            cur.containment.add_object(object)
+            cur.space.add_object(object)
+            cur.touching.add_object(object)
+
         cur.action["PSTOP"].append({})
         cur.action["PSTOP"][-1]["object"] = object
 
@@ -248,3 +270,19 @@ class Mental_model:
         cur.action["STATECHANGE"].append({})
         cur.action["STATECHANGE"][-1]["object"] = object
         cur.action["STATECHANGE"][-1]["to"] = to
+
+
+# testing
+model = Mental_model(Containment(), Space(), Touching())
+model.PTRANS("rain", to="ground", From="sky")
+model.PTRANS("elephant", to="home", From="zoo")
+model.PTRANS("bus", to="stop", From="school")
+
+model.advance_time()
+model.PSTOP("bus")
+model.PSTOP("elephant")
+
+model.advance_time()
+model.print(0)
+model.print(1)
+model.print(2)
