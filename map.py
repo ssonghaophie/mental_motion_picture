@@ -10,7 +10,7 @@ of the planet than object N is (i.e. M is lower than N)
 other at that particular time_step
 
 Each method that adds an edge to a map should also have a 
-correspoinding x_method that removes an edge from the map. For example,
+corresponding x_method that removes an edge from the map. For example,
 contain() adds an edge to the containment map and x_contain() removes
 an edge from the containment map.
 """
@@ -19,11 +19,11 @@ from graph import Graph
 
 
 class Containment(Graph):
-    """A simple grpah class that represents containment relationship
+    """A simple graph class that represents containment relationship
     """
 
     def contain(self, edge):
-        """ edge is a tupe like (obj1, obj2)
+        """ edge is a tuple like (obj1, obj2)
             in this case, obj1 contains obj2
         """
         if edge[0] in self._graph_dict:
@@ -42,11 +42,11 @@ class Containment(Graph):
 
 
 class Space(Graph):
-    """A simple grpah class that represents spatial relationship
+    """A simple graph class that represents spatial relationship
     """
 
     def under(self, edge):
-        """ edge is a tupe like (obj0, obj1)
+        """ edge is a tuple like (obj0, obj1)
             in this case, obj0 is under obj1
         """
         if edge[0] in self._graph_dict:
@@ -60,7 +60,7 @@ class Space(Graph):
         self._graph_dict[edge[0]].remove(edge[1])
 
     def above(self, edge):
-        """ edge is a tupe like (obj0, obj1)
+        """ edge is a tuple like (obj0, obj1)
             in this case, obj0 is above obj1, so obj1 is under obj0
         """
         if edge[1] in self._graph_dict:
@@ -79,11 +79,11 @@ class Space(Graph):
 
 
 class Touching(Graph):
-    """A simple grpah class that represents touching relationship
+    """A simple graph class that represents touching relationship
     """
 
     def touch(self, edge):
-        """ edge is a tupe like (obj1, obj2)
+        """ edge is a tuple like (obj1, obj2)
             in this case, obj1 and obj2 are touching each other
         """
         self.connect(edge)

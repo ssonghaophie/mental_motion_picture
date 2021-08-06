@@ -16,7 +16,7 @@ class Graph(object):
         self._graph_dict = graph_dict
 
     def edges(self, object):
-        """ returns a list of all the edges of a vertice"""
+        """ returns a list of all the edges of a vertices"""
         return self._graph_dict[object]
 
     def all_edges(self):
