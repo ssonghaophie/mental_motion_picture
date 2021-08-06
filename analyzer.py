@@ -2,16 +2,23 @@ from map import Containment, Space, Touching
 from mental_model import Time_step, Mental_model
 
 
-# Each word entry in the lexicon is a list of Request objects
+# Each word entry in the lexicon is a list of Request objects with a keep flag
 class Request:
 
-    def __init__(self, text=None, test_flag=False, tests=None, assigns=None, calls=None, next_packet=None):
+    def __init__(self, text=None, test_flag=False, tests=None, assigns=None, calls=None, next=None):
         self.TEXT = text  # short explanation of the Request
         self.TEST_FLAG = test_flag  # boolean
         self.TESTS = tests  # if all evaluations pass, set test to be True
         self.ASSIGNS = assigns  # assignments to complete if test==True
         self.CALLS = calls  # mental model function calls
-        self.NEXT_PACKET = next_packet
+        self.NEXT_PACKET = next
+
+
+class Packet:
+
+    def __init__(self, requests: [Request], keep=False):
+        self.requests = requests
+        self.keep = keep
 
 
 # the ELI analyzer
@@ -38,7 +45,6 @@ class Analyzer:
         # @return:
         """
         self.split(sentence)
-        # print the sentence
         print("--------------------------------------------------------")
         print("SENTENCE:", end=" ")
         for word in self.SENTENCE[1:]:
@@ -55,17 +61,27 @@ class Analyzer:
                 trig_flag, trig_req = self.check_trig_req(self.STACK[-1])
                 if trig_flag:
                     self.TRIGGERED.append(trig_req)
-                    self.STACK.pop()
+
+                    # keep flag is True, keep the packet but remove the request.
+                    if self.STACK[-1].keep:
+                        self.STACK[-1].requests.remove(trig_req)
+                        # if after removal, the packet is empty, remove the packet
+                        if not self.STACK[-1].requests:
+                            self.STACK.pop()
+                    # keep flag is False, remove the packet
+                    else:
+                        self.STACK.pop()
+
                     if trig_req.ASSIGNS:
                         self.execute_assign(trig_req)
                     if trig_req.CALLS:
                         self.function_call(trig_req)
+                    continue
 
-                elif not self.STACK[-1]:
+                elif not self.STACK[-1]:  # word not in lexicon
                     self.STACK.pop()
-                    break
-                else:
-                    break
+                    continue
+                break
 
             # loop 3
             while self.TRIGGERED:
@@ -78,15 +94,15 @@ class Analyzer:
         print("|||||||||||||||||||||| THE END |||||||||||||||||||||||||")
         print("--------------------------------------------------------\n")
 
-        # print("\n\n\n--------------------------------------------------------")
+        # print packets left on stack
         print(len(self.STACK), "word packet(s) left on STACK:")
         for packet in self.STACK:
-            print(" -", packet[0].TEXT)
+            print(" -", packet.requests[0].TEXT)
 
         # print the resulting mental model
         print("\n--------------------------------------------------------")
         print("mental model generated:")
-        print(self.model.print_latest())
+        self.model.print_latest()
 
     def split(self, sentence: str):
         """
@@ -104,7 +120,7 @@ class Analyzer:
         self.SENTENCE.extend(split)
         self.length += len(split)
 
-    def read_word(self) -> [Request]:
+    def read_word(self) -> Packet:
         """
         read the next word from self.SENTENCE, find the word in
         lexicon, and return the word packet
@@ -125,7 +141,7 @@ class Analyzer:
         self.pointer += 1
         return packet
 
-    def check_trig_req(self, packet: [Request]) -> (bool, Request):
+    def check_trig_req(self, packet: Packet) -> (bool, Request):
         """
         check if there is a triggered Request in the packet. If yes, return the
         first triggered Request. If no, return an empty Request
@@ -136,7 +152,7 @@ class Analyzer:
         if not packet:
             return False, None
 
-        for req in packet:
+        for req in packet.requests:
             if req.TESTS:
                 self.evaluate_tests(req)
 
@@ -144,7 +160,7 @@ class Analyzer:
         # value will be triggered and returned. However, it is possible that multiple
         # requests in the packet have a True test value. We may need an algorithm to
         # help decide the request that has the highest priority.
-        for req in packet:
+        for req in packet.requests:
             if req.TEST_FLAG:
                 print("\nREQUEST TRIGGERED: %s" % req.TEXT)
                 return True, req
@@ -177,25 +193,32 @@ class Analyzer:
                 print(" - SET %s TO %s" % (var, req.ASSIGNS[var]))
 
     def function_call(self, req: Request):
+        calls = req.CALLS
         print("\nFUNCTION CALL(S) TO MENTAL MODEL:")
-        if req.CALLS[0] == "CONTAIN":
-            print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-            self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
-            self.model.INGEST(object=self.vars["CD"], container=self.vars["SUBJECT"])
+        for call in calls:
+            if call[0] == "CONTAIN":
+                print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+                self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
+                self.model.INGEST(object=self.vars["CD"], container=self.vars["SUBJECT"])
 
-        elif req.CALLS[0] == "STATECHANGE":
-            print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-            self.model.STATECHANGE(object=self.vars["SUBJECT"], to=self.vars["CD"])
+            elif call[0] == "STATECHANGE":
+                print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+                self.model.STATECHANGE(object=self.vars["SUBJECT"], to=self.vars["CD"])
 
-        elif req.CALLS[0] == "ABOVE":
-            print(" - %s IS/ARE ABOVE %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-            self.model.above((self.vars["SUBJECT"], self.vars["CD"]))
+            elif call[0] == "ABOVE":
+                print(" - %s IS/ARE ABOVE %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+                self.model.above((self.vars["SUBJECT"], self.vars["CD"]))
 
-        elif req.CALLS[0] == "PTRANS":
-            to = req.CALLS[1]
-            From = req.CALLS[2]
-            print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], From, to))
-            self.model.PTRANS(object=self.vars["SUBJECT"], to=to, From=From)
+            elif call[0] == "PTRANS":
+                to = call[1]
+                From = call[2]
+                print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], From, to))
+                self.model.PTRANS(object=self.vars["SUBJECT"], to=to, From=From)
 
-        elif req.CALLS == "":
-            pass
+            elif call[0] == "PSTOP":
+                print(" - %s STOP(S) MOVING..." % self.vars["SUBJECT"])
+                self.model.PSTOP(self.vars["SUBJECT"])
+
+            elif call[0] == "ADVANCE TIME":
+                print(" - ADVANCE TO TIME-STEP")
+                self.model.advance_time()
