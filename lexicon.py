@@ -60,17 +60,18 @@ lex["FALLS"] = Packet([Request(text="verb FALLS", test_flag=True,
                                assigns={"CD": "FALLS", "PART-OF-SPEECH": "verb"}, calls=[["PTRANS", "EARTH", None]],
                                next=Packet([Request(text="CD is ON",
                                                     tests={"CD": "ON", "PART-OF-SPEECH": "preposition"},
-                                                    calls=[["PSTOP"]]),
+                                                    calls=[["ADVANCE TIME"], ["PSTOP"]]),
                                             Request(text="CD is FROM",
                                                     tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"})],
                                            keep=True))])
 lex["ON"] = Packet([Request(text="prep ON", test_flag=True, assigns={"CD": "ON", "PART-OF-SPEECH": "preposition"},
                             next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
                                                  tests={"PART-OF-SPEECH": "noun-phrase"},
-                                                 calls=[["ADVANCE TIME"], ["ABOVE"]])]))])
+                                                 calls=[["UPDATEACT", "PTRANS", "to", "CD", None], ["ABOVE"]])]))])
 lex["FROM"] = Packet([Request(text="prep FROM", test_flag=True, assigns={"CD": "FROM", "PART-OF-SPEECH": "preposition"},
                               next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
-                                                   tests={"PART-OF-SPEECH": "noun-phrase"})]))])
+                                                   tests={"PART-OF-SPEECH": "noun-phrase"},
+                                                   calls=[["UPDATEACT", "PTRANS", "from", "CD", None]])]))])
 
 analyzer = Analyzer(lexicon=lex)
 
