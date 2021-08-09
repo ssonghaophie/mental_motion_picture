@@ -1,4 +1,3 @@
-from map import Containment, Space, Touching
 from mental_model import Time_step, Mental_model
 
 
@@ -24,7 +23,7 @@ class Packet:
 # the ELI analyzer
 class Analyzer:
     vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None, "OBJECT": None}
-    model = Mental_model(Containment(), Space(), Touching())
+    model = Mental_model()
 
     def __init__(self, lexicon: {}):
         self.SENTENCE = []  # list of words
@@ -220,5 +219,11 @@ class Analyzer:
                 self.model.PSTOP(self.vars["SUBJECT"])
 
             elif call[0] == "ADVANCE TIME":
-                print(" - ADVANCE TO TIME-STEP")
+                print(" - ADVANCE TO TIME-STEP", self.model.count + 1)
                 self.model.advance_time()
+
+            elif call[0] == "UPDATEACT":
+                print(" - UPDATE ACT", call[1])
+                if call[3] == "CD":
+                    call[3] = self.vars["CD"]
+                self.model.updateACT(call[1], call[2], call[3], call[4])
