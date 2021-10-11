@@ -135,4 +135,7 @@ What we've discussed...
   
 <p>&nbsp;</p>
 
-- update
+- update a CD structure
+- go back to a previous time_step to find a previous CD structure and update the CD structure.
+- Example sentence: "rain falls to the ground from the cloud."
+- In this example, the PTRANS get copies to a later time_step, but we can go back in time to find the where the PTRANS first appears and add a "from" to that PTRANS.
