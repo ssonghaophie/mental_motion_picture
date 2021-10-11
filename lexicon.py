@@ -82,9 +82,9 @@ analyzer.parse("The rain falls on the soil from the cloud.")
 
 # print("\n\n\n.....................................................................")
 # analyzer.model.print(0)
-# analyzer.model.print(1)
+analyzer.model.print(1)
 # analyzer.model.advance_time()
-# analyzer.model.print(2)
+analyzer.model.print(2)
 # print out all time steps.
 
 # multiple calls, keep stack
