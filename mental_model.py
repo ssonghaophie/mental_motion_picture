@@ -33,7 +33,11 @@ class Mental_model:
 
         # copy PTRANS actions to the new time_step
         if len(self.cur.action["PTRANS"]) > 0:
-            new_node.action["PTRANS"] = deepcopy(self.cur.action["PTRANS"])
+            # instead of a deepcopy, we want a shallow copy of the ACT from the previous
+            # time_step, so that is we update the PTRANS in the newest time_step,
+            # the ACT stored in the previous time_step will also be updated.
+            # new_node.action["PTRANS"] = deepcopy(self.cur.action["PTRANS"])
+            new_node.action["PTRANS"] = self.cur.action["PTRANS"]
 
         if len(self.cur.action["PSTOP"]) > 0:
             for action_s in self.cur.action["PSTOP"]:
@@ -131,6 +135,7 @@ class Mental_model:
         """ print the containment map and space map
             of the Time_step at a certain index
         """
+        print("\n-- -- -- -- print Time_step", index)
         time_step = self.get(index)
 
         print("\nCONTAINMENT RELATIONSHIP -------------------------------")

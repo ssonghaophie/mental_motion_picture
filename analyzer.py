@@ -29,7 +29,7 @@ class Analyzer:
         self.SENTENCE = []  # list of words
         self.STACK = []  # store word packets
         self.TRIGGERED = []  # triggered requests
-        self.CD = None  # the output, what data structure?
+        # self.CD = None  # the output, what data structure?
         self.LEXICON = lexicon
 
         # read words from sentence
