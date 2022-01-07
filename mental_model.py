@@ -81,11 +81,11 @@ class Mental_model:
 
     def contain(self, edge):
         """add an edge to the containment map of the last time_step"""
-        for object in edge:
-            if object not in self.cur.containment._graph_dict:
-                self.cur.containment.add_object(object)
-                self.cur.space.add_object(object)
-                self.cur.touching.add_object(object)
+        # for object in edge:
+            # if object not in self.cur.containment._graph_dict:
+            #     self.cur.containment.add_object(object)
+            #     self.cur.space.add_object(object)
+            #     self.cur.touching.add_object(object)
         self.cur.containment.contain(edge)
 
     def x_contain(self, edge):
@@ -94,11 +94,11 @@ class Mental_model:
 
     def above(self, edge):
         """add an edge to the space map of the last time_step"""
-        for object in edge:
-            if object not in self.cur.containment._graph_dict:
-                self.cur.containment.add_object(object)
-                self.cur.space.add_object(object)
-                self.cur.touching.add_object(object)
+        # for object in edge:
+            # if object not in self.cur.containment._graph_dict:
+            #     self.cur.containment.add_object(object)
+            #     self.cur.space.add_object(object)
+            #     self.cur.touching.add_object(object)
         self.cur.space.above(edge)
 
     def x_above(self, edge):
@@ -107,11 +107,11 @@ class Mental_model:
 
     def under(self, edge):
         """add an edge to the space map of the last time_step"""
-        for object in edge:
-            if object not in self.cur.containment._graph_dict:
-                self.cur.containment.add_object(object)
-                self.cur.space.add_object(object)
-                self.cur.touching.add_object(object)
+        # for object in edge:
+        #     if object not in self.cur.containment._graph_dict:
+        #         self.cur.containment.add_object(object)
+        #         self.cur.space.add_object(object)
+        #         self.cur.touching.add_object(object)
         self.cur.space.under(edge)
 
     def x_under(self, edge):
@@ -120,11 +120,11 @@ class Mental_model:
 
     def touch(self, edge):
         """add an edge to the touching map of the last time_step"""
-        for object in edge:
-            if object not in self.cur.containment._graph_dict:
-                self.cur.containment.add_object(object)
-                self.cur.space.add_object(object)
-                self.cur.touching.add_object(object)
+        # for object in edge:
+        #     if object not in self.cur.containment._graph_dict:
+        #         self.cur.containment.add_object(object)
+        #         self.cur.space.add_object(object)
+        #         self.cur.touching.add_object(object)
         self.cur.touching.touch(edge)
 
     def x_touch(self, edge):
@@ -132,7 +132,7 @@ class Mental_model:
         self.cur.touching.x_touch(edge)
 
     def print(self, index):
-        """ print the containment map and space map
+        """ print the containment map, space map, and touching map
             of the Time_step at a certain index
         """
         print("\n-- -- -- -- print Time_step", index)

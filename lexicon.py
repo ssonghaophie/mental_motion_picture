@@ -78,13 +78,16 @@ analyzer = Analyzer(lexicon=lex)
 # print(analyzer.parse("   !!!  Jack And    susan   HAVE a baLL   !!.;  ; ... ,"))
 # print(analyzer.parse("plants absorb water"))
 # analyzer.parse("The carbon-dioxide turns into acid.")
-analyzer.parse("The rain falls on the soil from the cloud.")
+# analyzer.parse("Jack and Susan have a ball. The rain falls on the soil from the cloud.")
+analyzer.parse("Jack and Susan have a ball. The ball falls.")
+# analyzer.parse("The rain falls on the soil from the cloud.")
+# analyzer.parse("Jack and Susan have a ball.")
 
 # print("\n\n\n.....................................................................")
 # analyzer.model.print(0)
-analyzer.model.print(1)
+# analyzer.model.print(1)
 # analyzer.model.advance_time()
-analyzer.model.print(2)
+# analyzer.model.print(2)
 # print out all time steps.
 
 # multiple calls, keep stack

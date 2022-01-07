@@ -1,4 +1,5 @@
 from mental_model import Time_step, Mental_model
+import re
 
 
 # Each word entry in the lexicon is a list of Request objects with a keep flag
@@ -26,67 +27,76 @@ class Analyzer:
     model = Mental_model()
 
     def __init__(self, lexicon: {}):
-        self.SENTENCE = []  # list of words
+        self.PARAGRAPH = []  # a paragraph is a list of sentences
+        self.SENTENCE = []  # a sentence is a list of words
         self.STACK = []  # store word packets
         self.TRIGGERED = []  # triggered requests
-        # self.CD = None  # the output, what data structure?
+        self.CD = None  # the output, what data structure?
         self.LEXICON = lexicon
 
         # read words from sentence
         self.length = 0  # length of the SENTENCE list
         self.pointer = 0  # index of the next word in SENTENCE
 
-    def parse(self, sentence: str):
+    def parse(self, text: str):
         """
         construct and run an analyzer
 
         @param sentence: input sentence
         # @return:
         """
-        self.split(sentence)
-        print("--------------------------------------------------------")
-        print("SENTENCE:", end=" ")
-        for word in self.SENTENCE[1:]:
-            print(word, end=" ")
-        print()
+        self.split_para(text)
+        print(self.PARAGRAPH)
+        while self.PARAGRAPH:
+            self.length = 0  # length of the SENTENCE list
+            self.pointer = 0  # index of the next word in SENTENCE
 
-        # loop 1 - terminates when SENTENCE is empty
-        while self.pointer < self.length:
-            # read next word, put packet on top of stack
-            self.STACK.append(self.read_word())
+            sentence = self.PARAGRAPH.pop(0)
+            self.split(sentence)
+            print("\n", self.SENTENCE)
+            print("--------------------------------------------------------")
+            print("SENTENCE:", end=" ")
+            for word in self.SENTENCE[1:]:
+                print(word, end=" ")
+            print()
 
-            # loop 2
-            while self.STACK:
-                trig_flag, trig_req = self.check_trig_req(self.STACK[-1])
-                if trig_flag:
-                    self.TRIGGERED.append(trig_req)
+            # loop 1 - terminates when SENTENCE is empty
+            while self.pointer < self.length:
+                # read next word, put packet on top of stack
+                self.STACK.append(self.read_word())
 
-                    # keep flag is True, keep the packet but remove the request.
-                    if self.STACK[-1].keep:
-                        self.STACK[-1].requests.remove(trig_req)
-                        # if after removal, the packet is empty, remove the packet
-                        if not self.STACK[-1].requests:
+                # loop 2
+                while self.STACK:
+                    trig_flag, trig_req = self.check_trig_req(self.STACK[-1])
+                    if trig_flag:
+                        self.TRIGGERED.append(trig_req)
+
+                        # keep flag is True, keep the packet but remove the request.
+                        if self.STACK[-1].keep:
+                            self.STACK[-1].requests.remove(trig_req)
+                            # if after removal, the packet is empty, remove the packet
+                            if not self.STACK[-1].requests:
+                                self.STACK.pop()
+                        # keep flag is False, remove the packet
+                        else:
                             self.STACK.pop()
-                    # keep flag is False, remove the packet
-                    else:
+
+                        if trig_req.ASSIGNS:
+                            self.execute_assign(trig_req)
+                        if trig_req.CALLS:
+                            self.function_call(trig_req)
+                        continue
+
+                    elif not self.STACK[-1]:  # word not in lexicon
                         self.STACK.pop()
+                        continue
+                    break
 
-                    if trig_req.ASSIGNS:
-                        self.execute_assign(trig_req)
-                    if trig_req.CALLS:
-                        self.function_call(trig_req)
-                    continue
-
-                elif not self.STACK[-1]:  # word not in lexicon
-                    self.STACK.pop()
-                    continue
-                break
-
-            # loop 3
-            while self.TRIGGERED:
-                cur_request = self.TRIGGERED.pop()
-                if cur_request.NEXT_PACKET:
-                    self.STACK.append(cur_request.NEXT_PACKET)
+                # loop 3
+                while self.TRIGGERED:
+                    cur_request = self.TRIGGERED.pop()
+                    if cur_request.NEXT_PACKET:
+                        self.STACK.append(cur_request.NEXT_PACKET)
 
         # if anything left on the stack, print it
         print("\n--------------------------------------------------------")
@@ -103,20 +113,23 @@ class Analyzer:
         print("mental model generated:")
         self.model.print_latest()
 
+    def split_para(self, para: str):
+        self.PARAGRAPH = re.split(r"[,.!?]\s", para)
+
     def split(self, sentence: str):
         """
         the input sentence is put into uppercase and split on all
         whitespace strings. The resulted list is appended on SENTENCE
 
         @param sentence: input sentence
-        @return:
         """
         # remove leading and trailing characters and put into uppercase
         sentence = "*START* " + sentence.strip(".,?;:/\\ !@#$%^&*").upper()
 
         # split on whitespace characters
         split = sentence.split()
-        self.SENTENCE.extend(split)
+        self.SENTENCE = split
+        # self.SENTENCE.extend(split)
         self.length += len(split)
 
     def read_word(self) -> Packet:
@@ -162,6 +175,11 @@ class Analyzer:
         for req in packet.requests:
             if req.TEST_FLAG:
                 print("\nREQUEST TRIGGERED: %s" % req.TEXT)
+
+                # if the word is a noun, add to maps
+                if req.TEXT.startswith("noun"):
+                    self.model.add_object(req.TEXT[5:])
+
                 return True, req
 
         return False, Request()
@@ -178,7 +196,6 @@ class Analyzer:
         execute assignments in the Request
 
         @param req:
-        @return:
         """
         print("\nASSIGNMENT(S) EXECUTED:")
         for var in req.ASSIGNS:
@@ -195,10 +212,15 @@ class Analyzer:
         calls = req.CALLS
         print("\nFUNCTION CALL(S) TO MENTAL MODEL:")
         for call in calls:
-            if call[0] == "CONTAIN":
+            if call[0] == "CONTAIN":  # active
                 print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.INGEST(object=self.vars["CD"], container=self.vars["SUBJECT"])
+
+            if call[0] == "CONTAINED":  # passive!
+                print(" - %s CONTAIN(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
+                self.model.contain((self.vars["CD"], self.vars["SUBJECT"]))
+                self.model.INGEST(object=self.vars["SUBJECT"], container=self.vars["CD"])
 
             elif call[0] == "STATECHANGE":
                 print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
