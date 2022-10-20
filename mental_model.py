@@ -16,6 +16,7 @@ class Time_step:
         self.action = {"PTRANS": [], "PSTOP": [],
                        "INGEST": [], "EXPEL": [], "STATECHANGE": []}
         self.next = None
+        self.empty = True  # only the initial state is empty
 
 
 class Mental_model:
@@ -45,8 +46,11 @@ class Mental_model:
                     if action_t["object"] == action_s["object"]:
                         new_node.action["PTRANS"].remove(action_t)
                         break
+        new_node.empty = self.cur.empty
         self.cur.next = new_node
         self.cur = self.cur.next
+
+        print(" - ADVANCE TO TIME-STEP", self.count)
 
     def get(self, index):
         """Returns the value of the Time_step at a certain index"""
@@ -78,6 +82,7 @@ class Mental_model:
         self.cur.containment.add_object(object)
         self.cur.space.add_object(object)
         self.cur.touching.add_object(object)
+        self.cur.empty = False
 
     def contain(self, edge):
         """add an edge to the containment map of the last time_step"""
@@ -87,6 +92,7 @@ class Mental_model:
             #     self.cur.space.add_object(object)
             #     self.cur.touching.add_object(object)
         self.cur.containment.contain(edge)
+        self.cur.empty = False
 
     def x_contain(self, edge):
         """remove an edge from the containment map of the last time_step"""
@@ -100,6 +106,7 @@ class Mental_model:
             #     self.cur.space.add_object(object)
             #     self.cur.touching.add_object(object)
         self.cur.space.above(edge)
+        self.cur.empty = False
 
     def x_above(self, edge):
         """remove an edge from the space map of the last time_step"""
@@ -113,6 +120,7 @@ class Mental_model:
         #         self.cur.space.add_object(object)
         #         self.cur.touching.add_object(object)
         self.cur.space.under(edge)
+        self.cur.empty = False
 
     def x_under(self, edge):
         """remove an edge from the space map of the last time_step"""
@@ -126,6 +134,7 @@ class Mental_model:
         #         self.cur.space.add_object(object)
         #         self.cur.touching.add_object(object)
         self.cur.touching.touch(edge)
+        self.cur.empty = False
 
     def x_touch(self, edge):
         """remove an edge from the touching map of the last time_step"""
@@ -167,6 +176,7 @@ class Mental_model:
         # new_dict = ["object " + object, "from " + From, "to " + to]
         new_dict = {"object": object, "from": From, "to": to}
         self.cur.action["PTRANS"].append(new_dict)
+        self.cur.empty = False
 
     def PSTOP(self, object):
         if object not in self.cur.containment._graph_dict:
@@ -176,6 +186,7 @@ class Mental_model:
 
         self.cur.action["PSTOP"].append({})
         self.cur.action["PSTOP"][-1]["object"] = object
+        self.cur.empty = False
 
     def INGEST(self, object, container):
         for thing in [object, container]:
@@ -187,6 +198,7 @@ class Mental_model:
         self.cur.action["INGEST"].append({})
         self.cur.action["INGEST"][-1]["object"] = object
         self.cur.action["INGEST"][-1]["container"] = container
+        self.cur.empty = False
 
     def EXPEL(self, object, container):
         for thing in [object, container]:
@@ -198,6 +210,7 @@ class Mental_model:
         self.cur.action["EXPEL"].append({})
         self.cur.action["EXPEL"][-1]["object"] = object
         self.cur.action["EXPEL"][-1]["container"] = container
+        self.cur.empty = False
 
     def STATECHANGE(self, object, to):
         for thing in [object, to]:
@@ -209,6 +222,7 @@ class Mental_model:
         self.cur.action["STATECHANGE"].append({})
         self.cur.action["STATECHANGE"][-1]["object"] = object
         self.cur.action["STATECHANGE"][-1]["to"] = to
+        self.cur.empty = False
 
     def updateACT(self, type: str, key: str, val: str, index=None):
         # get the timestep that needs to be updated

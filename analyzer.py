@@ -1,5 +1,5 @@
 from mental_model import Time_step, Mental_model
-import re
+import re  # regular expression
 
 
 # Each word entry in the lexicon is a list of Request objects with a keep flag
@@ -50,6 +50,12 @@ class Analyzer:
         while self.PARAGRAPH:
             self.length = 0  # length of the SENTENCE list
             self.pointer = 0  # index of the next word in SENTENCE
+
+            # if the most recent time_step is empty, then we must be parsing the
+            # first sentence of the paragraph; otherwise, advance time_step when
+            # parsing a new sentence
+            if not self.model.cur.empty:
+                self.model.advance_time()
 
             sentence = self.PARAGRAPH.pop(0)
             self.split(sentence)
@@ -241,7 +247,7 @@ class Analyzer:
                 self.model.PSTOP(self.vars["SUBJECT"])
 
             elif call[0] == "ADVANCE TIME":
-                print(" - ADVANCE TO TIME-STEP", self.model.count + 1)
+                # print(" - ADVANCE TO TIME-STEP", self.model.count + 1)
                 self.model.advance_time()
 
             elif call[0] == "UPDATEACT":
