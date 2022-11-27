@@ -1,4 +1,4 @@
-from mental_model import Time_step, Mental_model
+from mental_model import Frame, Mental_motion_picture
 import re  # regular expression
 
 
@@ -24,7 +24,7 @@ class Packet:
 # the ELI analyzer
 class Analyzer:
     vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None, "OBJECT": None}
-    model = Mental_model()
+    model = Mental_motion_picture()
 
     def __init__(self, lexicon: {}):
         self.PARAGRAPH = []  # a paragraph is a list of sentences
@@ -51,8 +51,8 @@ class Analyzer:
             self.length = 0  # length of the SENTENCE list
             self.pointer = 0  # index of the next word in SENTENCE
 
-            # if the most recent time_step is empty, then we must be parsing the
-            # first sentence of the paragraph; otherwise, advance time_step when
+            # if the most recent Frame is empty, then we must be parsing the
+            # first sentence of the paragraph; otherwise, advance Frame when
             # parsing a new sentence
             if not self.model.cur.empty:
                 self.model.advance_time()
@@ -65,6 +65,10 @@ class Analyzer:
             for word in self.SENTENCE[1:]:
                 print(word, end=" ")
             print()
+
+            # reset the analyzer attributes
+            for var in self.vars:
+                self.vars[var] = None
 
             # loop 1 - terminates when SENTENCE is empty
             while self.pointer < self.length:
@@ -236,6 +240,10 @@ class Analyzer:
                 print(" - %s IS/ARE ABOVE %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.above((self.vars["SUBJECT"], self.vars["CD"]))
 
+            elif call[0] == "UNDER":
+                print(" - %s IS/ARE UNDER %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+                self.model.under((self.vars["SUBJECT"], self.vars["CD"]))
+
             elif call[0] == "PTRANS":
                 to = call[1]
                 From = call[2]
@@ -255,3 +263,10 @@ class Analyzer:
                 if call[3] == "CD":
                     call[3] = self.vars["CD"]
                 self.model.updateACT(call[1], call[2], call[3], call[4])
+
+            # special words have their own function calls
+            # todo - how does the analyzer handle the special word "as"?
+            # create a timestep before the latest one,
+            # and make any changes to the newly inserted timestep
+            elif call[0] == "SPECIAL":
+                pass

@@ -1,6 +1,6 @@
 from mental_model import *
 
-model = Mental_model(Containment(), Space(), Touching())
+model = Mental_motion_picture(Containment(), Space(), Touching())
 
 # 0
 # Limestone lies under the soil.

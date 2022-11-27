@@ -7,7 +7,7 @@ https://github.com/bfaure/Python3_Data_Structures/blob/master/Linked_List/main.p
 """
 
 
-class Time_step:
+class Frame:
 
     def __init__(self, containment, space, touching):
         self.containment = containment
@@ -19,24 +19,24 @@ class Time_step:
         self.empty = True  # only the initial state is empty
 
 
-class Mental_model:
+class Mental_motion_picture:
     def __init__(self):
-        self.head = Time_step(Containment(), Space(), Touching())
-        self.count = 1  # number of time_steps in this model
+        self.head = Frame(Containment(), Space(), Touching())
+        self.count = 1  # number of Frames in this model
         self.cur = self.head  # the latest node
 
     def advance_time(self):
-        """copy the current Time_step to a new Time_step"""
+        """copy the current Frame to a new Frame"""
         self.count += 1
-        new_node = Time_step(self.cur.containment.copy(),
-                             self.cur.space.copy(),
-                             self.cur.touching.copy())
+        new_node = Frame(self.cur.containment.copy(),
+                         self.cur.space.copy(),
+                         self.cur.touching.copy())
 
-        # copy PTRANS actions to the new time_step
+        # copy PTRANS actions to the new Frame
         if len(self.cur.action["PTRANS"]) > 0:
             # instead of a deepcopy, we want a shallow copy of the ACT from the previous
-            # time_step, so that is we update the PTRANS in the newest time_step,
-            # the ACT stored in the previous time_step will also be updated.
+            # Frame, so that is we update the PTRANS in the newest Frame,
+            # the ACT stored in the previous Frame will also be updated.
             # new_node.action["PTRANS"] = deepcopy(self.cur.action["PTRANS"])
             new_node.action["PTRANS"] = self.cur.action["PTRANS"]
 
@@ -50,10 +50,10 @@ class Mental_model:
         self.cur.next = new_node
         self.cur = self.cur.next
 
-        print(" - ADVANCE TO TIME-STEP", self.count)
+        print(" - ADVANCE TO FRAME", self.count)
 
     def get(self, index):
-        """Returns the value of the Time_step at a certain index"""
+        """Returns the value of the Frame at a certain index"""
         if index > self.count or index < 1:
             print("ERROR: Index out of range!")
             return None
@@ -78,14 +78,14 @@ class Mental_model:
         return self.get(index).touching
 
     def add_object(self, object):
-        """add object to all maps of the last time_step"""
+        """add object to all maps of the last Frame"""
         self.cur.containment.add_object(object)
         self.cur.space.add_object(object)
         self.cur.touching.add_object(object)
         self.cur.empty = False
 
     def contain(self, edge):
-        """add an edge to the containment map of the last time_step"""
+        """add an edge to the containment map of the last Frame"""
         # for object in edge:
             # if object not in self.cur.containment._graph_dict:
             #     self.cur.containment.add_object(object)
@@ -95,11 +95,11 @@ class Mental_model:
         self.cur.empty = False
 
     def x_contain(self, edge):
-        """remove an edge from the containment map of the last time_step"""
+        """remove an edge from the containment map of the last Frame"""
         self.cur.containment.x_contain(edge)
 
     def above(self, edge):
-        """add an edge to the space map of the last time_step"""
+        """add an edge to the space map of the last Frame"""
         # for object in edge:
             # if object not in self.cur.containment._graph_dict:
             #     self.cur.containment.add_object(object)
@@ -109,11 +109,11 @@ class Mental_model:
         self.cur.empty = False
 
     def x_above(self, edge):
-        """remove an edge from the space map of the last time_step"""
+        """remove an edge from the space map of the last Frame"""
         self.cur.space.x_above(edge)
 
     def under(self, edge):
-        """add an edge to the space map of the last time_step"""
+        """add an edge to the space map of the last Frame"""
         # for object in edge:
         #     if object not in self.cur.containment._graph_dict:
         #         self.cur.containment.add_object(object)
@@ -123,11 +123,11 @@ class Mental_model:
         self.cur.empty = False
 
     def x_under(self, edge):
-        """remove an edge from the space map of the last time_step"""
+        """remove an edge from the space map of the last Frame"""
         self.cur.space.x_under(edge)
 
     def touch(self, edge):
-        """add an edge to the touching map of the last time_step"""
+        """add an edge to the touching map of the last Frame"""
         # for object in edge:
         #     if object not in self.cur.containment._graph_dict:
         #         self.cur.containment.add_object(object)
@@ -137,28 +137,28 @@ class Mental_model:
         self.cur.empty = False
 
     def x_touch(self, edge):
-        """remove an edge from the touching map of the last time_step"""
+        """remove an edge from the touching map of the last Frame"""
         self.cur.touching.x_touch(edge)
 
     def print(self, index):
         """ print the containment map, space map, and touching map
-            of the Time_step at a certain index
+            of the Frame at a certain index
         """
-        print("\n-- -- -- -- print Time_step", index)
-        time_step = self.get(index)
+        print("\n-- -- -- -- print Frame", index)
+        frame = self.get(index)
 
         print("\nCONTAINMENT RELATIONSHIP -------------------------------")
-        print(time_step.containment)
+        print(frame.containment)
 
         print("\nSPATIAL RELATIONSHIP -----------------------------------")
-        print(time_step.space)
+        print(frame.space)
 
         print("\nTOUCHING RELATIONSHIP ----------------------------------")
-        print(time_step.touching)
+        print(frame.touching)
 
         print("\nPRIMITIVE ACTIONS --------------------------------------")
-        for action in time_step.action:
-            print(action, time_step.action[action])
+        for action in frame.action:
+            print(action, frame.action[action])
 
     def print_latest(self):
         self.print(self.count)
@@ -235,7 +235,7 @@ class Mental_model:
         node.action[type][-1][key] = val
 
 # # testing
-# model = Mental_model()
+# model = Mental_motion_picture()
 # model.PTRANS("elephant", to="home", From="zoo")
 # model.PTRANS("bus", to="stop", From="school")
 #
