@@ -1,0 +1,5 @@
+- subject in entity
+- subject not a pronoun
+- at least a "toLoc" or a "fromLoc"
+- not containment or de-containment
+- entity, "toLoc", and "fromLoc" must appear in the sentence
