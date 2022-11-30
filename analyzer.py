@@ -197,6 +197,11 @@ class Analyzer:
     def evaluate_tests(self, req: Request):
         req.TEST_FLAG = True
         for var in req.TESTS:
+            # if the request is UPDATEACT, check if a primitive act exist
+            if var in ("PTRANS", "PSTOP", "INGEST", "EXPEL"):
+                if not self.model.cur.action[var]:
+                    req.TEST_FLAG = False
+                    break
             if req.TESTS[var] != self.vars[var]:
                 req.TEST_FLAG = False
                 break
