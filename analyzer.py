@@ -202,7 +202,7 @@ class Analyzer:
                 if not self.model.cur.action[var]:
                     req.TEST_FLAG = False
                     break
-            if req.TESTS[var] != self.vars[var]:
+            elif req.TESTS[var] != self.vars[var]:
                 req.TEST_FLAG = False
                 break
 
