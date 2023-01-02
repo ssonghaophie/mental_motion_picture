@@ -16,14 +16,14 @@ class Request:
 
 class Packet:
 
-    def __init__(self, requests: [Request], keep=False):
+    def __init__(self, requests: [Request], keep=False, one_time=False):
         self.requests = requests
         self.keep = keep
-
+        self.one_time = one_time  # doc for one_time
 
 # the ELI analyzer
 class Analyzer:
-    vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None, "OBJECT": None}
+    vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None}
     model = Mental_motion_picture()
 
     def __init__(self, lexicon: {}):
@@ -97,6 +97,10 @@ class Analyzer:
                             self.function_call(trig_req)
                         continue
 
+                    elif self.STACK[-1].one_time:
+                        # if the packet should be checked only one time,
+                        # then even if no request is triggered, remove the packet from STACK
+                        self.STACK.pop()
                     elif not self.STACK[-1]:  # word not in lexicon
                         self.STACK.pop()
                         continue
@@ -199,7 +203,7 @@ class Analyzer:
         for var in req.TESTS:
             # if the request is UPDATEACT, check if a primitive act exist
             if var in ("PTRANS", "PSTOP", "INGEST", "EXPEL"):
-                if not self.model.cur.action[var]:
+                if not self.model.cur.actions_by_type[var]:
                     req.TEST_FLAG = False
                     break
             elif req.TESTS[var] != self.vars[var]:
@@ -227,14 +231,21 @@ class Analyzer:
         calls = req.CALLS
         print("\nFUNCTION CALL(S) TO MENTAL MODEL:")
         for call in calls:
+            # todo: ingest & ingested, separate ingest and contain
             if call[0] == "CONTAIN":  # active
                 print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
-                self.model.INGEST(object=self.vars["CD"], container=self.vars["SUBJECT"])
 
-            if call[0] == "CONTAINED":  # passive!
+            elif call[0] == "CONTAINED":  # passive!
                 print(" - %s CONTAIN(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
                 self.model.contain((self.vars["CD"], self.vars["SUBJECT"]))
+
+            elif call[0] == "INGEST":  # active
+                print(" - %s INGEST(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+                self.model.INGEST(object=self.vars["CD"], container=self.vars["SUBJECT"])
+
+            elif call[0] == "INGESTED":  # passive!
+                print(" - %s INGEST(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
                 self.model.INGEST(object=self.vars["SUBJECT"], container=self.vars["CD"])
 
             elif call[0] == "STATECHANGE":
@@ -267,7 +278,13 @@ class Analyzer:
                 print(" - UPDATE ACT", call[1])
                 if call[3] == "CD":
                     call[3] = self.vars["CD"]
-                self.model.updateACT(call[1], call[2], call[3], call[4])
+                self.model.update_act_by_type(call[1], call[2], call[3], call[4])
+
+            elif call[0] == "UPDATEACT ADD OBJECT":
+                print(" - UPDATE ACT & ADD OBJECT")
+                if call[1] == "CD":
+                    call[1] = self.vars["CD"]
+                self.model.update_act_add_object(call[1])
 
             # special words have their own function calls
             # todo - how does the analyzer handle the special word "as"?
@@ -275,3 +292,6 @@ class Analyzer:
             # and make any changes to the newly inserted timestep
             elif call[0] == "SPECIAL":
                 pass
+
+            else:
+                print("Invalid function call to mental motion picture!")

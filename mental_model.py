@@ -1,4 +1,5 @@
 from map import Containment, Space, Touching
+from primitive_acts import *
 from copy import deepcopy
 
 """
@@ -13,8 +14,9 @@ class Frame:
         self.containment = containment
         self.space = space
         self.touching = touching
-        self.action = {"PTRANS": [], "PSTOP": [],
-                       "INGEST": [], "EXPEL": [], "STATECHANGE": []}
+        self.actions = []
+        self.actions_by_type = {"PTRANS": [], "PSTOP": [],
+                                "INGEST": [], "EXPEL": [], "STATECHANGE": []}
         self.next = None
         self.empty = True  # only the initial state is empty
 
@@ -33,18 +35,18 @@ class Mental_motion_picture:
                          self.cur.touching.copy())
 
         # copy PTRANS actions to the new Frame
-        if len(self.cur.action["PTRANS"]) > 0:
+        if len(self.cur.actions_by_type["PTRANS"]) > 0:
             # instead of a deepcopy, we want a shallow copy of the ACT from the previous
             # Frame, so that is we update the PTRANS in the newest Frame,
             # the ACT stored in the previous Frame will also be updated.
             # new_node.action["PTRANS"] = deepcopy(self.cur.action["PTRANS"])
-            new_node.action["PTRANS"] = self.cur.action["PTRANS"]
+            new_node.actions_by_type["PTRANS"] = self.cur.actions_by_type["PTRANS"]
 
-        if len(self.cur.action["PSTOP"]) > 0:
-            for action_s in self.cur.action["PSTOP"]:
-                for action_t in new_node.action["PTRANS"]:
+        if len(self.cur.actions_by_type["PSTOP"]) > 0:
+            for action_s in self.cur.actions_by_type["PSTOP"]:
+                for action_t in new_node.actions_by_type["PTRANS"]:
                     if action_t["object"] == action_s["object"]:
-                        new_node.action["PTRANS"].remove(action_t)
+                        new_node.actions_by_type["PTRANS"].remove(action_t)
                         break
         new_node.empty = self.cur.empty
         self.cur.next = new_node
@@ -157,8 +159,13 @@ class Mental_motion_picture:
         print(frame.touching)
 
         print("\nPRIMITIVE ACTIONS --------------------------------------")
-        for action in frame.action:
-            print(action, frame.action[action])
+        for act_type in frame.actions_by_type:
+            actions = frame.actions_by_type[act_type]
+            if act_type == "INGEST":
+                for act in actions:
+                    print("object(s)", act.object, "container", act.container)
+            else:
+                print(act_type, actions)
 
     def print_latest(self):
         self.print(self.count)
@@ -175,7 +182,7 @@ class Mental_motion_picture:
 
         # new_dict = ["object " + object, "from " + From, "to " + to]
         new_dict = {"object": object, "from": From, "to": to}
-        self.cur.action["PTRANS"].append(new_dict)
+        self.cur.actions_by_type["PTRANS"].append(new_dict)
         self.cur.empty = False
 
     def PSTOP(self, object):
@@ -184,8 +191,8 @@ class Mental_motion_picture:
             self.cur.space.add_object(object)
             self.cur.touching.add_object(object)
 
-        self.cur.action["PSTOP"].append({})
-        self.cur.action["PSTOP"][-1]["object"] = object
+        self.cur.actions_by_type["PSTOP"].append({})
+        self.cur.actions_by_type["PSTOP"][-1]["object"] = object
         self.cur.empty = False
 
     def INGEST(self, object, container):
@@ -195,9 +202,14 @@ class Mental_motion_picture:
                 self.cur.space.add_object(thing)
                 self.cur.touching.add_object(thing)
 
-        self.cur.action["INGEST"].append({})
-        self.cur.action["INGEST"][-1]["object"] = object
-        self.cur.action["INGEST"][-1]["container"] = container
+        act = INGEST(object, container=container)
+        self.cur.actions_by_type["INGEST"].append(act)
+        self.cur.actions.append(act)
+
+        # self.cur.actions_by_type["INGEST"].append({})
+        # self.cur.actions_by_type["INGEST"][-1]["object"] = object
+        # self.cur.actions_by_type["INGEST"][-1]["container"] = container
+
         self.cur.empty = False
 
     def EXPEL(self, object, container):
@@ -207,9 +219,9 @@ class Mental_motion_picture:
                 self.cur.space.add_object(thing)
                 self.cur.touching.add_object(thing)
 
-        self.cur.action["EXPEL"].append({})
-        self.cur.action["EXPEL"][-1]["object"] = object
-        self.cur.action["EXPEL"][-1]["container"] = container
+        self.cur.actions_by_type["EXPEL"].append({})
+        self.cur.actions_by_type["EXPEL"][-1]["object"] = object
+        self.cur.actions_by_type["EXPEL"][-1]["container"] = container
         self.cur.empty = False
 
     def STATECHANGE(self, object, to):
@@ -219,12 +231,21 @@ class Mental_motion_picture:
                 self.cur.space.add_object(thing)
                 self.cur.touching.add_object(thing)
 
-        self.cur.action["STATECHANGE"].append({})
-        self.cur.action["STATECHANGE"][-1]["object"] = object
-        self.cur.action["STATECHANGE"][-1]["to"] = to
+        self.cur.actions_by_type["STATECHANGE"].append({})
+        self.cur.actions_by_type["STATECHANGE"][-1]["object"] = object
+        self.cur.actions_by_type["STATECHANGE"][-1]["to"] = to
         self.cur.empty = False
 
-    def updateACT(self, type: str, key: str, val: str, index=None):
+    def update_act_by_type(self, act_type: str, key: str, val: str, index=None):
+        """
+        update the last primitive act of a type in a specific timestep
+
+        @param act_type:
+        @param key:
+        @param val:
+        @param index:
+        @return:
+        """
         # get the timestep that needs to be updated
         if not index:
             node = self.cur
@@ -232,7 +253,47 @@ class Mental_motion_picture:
             node = self.get(index)
 
         # update the last ACT of that type
-        node.action[type][-1][key] = val
+        if key not in ["object", "from", "to", "container"]:
+            print("Invalid primitive act attribute!")
+            return
+        if key == "object":
+            node.actions_by_type[act_type][-1].object = [val]
+        elif key == "from":
+            node.actions_by_type[act_type][-1].act_from = val
+        elif key == "to":
+            node.actions_by_type[act_type][-1].act_to = val
+        else:
+            node.actions_by_type[act_type][-1].container = val
+
+    def update_act(self, key: str, val: str):
+        """
+        update the last primitive act of the model
+
+        @param key:
+        @param val:
+        @return:
+        """
+        if key not in ["object", "from", "to", "container"]:
+            print("Invalid primitive act attribute!")
+            return
+
+        if key == "object":
+            self.cur.actions[-1].object = [val]
+        elif key == "from":
+            self.cur.actions[-1].act_from = val
+        elif key == "to":
+            self.cur.actions[-1].act_to = val
+        elif key == "container":
+            self.cur.actions[-1].container = val
+
+    def update_act_add_object(self, val: str):
+        """
+        add an object to the last primitive act of the model
+
+        @param val:
+        @return:
+        """
+        self.cur.actions[-1].object.append(val)
 
 # # testing
 # model = Mental_motion_picture()

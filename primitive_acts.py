@@ -1,4 +1,4 @@
-class Acts:
+class PrimitiveAct:
 
     def __init__(self, object: str, act_from=None, act_to=None, container=None):
         self.object = [object]  # a container can contain >1 objects, or >1 parallel objects behave similarly
@@ -7,21 +7,21 @@ class Acts:
         self.container = container
 
 
-class PSTOP(Acts):
+class PSTOP(PrimitiveAct):
     pass
 
 
-class PTRANS(Acts):
+class PTRANS(PrimitiveAct):
     pass
 
 
-class INGEST(Acts):
+class INGEST(PrimitiveAct):
     pass
 
 
-class EXPEL(Acts):
+class EXPEL(PrimitiveAct):
     pass
 
 
-class STATECHANGE(Acts):
+class STATECHANGE(PrimitiveAct):
     pass
