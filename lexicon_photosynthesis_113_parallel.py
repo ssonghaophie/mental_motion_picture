@@ -14,9 +14,12 @@ lex["*START*"] = Packet([Request(text="start parsing", test_flag=True,
 lex["THE"] = Packet([Request(text="definite article THE", test_flag=True,
                              assigns={"CD": "THE", "PART-OF-SPEECH": "definite-article"})])
 lex["FROM"] = Packet([Request(text="prep FROM", test_flag=True, assigns={"CD": "FROM", "PART-OF-SPEECH": "preposition"},
-                              next=Packet([Request(text="update a PTRANS; PART-OF-SPEECH is noun-phrase",
+                              next=Packet([Request(text="update a PTRANS",
                                                    tests={"PART-OF-SPEECH": "noun-phrase", "PTRANS": ""},
-                                                   calls=[["UPDATEACT", "PTRANS", "from", "CD", None]])]))])
+                                                   calls=[["UPDATEACT", "PTRANS", "from", "CD", None]]),
+                                           Request(text="update an INGEST",
+                                                   tests={"PART-OF-SPEECH": "noun-phrase", "INGEST": ""},
+                                                   calls=[["UPDATEACT", "INGEST", "from", "CD", None]])]))])
 
 # find a parallel noun until a verb is encountered?
 check_parallel_noun = Packet([Request(text="check parallel noun-phrases", tests={"PART-OF-SPEECH": "noun-phrase"},
@@ -31,7 +34,8 @@ lex["ROOTS"] = Packet([Request(text="noun ROOTS", test_flag=True,
                                next=check_parallel_noun)])
 lex["ABSORB"] = Packet([Request(text="verb ABSORB", test_flag=True, assigns={"CD": "ABSORB", "PART-OF-SPEECH": "verb"},
                                 next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
-                                                     tests={"PART-OF-SPEECH": "noun-phrase"}, calls=[["CONTAIN"]]),
+                                                     tests={"PART-OF-SPEECH": "noun-phrase"},
+                                                     calls=[["INGEST"], ["CONTAIN"]]),
                                              Request(text="CD is FROM",
                                                      tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"})]))])
 lex["WATER"] = Packet([Request(text="noun WATER", test_flag=True,
@@ -43,9 +47,10 @@ lex["AND"] = Packet([Request(text="conj AND", test_flag=True,
 lex["MINERALS"] = Packet([Request(text="noun MINERALS", test_flag=True,
                                   assigns={"CD": "MINERALS", "PART-OF-SPEECH": "noun-phrase"},
                                   next=check_parallel_noun)])
-# lex["SOIL"] = Packet([Request(text="noun SOIL", test_flag=True,
-#                               assigns={"CD": "SOIL", "PART-OF-SPEECH": "noun-phrase"})])
+lex["SOIL"] = Packet([Request(text="noun SOIL", test_flag=True,
+                              assigns={"CD": "SOIL", "PART-OF-SPEECH": "noun-phrase"},
+                              next=check_parallel_noun)])
 
 ################################################################################
 analyzer = Analyzer(lexicon=lex)
-analyzer.parse("The roots absorb water and minerals.")
+analyzer.parse("The roots absorb water and minerals from the soil.")

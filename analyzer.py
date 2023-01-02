@@ -1,4 +1,4 @@
-from mental_model import Frame, Mental_motion_picture
+from mental_model import MentalMotionPicture
 import re  # regular expression
 
 
@@ -21,10 +21,11 @@ class Packet:
         self.keep = keep
         self.one_time = one_time  # doc for one_time
 
+
 # the ELI analyzer
 class Analyzer:
     vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None}
-    model = Mental_motion_picture()
+    model = MentalMotionPicture()
 
     def __init__(self, lexicon: {}):
         self.PARAGRAPH = []  # a paragraph is a list of sentences
@@ -42,7 +43,7 @@ class Analyzer:
         """
         construct and run an analyzer
 
-        @param sentence: input sentence
+        @param text: input paragraph
         # @return:
         """
         self.split_para(text)
@@ -148,7 +149,7 @@ class Analyzer:
 
     def read_word(self) -> Packet:
         """
-        read the next word from self.SENTENCE, find the word in
+        read the next word from self. SENTENCE, find the word in
         lexicon, and return the word packet
 
         @return:
@@ -231,7 +232,6 @@ class Analyzer:
         calls = req.CALLS
         print("\nFUNCTION CALL(S) TO MENTAL MODEL:")
         for call in calls:
-            # todo: ingest & ingested, separate ingest and contain
             if call[0] == "CONTAIN":  # active
                 print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
@@ -261,10 +261,10 @@ class Analyzer:
                 self.model.under((self.vars["SUBJECT"], self.vars["CD"]))
 
             elif call[0] == "PTRANS":
-                to = call[1]
-                From = call[2]
-                print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], From, to))
-                self.model.PTRANS(object=self.vars["SUBJECT"], to=to, From=From)
+                ptrans_to = call[1]
+                ptrans_from = call[2]
+                print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], ptrans_from, ptrans_to))
+                self.model.PTRANS(object=self.vars["SUBJECT"], to=ptrans_to, From=ptrans_from)
 
             elif call[0] == "PSTOP":
                 print(" - %s STOP(S) MOVING..." % self.vars["SUBJECT"])

@@ -1,6 +1,6 @@
 from map import Containment, Space, Touching
 from primitive_acts import *
-from copy import deepcopy
+# from copy import deepcopy
 
 """
 The Mental_map class is adapted from the linked_list class from
@@ -21,7 +21,7 @@ class Frame:
         self.empty = True  # only the initial state is empty
 
 
-class Mental_motion_picture:
+class MentalMotionPicture:
     def __init__(self):
         self.head = Frame(Containment(), Space(), Touching())
         self.count = 1  # number of Frames in this model
@@ -88,11 +88,6 @@ class Mental_motion_picture:
 
     def contain(self, edge):
         """add an edge to the containment map of the last Frame"""
-        # for object in edge:
-            # if object not in self.cur.containment._graph_dict:
-            #     self.cur.containment.add_object(object)
-            #     self.cur.space.add_object(object)
-            #     self.cur.touching.add_object(object)
         self.cur.containment.contain(edge)
         self.cur.empty = False
 
@@ -102,11 +97,6 @@ class Mental_motion_picture:
 
     def above(self, edge):
         """add an edge to the space map of the last Frame"""
-        # for object in edge:
-            # if object not in self.cur.containment._graph_dict:
-            #     self.cur.containment.add_object(object)
-            #     self.cur.space.add_object(object)
-            #     self.cur.touching.add_object(object)
         self.cur.space.above(edge)
         self.cur.empty = False
 
@@ -116,11 +106,6 @@ class Mental_motion_picture:
 
     def under(self, edge):
         """add an edge to the space map of the last Frame"""
-        # for object in edge:
-        #     if object not in self.cur.containment._graph_dict:
-        #         self.cur.containment.add_object(object)
-        #         self.cur.space.add_object(object)
-        #         self.cur.touching.add_object(object)
         self.cur.space.under(edge)
         self.cur.empty = False
 
@@ -159,13 +144,26 @@ class Mental_motion_picture:
         print(frame.touching)
 
         print("\nPRIMITIVE ACTIONS --------------------------------------")
-        for act_type in frame.actions_by_type:
-            actions = frame.actions_by_type[act_type]
-            if act_type == "INGEST":
-                for act in actions:
-                    print("object(s)", act.object, "container", act.container)
-            else:
-                print(act_type, actions)
+
+        print("PTRANS: ", end="")
+        for act in frame.actions_by_type["PTRANS"]:
+            print("(objects:", act.object, ", from:", act.act_from, ", to:", act.act_to, end=") ")
+
+        print("\nPSTOP: ", end="")
+        for act in frame.actions_by_type["PSTOP"]:
+            print("(objects:", act.object, end=") ")
+
+        print("\nINGEST: ", end="")
+        for act in frame.actions_by_type["INGEST"]:
+            print("(objects:", act.object, ", container:", act.container, ", from:", act.act_from, end=") ")
+
+        print("\nEXPEL: ", end="")
+        for act in frame.actions_by_type["EXPEL"]:
+            print("(objects:", act.object, ", container:", act.container, end=") ")
+
+        print("\nSTATECHANGE: ", end="")
+        for act in frame.actions_by_type["STATECHANGE"]:
+            print("(objects:", act.object, ", to:", act.act_to, end=") ")
 
     def print_latest(self):
         self.print(self.count)
@@ -174,66 +172,64 @@ class Mental_motion_picture:
         """Allows for bracket operator syntax (i.e. a[0] = first item)"""
         return self.get(index)
 
-    def PTRANS(self, object, to=None, From=None):
+    def add_to_graph(self, object):
+        """
+        check if an object exists in the graph; if not, add to graph
+
+        @param object:
+        @return:
+        """
         if object not in self.cur.containment._graph_dict:
             self.cur.containment.add_object(object)
             self.cur.space.add_object(object)
             self.cur.touching.add_object(object)
 
-        # new_dict = ["object " + object, "from " + From, "to " + to]
-        new_dict = {"object": object, "from": From, "to": to}
-        self.cur.actions_by_type["PTRANS"].append(new_dict)
+    def PTRANS(self, object, to=None, From=None):
+        self.add_to_graph(object)
+
+        act = PTRANS(object, act_from=From, act_to=to)
+        self.cur.actions_by_type["PTRANS"].append(act)
+        self.cur.actions.append(act)
+
         self.cur.empty = False
 
     def PSTOP(self, object):
-        if object not in self.cur.containment._graph_dict:
-            self.cur.containment.add_object(object)
-            self.cur.space.add_object(object)
-            self.cur.touching.add_object(object)
+        self.add_to_graph(object)
 
-        self.cur.actions_by_type["PSTOP"].append({})
-        self.cur.actions_by_type["PSTOP"][-1]["object"] = object
-        self.cur.empty = False
-
-    def INGEST(self, object, container):
-        for thing in [object, container]:
-            if thing not in self.cur.containment._graph_dict:
-                self.cur.containment.add_object(thing)
-                self.cur.space.add_object(thing)
-                self.cur.touching.add_object(thing)
-
-        act = INGEST(object, container=container)
-        self.cur.actions_by_type["INGEST"].append(act)
+        act = PSTOP(object)
+        self.cur.actions_by_type["PSTOP"].append(act)
         self.cur.actions.append(act)
 
-        # self.cur.actions_by_type["INGEST"].append({})
-        # self.cur.actions_by_type["INGEST"][-1]["object"] = object
-        # self.cur.actions_by_type["INGEST"][-1]["container"] = container
+        self.cur.empty = False
+
+    def INGEST(self, object, container, ingest_from=None):
+        for thing in [object, container, ingest_from]:
+            self.add_to_graph(thing)
+
+        act = INGEST(object, container=container, act_from=ingest_from)
+        self.cur.actions_by_type["INGEST"].append(act)
+        self.cur.actions.append(act)
 
         self.cur.empty = False
 
     def EXPEL(self, object, container):
         for thing in [object, container]:
-            if thing not in self.cur.containment._graph_dict:
-                self.cur.containment.add_object(thing)
-                self.cur.space.add_object(thing)
-                self.cur.touching.add_object(thing)
+            self.add_to_graph(thing)
 
-        self.cur.actions_by_type["EXPEL"].append({})
-        self.cur.actions_by_type["EXPEL"][-1]["object"] = object
-        self.cur.actions_by_type["EXPEL"][-1]["container"] = container
+        act = EXPEL(object, container=container)
+        self.cur.actions_by_type["EXPEL"].append(act)
+        self.cur.actions.append(act)
+
         self.cur.empty = False
 
     def STATECHANGE(self, object, to):
         for thing in [object, to]:
-            if thing not in self.cur.containment._graph_dict:
-                self.cur.containment.add_object(thing)
-                self.cur.space.add_object(thing)
-                self.cur.touching.add_object(thing)
+            self.add_to_graph(thing)
 
-        self.cur.actions_by_type["STATECHANGE"].append({})
-        self.cur.actions_by_type["STATECHANGE"][-1]["object"] = object
-        self.cur.actions_by_type["STATECHANGE"][-1]["to"] = to
+        act = STATECHANGE(object, act_to=to)
+        self.cur.actions_by_type["STATECHANGE"].append(act)
+        self.cur.actions.append(act)
+
         self.cur.empty = False
 
     def update_act_by_type(self, act_type: str, key: str, val: str, index=None):
@@ -262,7 +258,7 @@ class Mental_motion_picture:
             node.actions_by_type[act_type][-1].act_from = val
         elif key == "to":
             node.actions_by_type[act_type][-1].act_to = val
-        else:
+        elif key == "container":
             node.actions_by_type[act_type][-1].container = val
 
     def update_act(self, key: str, val: str):
@@ -294,20 +290,3 @@ class Mental_motion_picture:
         @return:
         """
         self.cur.actions[-1].object.append(val)
-
-# # testing
-# model = Mental_motion_picture()
-# model.PTRANS("elephant", to="home", From="zoo")
-# model.PTRANS("bus", to="stop", From="school")
-#
-# model.advance_time()
-# model.PTRANS("rain", to="ground", From="sky")
-# model.PSTOP("bus")
-# model.PSTOP("elephant")
-#
-# model.advance_time()
-# model.updateACT("PTRANS", "from", "south")
-# model.print(1)
-# model.print(2)
-# model.print(3)
-# model.print_latest()
