@@ -43,7 +43,7 @@ class Analyzer:
         """
         construct and run an analyzer
 
-        @param text: input paragraph
+        @param text: input text
         # @return:
         """
         self.split_para(text)
@@ -98,13 +98,13 @@ class Analyzer:
                             self.function_call(trig_req)
                         continue
 
+                    elif not self.STACK[-1]:  # word not in lexicon
+                        self.STACK.pop()
+                        continue
                     elif self.STACK[-1].one_time:
                         # if the packet should be checked only one time,
                         # then even if no request is triggered, remove the packet from STACK
                         self.STACK.pop()
-                    elif not self.STACK[-1]:  # word not in lexicon
-                        self.STACK.pop()
-                        continue
                     break
 
                 # loop 3
@@ -142,10 +142,8 @@ class Analyzer:
         sentence = "*START* " + sentence.strip(".,?;:/\\ !@#$%^&*").upper()
 
         # split on whitespace characters
-        split = sentence.split()
-        self.SENTENCE = split
-        # self.SENTENCE.extend(split)
-        self.length += len(split)
+        self.SENTENCE = sentence.split()
+        self.length += len(self.SENTENCE)
 
     def read_word(self) -> Packet:
         """
@@ -230,7 +228,7 @@ class Analyzer:
 
     def function_call(self, req: Request):
         calls = req.CALLS
-        print("\nFUNCTION CALL(S) TO MENTAL MODEL:")
+        print("\nFUNCTION CALL(S) TO MENTAL MOTION PICTURE:")
         for call in calls:
             if call[0] == "CONTAIN":  # active
                 print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))

@@ -42,10 +42,10 @@ class MentalMotionPicture:
             # new_node.action["PTRANS"] = deepcopy(self.cur.action["PTRANS"])
             new_node.actions_by_type["PTRANS"] = self.cur.actions_by_type["PTRANS"]
 
-        if len(self.cur.actions_by_type["PSTOP"]) > 0:
+        if self.cur.actions_by_type["PSTOP"]:
             for action_s in self.cur.actions_by_type["PSTOP"]:
                 for action_t in new_node.actions_by_type["PTRANS"]:
-                    if action_t["object"] == action_s["object"]:
+                    if action_t.object == action_s.object:
                         new_node.actions_by_type["PTRANS"].remove(action_t)
                         break
         new_node.empty = self.cur.empty
@@ -128,9 +128,7 @@ class MentalMotionPicture:
         self.cur.touching.x_touch(edge)
 
     def print(self, index):
-        """ print the containment map, space map, and touching map
-            of the Frame at a certain index
-        """
+        """ print the containment map, space map, and touching map of the Frame at a certain index"""
         print("\n-- -- -- -- print Frame", index)
         frame = self.get(index)
 
@@ -174,12 +172,13 @@ class MentalMotionPicture:
 
     def add_to_graph(self, object):
         """
-        check if an object exists in the graph; if not, add to graph
+        check if an object exists in the graph; if not, add to graph;
+        do not add None to the graph.
 
         @param object:
         @return:
         """
-        if object not in self.cur.containment._graph_dict:
+        if object and object not in self.cur.containment._graph_dict:
             self.cur.containment.add_object(object)
             self.cur.space.add_object(object)
             self.cur.touching.add_object(object)
@@ -289,4 +288,5 @@ class MentalMotionPicture:
         @param val:
         @return:
         """
-        self.cur.actions[-1].object.append(val)
+        if self.cur.actions:
+            self.cur.actions[-1].object.append(val)
