@@ -48,6 +48,7 @@ lex["PLANT"] = Packet([Request(text="noun PLANT", test_flag=True,
 lex["TRAPS"] = Packet([Request(text="verb TRAPS", test_flag=True, assigns={"CD": "TRAPS", "PART-OF-SPEECH": "verb"},
                                next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
                                                     tests={"PART-OF-SPEECH": "noun-phrase"},
+                                                    assigns={"OBJECT": "*CD"},
                                                     calls=[["CONTAIN"], ["INGEST"]]),
                                             Request(text="CD is FROM",
                                                     tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"})]))])
@@ -91,6 +92,7 @@ lex["SOIL"] = Packet([Request(text="noun SOIL", test_flag=True,
 # 3. This combination of water and minerals flows from the stem into the leaf.
 lex["COMBINATION"] = Packet([Request(text="noun COMBINATION", test_flag=True,
                                      assigns={"CD": "COMBINATION", "PART-OF-SPEECH": "noun-phrase"},
+                                     calls=[["MATCH COMBO"]],
                                      next=check_parallel_noun)])
 lex["FLOWS"] = Packet([Request(text="verb FLOWS", test_flag=True,
                                assigns={"CD": "FLOWS", "PART-OF-SPEECH": "verb"}, calls=[["PTRANS", None, None]],
@@ -120,15 +122,17 @@ lex["ENTERS"] = Packet([Request(text="verb ENTERS", test_flag=True, assigns={"CD
 
 # 5. Light, water and minerals, and the carbon-dioxide all mix together.
 # lex["ALL"]
-# lex["MIX"]
+lex["MIX"] = Packet([Request(text="verb MIX", test_flag=True, assigns={"CD": "MIX", "PART-OF-SPEECH": "verb"},
+                             calls=[["DEFINE COMBO"]])])
 # lex["TOGETHER"]
-# todo: mixture / combo
+# todo: all and together have similar meanings
 
 # 6. This mixture forms glucose which is what the plant eats.
 # This mixture forms glucose.
-# todo: which
+# todo: "which"
 lex["MIXTURE"] = Packet([Request(text="noun MIXTURE", test_flag=True,
-                                 assigns={"CD": "MIXTURE", "PART-OF-SPEECH": "noun-phrase"})])
+                                 assigns={"CD": "MIXTURE", "PART-OF-SPEECH": "noun-phrase"},
+                                 calls=[["MATCH COMBO"]])])
 lex["FORMS"] = Packet([Request(text="verb FORMS", test_flag=True, assigns={"CD": "FORMS", "PART-OF-SPEECH": "verb"},
                                next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
                                                     tests={"PART-OF-SPEECH": "noun-phrase"},
@@ -157,9 +161,14 @@ lex["STOMATA"] = Packet([Request(text="noun STOMATA", test_flag=True,
                                  assigns={"CD": "STOMATA", "PART-OF-SPEECH": "noun-phrase"})])
 
 analyzer = Analyzer(lexicon=lex)
-analyzer.parse("Chloroplasts in the leaf of the plant traps light from the sun. "
-               "The roots absorb water and minerals from the soil. "
-               "This combination of water and minerals flows from the stem into the leaf. "
-               "Carbon-dioxide enters the leaf.")
-               # "This mixture forms glucose."
-               # "Oxygen goes out of the leaf through the stomata.")
+
+# todo: I had to remove comma manually in sentence 5?!
+analyzer.parse("Light water and minerals and carbon-dioxide all mix together. This mixture forms glucose.")
+
+# analyzer.parse("Chloroplasts in the leaf of the plant traps light from the sun. "
+#                "The roots absorb water and minerals from the soil. "
+#                "This combination of water and minerals flows from the stem into the leaf. "
+#                "Carbon-dioxide enters the leaf. "
+#                "Light, water and minerals, and carbon-dioxide all mix together. "
+#                "This mixture forms glucose. "
+#                "Oxygen goes out of the leaf through the stomata.")

@@ -2,7 +2,8 @@ from mental_model import MentalMotionPicture
 import re  # regular expression
 
 
-# Each word entry in the lexicon is a list of Request objects with a keep flag
+# Each word entry in the lexicon is a word packet,
+# which is a list of Request objects with some flags
 class Request:
 
     def __init__(self, text=None, test_flag=False, tests=None, assigns=None, calls=None, next=None):
@@ -24,16 +25,33 @@ class Packet:
 
 # the ELI analyzer
 class Analyzer:
-    vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None}
     model = MentalMotionPicture()
+    cur_word = None
+
+    # to keep track of the parsing progress of the analyzer
+    # vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None, "OBJECT": None}
+    # todo: both subject and object can be multiple things, maybe a list??
+    vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": [], "OBJECT": []}
+
+    # todo: maybe each property should be its own attribute of the analyzer??
+    # cd = None
+    # part_of_speech = None
+    # subject = []
+    # object = []
+
+    # to keep track of parallel noun phrases and noun combinations
+    noun = False
+    first_noun = True  # encounter the first noun of a group of parallel noun phrases
+    noun_parallel = []  # some nouns phrases are parallel but the paragraph doesn't define them as a combo
+    noun_combo = []  # the paragraph defines them to be combinations / mixture
 
     def __init__(self, lexicon: {}):
-        self.PARAGRAPH = []  # a paragraph is a list of sentences
-        self.SENTENCE = []  # a sentence is a list of words
-        self.STACK = []  # store word packets
-        self.TRIGGERED = []  # triggered requests
-        self.CD = None  # the output, what data structure?
-        self.LEXICON = lexicon
+        self.paragraph = []  # a paragraph is a list of sentences
+        self.sentence = []  # a sentence is a list of words
+        self.stack = []  # store word packets
+        self.triggered = []  # triggered requests
+        self.cd = None  # the output, what data structure?
+        self.lexicon = lexicon
 
         # read words from sentence
         self.length = 0  # length of the SENTENCE list
@@ -46,9 +64,9 @@ class Analyzer:
         @param text: input text
         # @return:
         """
-        self.split_para(text)
-        print(self.PARAGRAPH)
-        while self.PARAGRAPH:
+        self.split_paragraph(text)
+        print(self.paragraph)
+        while self.paragraph:
             self.length = 0  # length of the SENTENCE list
             self.pointer = 0  # index of the next word in SENTENCE
 
@@ -58,39 +76,41 @@ class Analyzer:
             if not self.model.cur.empty:
                 self.model.advance_time()
 
-            sentence = self.PARAGRAPH.pop(0)
-            self.split(sentence)
-            print("\n", self.SENTENCE)
+            sentence = self.paragraph.pop(0)
+            self.split_sentence(sentence)
+            print("\n", self.sentence)
             print("--------------------------------------------------------")
             print("SENTENCE:", end=" ")
-            for word in self.SENTENCE[1:]:
+            for word in self.sentence[1:]:
                 print(word, end=" ")
             print()
 
-            # reset the analyzer attributes
+            # todo: make it a function?? reset the analyzer attributes
             for var in self.vars:
                 self.vars[var] = None
 
             # loop 1 - terminates when SENTENCE is empty
             while self.pointer < self.length:
                 # read next word, put packet on top of stack
-                self.STACK.append(self.read_word())
+                self.stack.append(self.read_word())
+                self.noun = False
+                self.first_noun = True
 
                 # loop 2
-                while self.STACK:
-                    trig_flag, trig_req = self.check_trig_req(self.STACK[-1])
+                while self.stack:
+                    trig_flag, trig_req = self.check_trig_req(self.stack[-1])
                     if trig_flag:
-                        self.TRIGGERED.append(trig_req)
+                        self.triggered.append(trig_req)
 
                         # keep flag is True, keep the packet but remove the request.
-                        if self.STACK[-1].keep:
-                            self.STACK[-1].requests.remove(trig_req)
+                        if self.stack[-1].keep:
+                            self.stack[-1].requests.remove(trig_req)
                             # if after removal, the packet is empty, remove the packet
-                            if not self.STACK[-1].requests:
-                                self.STACK.pop()
+                            if not self.stack[-1].requests:
+                                self.stack.pop()
                         # keep flag is False, remove the packet
                         else:
-                            self.STACK.pop()
+                            self.stack.pop()
 
                         if trig_req.ASSIGNS:
                             self.execute_assign(trig_req)
@@ -98,40 +118,57 @@ class Analyzer:
                             self.function_call(trig_req)
                         continue
 
-                    elif not self.STACK[-1]:  # word not in lexicon
-                        self.STACK.pop()
+                    elif not self.stack[-1]:  # word not in lexicon
+                        self.stack.pop()
                         continue
-                    elif self.STACK[-1].one_time:
-                        # if the packet should be checked only one time,
-                        # then even if no request is triggered, remove the packet from STACK
-                        self.STACK.pop()
+
+                    # (for the parallel noun phrase functionality) if the packet should be checked only one time,
+                    # then even if no request is triggered, remove the packet from stack
+                    elif self.stack[-1].one_time:
+                        self.stack.pop()
                     break
 
                 # loop 3
-                while self.TRIGGERED:
-                    cur_request = self.TRIGGERED.pop()
+                while self.triggered:
+                    cur_request = self.triggered.pop()
                     if cur_request.NEXT_PACKET:
-                        self.STACK.append(cur_request.NEXT_PACKET)
+                        self.stack.append(cur_request.NEXT_PACKET)
 
-        # if anything left on the stack, print it
+                    if cur_request.TEXT == "check parallel noun-phrases":
+                        self.first_noun = False
+
+                # group noun phrases into parallel groups
+                if self.noun:
+                    if self.first_noun:
+                        self.noun_parallel.append([self.cur_word])
+                    else:  # it is a noun but not the first one of a group of parallel noun phrases
+                        self.noun_parallel[-1].append(self.cur_word)
+
+        self.print_results()
+
+    def print_results(self):
         print("\n--------------------------------------------------------")
         print("|||||||||||||||||||||| THE END |||||||||||||||||||||||||")
         print("--------------------------------------------------------\n")
 
         # print packets left on stack
-        print(len(self.STACK), "word packet(s) left on STACK:")
-        for packet in self.STACK:
+        print(len(self.stack), "word packet(s) left on STACK:")
+        for packet in self.stack:
             print(" -", packet.requests[0].TEXT)
 
         # print the resulting mental model
         print("\n--------------------------------------------------------")
         print("mental model generated:")
+        print("\nparallel noun phrases", self.noun_parallel)
+        print("noun phrase combinations", self.noun_combo)
         self.model.print_latest()
 
-    def split_para(self, para: str):
-        self.PARAGRAPH = re.split(r"[,.!?]\s", para)
+        # print("vars of the analyzer:", self.vars)
 
-    def split(self, sentence: str):
+    def split_paragraph(self, para: str):
+        self.paragraph = re.split(r"[,.!?]\s", para)
+
+    def split_sentence(self, sentence: str):
         """
         the input sentence is put into uppercase and split on all
         whitespace strings. The resulted list is appended on SENTENCE
@@ -142,25 +179,25 @@ class Analyzer:
         sentence = "*START* " + sentence.strip(".,?;:/\\ !@#$%^&*").upper()
 
         # split on whitespace characters
-        self.SENTENCE = sentence.split()
-        self.length += len(self.SENTENCE)
+        self.sentence = sentence.split()
+        self.length += len(self.sentence)
 
     def read_word(self) -> Packet:
         """
-        read the next word from self. SENTENCE, find the word in
+        read the next word from self.SENTENCE, find the word in
         lexicon, and return the word packet
 
-        @return:
+        @return: a word packet in the lexicon
         """
-        word = self.SENTENCE[self.pointer]
+        self.cur_word = self.sentence[self.pointer]
         print("--------------------------------------------------------")
-        print("READ WORD: %s" % word)
+        print("READ WORD: %s" % self.cur_word)
 
         # check if the word has an entry in the lexicon
-        if word in self.LEXICON:
-            packet = self.LEXICON[word]
+        if self.cur_word in self.lexicon:
+            packet = self.lexicon[self.cur_word]
         else:
-            print(word, "not found in lexicon!")
+            print(self.cur_word, "not found in lexicon!")
             packet = None
 
         self.pointer += 1
@@ -226,6 +263,10 @@ class Analyzer:
                 self.vars[var] = req.ASSIGNS[var]
                 print(" - SET %s TO %s" % (var, req.ASSIGNS[var]))
 
+            # check if "PART-OF-SPEECH" is "noun-phrase" and update self.noun
+            if var == "PART-OF-SPEECH" and req.ASSIGNS[var] == "noun-phrase":
+                self.noun = True
+
     def function_call(self, req: Request):
         calls = req.CALLS
         print("\nFUNCTION CALL(S) TO MENTAL MOTION PICTURE:")
@@ -283,6 +324,20 @@ class Analyzer:
                 if call[1] == "CD":
                     call[1] = self.vars["CD"]
                 self.model.update_act_add_object(call[1])
+
+            # parallel noun phrases and combinations!
+            elif call[0] == "DEFINE COMBO":
+                if self.noun_parallel:
+                    self.noun_combo.append(self.noun_parallel[-1])
+                    print(" - %s is a noun phrase combination" % self.noun_parallel[-1])
+
+            elif call[0] == "MATCH COMBO":
+                if self.noun_combo:
+                    print(" - %s equals combination %s" % (self.cur_word, self.noun_combo[-1]))
+                elif self.noun_parallel:
+                    # todo: iterate backwards to find the first combo (len > 1)
+                    pass
+                    # print(" - %s equals combination %s" % (self.cur_word, self.noun_parallel[-1]))
 
             # special words have their own function calls
             # todo - how does the analyzer handle the special word "as"?
