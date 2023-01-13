@@ -163,12 +163,12 @@ lex["STOMATA"] = Packet([Request(text="noun STOMATA", test_flag=True,
 analyzer = Analyzer(lexicon=lex)
 
 # todo: I had to remove comma manually in sentence 5?!
-analyzer.parse("Light water and minerals and carbon-dioxide all mix together. This mixture forms glucose.")
 
-# analyzer.parse("Chloroplasts in the leaf of the plant traps light from the sun. "
-#                "The roots absorb water and minerals from the soil. "
-#                "This combination of water and minerals flows from the stem into the leaf. "
-#                "Carbon-dioxide enters the leaf. "
-#                "Light, water and minerals, and carbon-dioxide all mix together. "
-#                "This mixture forms glucose. "
-#                "Oxygen goes out of the leaf through the stomata.")
+# analyzer.parse("Light water and minerals and carbon-dioxide all mix together. This mixture forms glucose.")
+analyzer.parse("Chloroplasts in the leaf of the plant traps light from the sun. "
+               "The roots absorb water and minerals from the soil. "
+               "This combination of water and minerals flows from the stem into the leaf. "
+               "Carbon-dioxide enters the leaf. "
+               "Light water and minerals and carbon-dioxide all mix together. "
+               "This mixture forms glucose. "
+               "Oxygen goes out of the leaf through the stomata.")

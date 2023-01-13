@@ -31,7 +31,7 @@ class Analyzer:
     # to keep track of the parsing progress of the analyzer
     # vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None, "OBJECT": None}
     # todo: both subject and object can be multiple things, maybe a list??
-    vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": [], "OBJECT": []}
+    vars = {"CD": "None", "PART-OF-SPEECH": "None", "SUBJECT": "None", "OBJECT": []}
 
     # todo: maybe each property should be its own attribute of the analyzer??
     # cd = None
@@ -159,8 +159,8 @@ class Analyzer:
         # print the resulting mental model
         print("\n--------------------------------------------------------")
         print("mental model generated:")
-        print("\nparallel noun phrases", self.noun_parallel)
-        print("noun phrase combinations", self.noun_combo)
+        # print("\nparallel noun phrases", self.noun_parallel)
+        # print("noun phrase combinations", self.noun_combo)
         self.model.print_latest()
 
         # print("vars of the analyzer:", self.vars)
@@ -184,7 +184,7 @@ class Analyzer:
 
     def read_word(self) -> Packet:
         """
-        read the next word from self.SENTENCE, find the word in
+        read the next word from self.sentence, find the word in
         lexicon, and return the word packet
 
         @return: a word packet in the lexicon
@@ -228,7 +228,7 @@ class Analyzer:
 
                 # if the word is a noun, add to maps
                 if req.TEXT.startswith("noun"):
-                    self.model.add_object(req.TEXT[5:])
+                    self.model.add_to_graph(req.TEXT[5:])
 
                 return True, req
 
@@ -281,15 +281,18 @@ class Analyzer:
 
             elif call[0] == "INGEST":  # active
                 print(" - %s INGEST(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-                self.model.INGEST(object=self.vars["CD"], container=self.vars["SUBJECT"])
+                self.model.INGEST(obj=self.vars["CD"], container=self.vars["SUBJECT"])
 
             elif call[0] == "INGESTED":  # passive!
                 print(" - %s INGEST(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
-                self.model.INGEST(object=self.vars["SUBJECT"], container=self.vars["CD"])
+                self.model.INGEST(obj=self.vars["SUBJECT"], container=self.vars["CD"])
 
             elif call[0] == "STATECHANGE":
                 print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-                self.model.STATECHANGE(object=self.vars["SUBJECT"], to=self.vars["CD"])
+                obj1 = self.model.cur.space.noun_dict[self.vars["SUBJECT"]]
+                obj2 = self.model.cur.space.noun_dict[self.vars["CD"]]
+                obj2.combo = obj1.combo
+                self.model.STATECHANGE(obj=self.vars["SUBJECT"], to=self.vars["CD"])
 
             elif call[0] == "ABOVE":
                 print(" - %s IS/ARE ABOVE %s" % (self.vars["SUBJECT"], self.vars["CD"]))
@@ -303,14 +306,13 @@ class Analyzer:
                 ptrans_to = call[1]
                 ptrans_from = call[2]
                 print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], ptrans_from, ptrans_to))
-                self.model.PTRANS(object=self.vars["SUBJECT"], to=ptrans_to, From=ptrans_from)
+                self.model.PTRANS(obj=self.vars["SUBJECT"], to=ptrans_to, From=ptrans_from)
 
             elif call[0] == "PSTOP":
                 print(" - %s STOP(S) MOVING..." % self.vars["SUBJECT"])
                 self.model.PSTOP(self.vars["SUBJECT"])
 
             elif call[0] == "ADVANCE TIME":
-                # print(" - ADVANCE TO TIME-STEP", self.model.count + 1)
                 self.model.advance_time()
 
             elif call[0] == "UPDATEACT":
@@ -332,12 +334,22 @@ class Analyzer:
                     print(" - %s is a noun phrase combination" % self.noun_parallel[-1])
 
             elif call[0] == "MATCH COMBO":
+                combo_str = None
+                combo = []
                 if self.noun_combo:
-                    print(" - %s equals combination %s" % (self.cur_word, self.noun_combo[-1]))
+                    combo_str = self.noun_combo[-1]
                 elif self.noun_parallel:
-                    # todo: iterate backwards to find the first combo (len > 1)
-                    pass
-                    # print(" - %s equals combination %s" % (self.cur_word, self.noun_parallel[-1]))
+                    i = -1
+                    while (not combo_str) and (len(self.noun_parallel) + i >= 0):
+                        if len(self.noun_parallel[i]) > 1:
+                            combo_str = self.noun_parallel[i]
+                        else:
+                            i -= 1
+                for noun_str in combo_str:
+                    noun_obj = self.model.cur.space.noun_dict[noun_str]
+                    combo.append(noun_obj)
+                self.model.cur.space.noun_dict[self.cur_word].combo = combo
+                print(" - %s equals combination %s" % (self.cur_word, combo_str))
 
             # special words have their own function calls
             # todo - how does the analyzer handle the special word "as"?

@@ -1,6 +1,6 @@
 from map import Containment, Space, Touching
+from noun_phrase import NounPhrase
 from primitive_acts import *
-# from copy import deepcopy
 
 """
 The Mental_map class is adapted from the linked_list class from
@@ -10,7 +10,7 @@ https://github.com/bfaure/Python3_Data_Structures/blob/master/Linked_List/main.p
 
 class Frame:
 
-    def __init__(self, containment, space, touching):
+    def __init__(self, containment: Containment, space: Space, touching: Touching):
         self.containment = containment
         self.space = space
         self.touching = touching
@@ -54,7 +54,7 @@ class MentalMotionPicture:
 
         print(" - ADVANCE TO FRAME", self.count)
 
-    def get(self, index):
+    def get(self, index: int):
         """Returns the value of the Frame at a certain index"""
         if index > self.count or index < 1:
             print("ERROR: Index out of range!")
@@ -67,70 +67,58 @@ class MentalMotionPicture:
             cur_node = cur_node.next
             cur_idx += 1
 
-    def get_containment(self, index):
+    def get_containment(self, index) -> Containment:
         """Returns the containment map of the time_stamp at index"""
         return self.get(index).containment
 
-    def get_space(self, index):
+    def get_space(self, index) -> Space:
         """Returns the space map of the time_stamp at index"""
         return self.get(index).space
 
-    def get_touching(self, index):
+    def get_touching(self, index) -> Touching:
         """Returns the space map of the time_stamp at index"""
         return self.get(index).touching
 
-    def add_object(self, object):
-        """add object to all maps of the last Frame"""
-        self.cur.containment.add_object(object)
-        self.cur.space.add_object(object)
-        self.cur.touching.add_object(object)
-        self.cur.empty = False
-
-    def contain(self, edge):
+    def contain(self, edge: [str]):
         """add an edge to the containment map of the last Frame"""
         self.cur.containment.contain(edge)
         self.cur.empty = False
 
-    def x_contain(self, edge):
+    def x_contain(self, edge: [str]):
         """remove an edge from the containment map of the last Frame"""
         self.cur.containment.x_contain(edge)
 
-    def above(self, edge):
+    def above(self, edge: [str]):
         """add an edge to the space map of the last Frame"""
         self.cur.space.above(edge)
         self.cur.empty = False
 
-    def x_above(self, edge):
+    def x_above(self, edge: [str]):
         """remove an edge from the space map of the last Frame"""
         self.cur.space.x_above(edge)
 
-    def under(self, edge):
+    def under(self, edge: [str]):
         """add an edge to the space map of the last Frame"""
         self.cur.space.under(edge)
         self.cur.empty = False
 
-    def x_under(self, edge):
+    def x_under(self, edge: [str]):
         """remove an edge from the space map of the last Frame"""
         self.cur.space.x_under(edge)
 
-    def touch(self, edge):
+    def touch(self, edge: [str]):
         """add an edge to the touching map of the last Frame"""
-        # for object in edge:
-        #     if object not in self.cur.containment._graph_dict:
-        #         self.cur.containment.add_object(object)
-        #         self.cur.space.add_object(object)
-        #         self.cur.touching.add_object(object)
         self.cur.touching.touch(edge)
         self.cur.empty = False
 
-    def x_touch(self, edge):
+    def x_touch(self, edge: [str]):
         """remove an edge from the touching map of the last Frame"""
         self.cur.touching.x_touch(edge)
 
-    def print(self, index):
+    def print(self, index: int):
         """ print the containment map, space map, and touching map of the Frame at a certain index"""
-        print("\n-- -- -- -- print Frame", index)
         frame = self.get(index)
+        print("\n(Frame #" + str(index) + ")")
 
         print("\nCONTAINMENT RELATIONSHIP -------------------------------")
         print(frame.containment)
@@ -145,23 +133,23 @@ class MentalMotionPicture:
 
         print("PTRANS: ", end="")
         for act in frame.actions_by_type["PTRANS"]:
-            print("(objects:", act.object, ", from:", act.act_from, ", to:", act.act_to, end=") ")
+            print(str(act), end=" ")
 
         print("\nPSTOP: ", end="")
         for act in frame.actions_by_type["PSTOP"]:
-            print("(objects:", act.object, end=") ")
+            print(str(act), end=" ")
 
         print("\nINGEST: ", end="")
         for act in frame.actions_by_type["INGEST"]:
-            print("(objects:", act.object, ", container:", act.container, ", from:", act.act_from, end=") ")
+            print(str(act), end=" ")
 
         print("\nEXPEL: ", end="")
         for act in frame.actions_by_type["EXPEL"]:
-            print("(objects:", act.object, ", container:", act.container, end=") ")
+            print(str(act), end=" ")
 
         print("\nSTATECHANGE: ", end="")
         for act in frame.actions_by_type["STATECHANGE"]:
-            print("(objects:", act.object, ", to:", act.act_to, end=") ")
+            print(str(act), end=" ")
 
     def print_latest(self):
         self.print(self.count)
@@ -170,62 +158,64 @@ class MentalMotionPicture:
         """Allows for bracket operator syntax (i.e. a[0] = first item)"""
         return self.get(index)
 
-    def add_to_graph(self, object):
+    def add_to_graph(self, obj: str):
         """
         check if an object exists in the graph; if not, add to graph;
         do not add None to the graph.
 
-        @param object:
+        @param obj:
         @return:
         """
-        if object and object not in self.cur.containment._graph_dict:
-            self.cur.containment.add_object(object)
-            self.cur.space.add_object(object)
-            self.cur.touching.add_object(object)
+        if obj and (obj not in self.cur.space.noun_dict):
+            noun = NounPhrase(obj)
+            self.cur.containment.add_object(noun)
+            self.cur.space.add_object(noun)
+            self.cur.touching.add_object(noun)
+            self.cur.empty = False
 
-    def PTRANS(self, object, to=None, From=None):
-        self.add_to_graph(object)
+    def PTRANS(self, obj: str, to=None, From=None):
+        self.add_to_graph(obj)
 
-        act = PTRANS(object, act_from=From, act_to=to)
+        act = Ptrans(obj, act_from=From, act_to=to)
         self.cur.actions_by_type["PTRANS"].append(act)
         self.cur.actions.append(act)
 
         self.cur.empty = False
 
-    def PSTOP(self, object):
-        self.add_to_graph(object)
+    def PSTOP(self, obj: str):
+        self.add_to_graph(obj)
 
-        act = PSTOP(object)
+        act = Pstop(obj)
         self.cur.actions_by_type["PSTOP"].append(act)
         self.cur.actions.append(act)
 
         self.cur.empty = False
 
-    def INGEST(self, object, container, ingest_from=None):
-        for thing in [object, container, ingest_from]:
+    def INGEST(self, obj: str, container: str, ingest_from=None):
+        for thing in [obj, container, ingest_from]:
             self.add_to_graph(thing)
 
-        act = INGEST(object, container=container, act_from=ingest_from)
+        act = Ingest(obj, container=container, act_from=ingest_from)
         self.cur.actions_by_type["INGEST"].append(act)
         self.cur.actions.append(act)
 
         self.cur.empty = False
 
-    def EXPEL(self, object, container):
-        for thing in [object, container]:
+    def EXPEL(self, obj: str, container: str):
+        for thing in [obj, container]:
             self.add_to_graph(thing)
 
-        act = EXPEL(object, container=container)
+        act = Expel(obj, container=container)
         self.cur.actions_by_type["EXPEL"].append(act)
         self.cur.actions.append(act)
 
         self.cur.empty = False
 
-    def STATECHANGE(self, object, to):
-        for thing in [object, to]:
+    def STATECHANGE(self, obj: str, to: str):
+        for thing in [obj, to]:
             self.add_to_graph(thing)
 
-        act = STATECHANGE(object, act_to=to)
+        act = StateChange(obj, act_to=to)
         self.cur.actions_by_type["STATECHANGE"].append(act)
         self.cur.actions.append(act)
 
