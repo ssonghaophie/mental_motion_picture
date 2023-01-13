@@ -184,7 +184,7 @@ class Analyzer:
 
     def read_word(self) -> Packet:
         """
-        read the next word from self.sentence, find the word in
+        read the next word of the sentence, find the word in
         lexicon, and return the word packet
 
         @return: a word packet in the lexicon
@@ -281,18 +281,18 @@ class Analyzer:
 
             elif call[0] == "INGEST":  # active
                 print(" - %s INGEST(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-                self.model.INGEST(obj=self.vars["CD"], container=self.vars["SUBJECT"])
+                self.model.ingest(obj=self.vars["CD"], container=self.vars["SUBJECT"])
 
             elif call[0] == "INGESTED":  # passive!
                 print(" - %s INGEST(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
-                self.model.INGEST(obj=self.vars["SUBJECT"], container=self.vars["CD"])
+                self.model.ingest(obj=self.vars["SUBJECT"], container=self.vars["CD"])
 
             elif call[0] == "STATECHANGE":
                 print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 obj1 = self.model.cur.space.noun_dict[self.vars["SUBJECT"]]
                 obj2 = self.model.cur.space.noun_dict[self.vars["CD"]]
                 obj2.combo = obj1.combo
-                self.model.STATECHANGE(obj=self.vars["SUBJECT"], to=self.vars["CD"])
+                self.model.state_change(obj=self.vars["SUBJECT"], to=self.vars["CD"])
 
             elif call[0] == "ABOVE":
                 print(" - %s IS/ARE ABOVE %s" % (self.vars["SUBJECT"], self.vars["CD"]))
@@ -306,11 +306,11 @@ class Analyzer:
                 ptrans_to = call[1]
                 ptrans_from = call[2]
                 print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], ptrans_from, ptrans_to))
-                self.model.PTRANS(obj=self.vars["SUBJECT"], to=ptrans_to, From=ptrans_from)
+                self.model.ptrans(obj=self.vars["SUBJECT"], to=ptrans_to, act_from=ptrans_from)
 
             elif call[0] == "PSTOP":
                 print(" - %s STOP(S) MOVING..." % self.vars["SUBJECT"])
-                self.model.PSTOP(self.vars["SUBJECT"])
+                self.model.pstop(self.vars["SUBJECT"])
 
             elif call[0] == "ADVANCE TIME":
                 self.model.advance_time()

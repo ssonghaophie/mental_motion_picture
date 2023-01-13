@@ -36,7 +36,7 @@ class Expel(PrimitiveAct):
     def __str__(self):
         res = "(objects: " + str(self.object)
         res += ", container: " + str(self.container)
-        res += ", from: " + str(self.act_from)
+        res += ", to: " + str(self.act_to)
         res += ")"
         return res
 

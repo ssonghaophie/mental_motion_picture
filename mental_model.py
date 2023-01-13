@@ -173,16 +173,16 @@ class MentalMotionPicture:
             self.cur.touching.add_object(noun)
             self.cur.empty = False
 
-    def PTRANS(self, obj: str, to=None, From=None):
+    def ptrans(self, obj: str, to=None, act_from=None):
         self.add_to_graph(obj)
 
-        act = Ptrans(obj, act_from=From, act_to=to)
+        act = Ptrans(obj, act_from=act_from, act_to=to)
         self.cur.actions_by_type["PTRANS"].append(act)
         self.cur.actions.append(act)
 
         self.cur.empty = False
 
-    def PSTOP(self, obj: str):
+    def pstop(self, obj: str):
         self.add_to_graph(obj)
 
         act = Pstop(obj)
@@ -191,7 +191,7 @@ class MentalMotionPicture:
 
         self.cur.empty = False
 
-    def INGEST(self, obj: str, container: str, ingest_from=None):
+    def ingest(self, obj: str, container: str, ingest_from=None):
         for thing in [obj, container, ingest_from]:
             self.add_to_graph(thing)
 
@@ -201,7 +201,7 @@ class MentalMotionPicture:
 
         self.cur.empty = False
 
-    def EXPEL(self, obj: str, container: str):
+    def expel(self, obj: str, container: str):
         for thing in [obj, container]:
             self.add_to_graph(thing)
 
@@ -211,7 +211,7 @@ class MentalMotionPicture:
 
         self.cur.empty = False
 
-    def STATECHANGE(self, obj: str, to: str):
+    def state_change(self, obj: str, to: str):
         for thing in [obj, to]:
             self.add_to_graph(thing)
 
