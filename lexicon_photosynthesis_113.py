@@ -9,6 +9,7 @@
 
 ################################################################################
 from analyzer import Request, Packet, Analyzer
+from converter import Converter
 
 lex = dict()
 lex["*START*"] = Packet([Request(text="start parsing", test_flag=True,
@@ -20,61 +21,80 @@ lex["*START*"] = Packet([Request(text="start parsing", test_flag=True,
                                                                            assigns={"CONCEPT": "*CD"})]))]))])
 lex["THE"] = Packet([Request(text="definite article THE", test_flag=True,
                              assigns={"CD": "THE", "PART-OF-SPEECH": "definite-article"})])
+check_parallel_noun = Packet([Request(text="check parallel noun-phrases", tests={"PART-OF-SPEECH": "noun-phrase"},
+                                      calls=[["UPDATEACT ADD OBJECT", "CD"]])],
+                             one_time=True)
 
 ################################################################################
 # 1. Chloroplasts in the leaf of the plant traps light from the sun.
 lex["CHLOROPLASTS"] = Packet([Request(text="noun CHLOROPLASTS", test_flag=True,
-                                      assigns={"CD": "CHLOROPLASTS", "PART-OF-SPEECH": "noun-phrase"})])
+                                      assigns={"CD": "CHLOROPLASTS", "PART-OF-SPEECH": "noun-phrase"},
+                                      next=check_parallel_noun)])
 lex["IN"] = Packet([Request(text="prep IN", test_flag=True,
                             assigns={"CD": "LEAF", "PART-OF-SPEECH": "preposition"},
                             next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
                                                  tests={"PART-OF-SPEECH": "noun-phrase"},
                                                  calls=[["CONTAINED"]])]))])
-# todo: differentiate containment map and INGEST primitive acts!
-# in this case, only containment relationship, no INGEST act!
-
 lex["LEAF"] = Packet([Request(text="noun LEAF", test_flag=True,
-                              assigns={"CD": "LEAF", "PART-OF-SPEECH": "noun-phrase"})])
+                              assigns={"CD": "LEAF", "PART-OF-SPEECH": "noun-phrase"},
+                              next=check_parallel_noun)])
 lex["OF"] = Packet([Request(text="prep OF", test_flag=True,
                             assigns={"CD": "OF", "PART-OF-SPEECH": "preposition"})])
 # todo: of
+# part-whole relationship? at this point think of it as a containment relationship?
+
 lex["PLANT"] = Packet([Request(text="noun PLANT", test_flag=True,
-                               assigns={"CD": "PLANT", "PART-OF-SPEECH": "noun-phrase"})])
+                               assigns={"CD": "PLANT", "PART-OF-SPEECH": "noun-phrase"},
+                               next=check_parallel_noun)])
 lex["TRAPS"] = Packet([Request(text="verb TRAPS", test_flag=True, assigns={"CD": "TRAPS", "PART-OF-SPEECH": "verb"},
                                next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
-                                                    tests={"PART-OF-SPEECH": "noun-phrase"}, calls=[["CONTAIN"]])]))])
+                                                    tests={"PART-OF-SPEECH": "noun-phrase"},
+                                                    assigns={"OBJECT": "*CD"},
+                                                    calls=[["CONTAIN"], ["INGEST"]]),
+                                            Request(text="CD is FROM",
+                                                    tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"})]))])
 lex["LIGHT"] = Packet([Request(text="noun LIGHT", test_flag=True,
-                               assigns={"CD": "LIGHT", "PART-OF-SPEECH": "noun-phrase"})])
+                               assigns={"CD": "LIGHT", "PART-OF-SPEECH": "noun-phrase"},
+                               next=check_parallel_noun)])
 lex["FROM"] = Packet([Request(text="prep FROM", test_flag=True, assigns={"CD": "FROM", "PART-OF-SPEECH": "preposition"},
                               next=Packet([Request(text="update a PTRANS; PART-OF-SPEECH is noun-phrase",
                                                    tests={"PART-OF-SPEECH": "noun-phrase", "PTRANS": ""},
-                                                   calls=[["UPDATEACT", "PTRANS", "from", "CD", None]])]))])
+                                                   calls=[["UPDATEACT", "PTRANS", "from", "CD", None]]),
+                                           Request(text="update an INGEST",
+                                                   tests={"PART-OF-SPEECH": "noun-phrase", "INGEST": ""},
+                                                   calls=[["UPDATEACT", "INGEST", "from", "CD", None]])]))])
 lex["SUN"] = Packet([Request(text="noun SUN", test_flag=True,
-                             assigns={"CD": "SUN", "PART-OF-SPEECH": "noun-phrase"})])
-# todo: do we need a FROM attribute for an INGEST primitive act?
-# e.g. trap light from the sun
+                             assigns={"CD": "SUN", "PART-OF-SPEECH": "noun-phrase"},
+                             next=check_parallel_noun)])
 
 # 2. The roots absorb water and minerals from the soil.
 lex["ROOTS"] = Packet([Request(text="noun ROOTS", test_flag=True,
-                               assigns={"CD": "ROOTS", "PART-OF-SPEECH": "noun-phrase"})])
+                               assigns={"CD": "ROOTS", "PART-OF-SPEECH": "noun-phrase"},
+                               next=check_parallel_noun)])
 lex["ABSORB"] = Packet([Request(text="verb ABSORB", test_flag=True, assigns={"CD": "ABSORB", "PART-OF-SPEECH": "verb"},
                                 next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
-                                                     tests={"PART-OF-SPEECH": "noun-phrase"}, calls=[["CONTAIN"]]),
+                                                     tests={"PART-OF-SPEECH": "noun-phrase"},
+                                                     calls=[["CONTAIN"], ["INGEST"]]),
                                              Request(text="CD is FROM",
                                                      tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"})]))])
 lex["WATER"] = Packet([Request(text="noun WATER", test_flag=True,
-                               assigns={"CD": "WATER", "PART-OF-SPEECH": "noun-phrase"})])
-# lex["AND"]
-# lex["MINERALS"] = Packet([Request(text="noun MINERALS", test_flag=True,
-#                                   assigns={"CD": "MINERALS", "PART-OF-SPEECH": "noun-phrase"})])
-# todo: bring back the last verb?
-
+                               assigns={"CD": "WATER", "PART-OF-SPEECH": "noun-phrase"},
+                               next=check_parallel_noun)])
+lex["AND"] = Packet([Request(text="conj AND", test_flag=True,
+                             assigns={"CD": "AND", "PART-OF-SPEECH": "conjunction"},
+                             next=check_parallel_noun)])
+lex["MINERALS"] = Packet([Request(text="noun MINERALS", test_flag=True,
+                                  assigns={"CD": "MINERALS", "PART-OF-SPEECH": "noun-phrase"},
+                                  next=check_parallel_noun)])
 lex["SOIL"] = Packet([Request(text="noun SOIL", test_flag=True,
-                              assigns={"CD": "SOIL", "PART-OF-SPEECH": "noun-phrase"})])
+                              assigns={"CD": "SOIL", "PART-OF-SPEECH": "noun-phrase"},
+                              next=check_parallel_noun)])
 
 # 3. This combination of water and minerals flows from the stem into the leaf.
 lex["COMBINATION"] = Packet([Request(text="noun COMBINATION", test_flag=True,
-                                     assigns={"CD": "COMBINATION", "PART-OF-SPEECH": "noun-phrase"})])
+                                     assigns={"CD": "COMBINATION", "PART-OF-SPEECH": "noun-phrase"},
+                                     calls=[["MATCH COMBO"]],
+                                     next=check_parallel_noun)])
 lex["FLOWS"] = Packet([Request(text="verb FLOWS", test_flag=True,
                                assigns={"CD": "FLOWS", "PART-OF-SPEECH": "verb"}, calls=[["PTRANS", None, None]],
                                next=Packet([Request(text="CD is INTO",
@@ -84,31 +104,36 @@ lex["FLOWS"] = Packet([Request(text="verb FLOWS", test_flag=True,
                                                     tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"})],
                                            keep=True))])
 lex["STEM"] = Packet([Request(text="noun STEM", test_flag=True,
-                              assigns={"CD": "STEM", "PART-OF-SPEECH": "noun-phrase"})])
+                              assigns={"CD": "STEM", "PART-OF-SPEECH": "noun-phrase"},
+                              next=check_parallel_noun)])
 lex["INTO"] = Packet([Request(text="prep INTO", test_flag=True, assigns={"CD": "INTO", "PART-OF-SPEECH": "preposition"},
                               next=Packet([Request(text="update a PTRANS; PART-OF-SPEECH is noun-phrase",
                                                    tests={"PART-OF-SPEECH": "noun-phrase", "PTRANS": ""},
-                                                   calls=[["UPDATEACT", "PTRANS", "to", "CD", None], ["PSTOP"]])]))])
+                                                   calls=[["UPDATEACT", "PTRANS", "to", "CD", None],
+                                                          ["PSTOP"], ["CONTAINED"], ["INGESTED"]])]))])
 
 # 4. Carbon-dioxide enters the leaf.
 lex["CARBON-DIOXIDE"] = Packet([Request(text="noun CARBON-DIOXIDE", test_flag=True,
-                                        assigns={"CD": "CARBON-DIOXIDE", "PART-OF-SPEECH": "noun-phrase"})])
+                                        assigns={"CD": "CARBON-DIOXIDE", "PART-OF-SPEECH": "noun-phrase"},
+                                        next=check_parallel_noun)])
 lex["ENTERS"] = Packet([Request(text="verb ENTERS", test_flag=True, assigns={"CD": "ENTERS", "PART-OF-SPEECH": "verb"},
                                 next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
                                                      tests={"PART-OF-SPEECH": "noun-phrase"},
-                                                     calls=[["CONTAINED"]])]))])
+                                                     calls=[["CONTAINED"], ["INGESTED"]])]))])
 
 # 5. Light, water and minerals, and the carbon-dioxide all mix together.
 # lex["ALL"]
-# lex["MIX"]
+lex["MIX"] = Packet([Request(text="verb MIX", test_flag=True, assigns={"CD": "MIX", "PART-OF-SPEECH": "verb"},
+                             calls=[["DEFINE COMBO"]])])
 # lex["TOGETHER"]
-# todo: parallel structure
+# todo: all and together have similar meanings
 
 # 6. This mixture forms glucose which is what the plant eats.
 # This mixture forms glucose.
-# todo: which
+# todo: "which"
 lex["MIXTURE"] = Packet([Request(text="noun MIXTURE", test_flag=True,
-                                 assigns={"CD": "MIXTURE", "PART-OF-SPEECH": "noun-phrase"})])
+                                 assigns={"CD": "MIXTURE", "PART-OF-SPEECH": "noun-phrase"},
+                                 calls=[["MATCH COMBO"]])])
 lex["FORMS"] = Packet([Request(text="verb FORMS", test_flag=True, assigns={"CD": "FORMS", "PART-OF-SPEECH": "verb"},
                                next=Packet([Request(text="PART-OF-SPEECH is noun-phrase",
                                                     tests={"PART-OF-SPEECH": "noun-phrase"},
@@ -137,9 +162,19 @@ lex["STOMATA"] = Packet([Request(text="noun STOMATA", test_flag=True,
                                  assigns={"CD": "STOMATA", "PART-OF-SPEECH": "noun-phrase"})])
 
 analyzer = Analyzer(lexicon=lex)
+
+# todo: I had to remove comma manually in sentence 5?!
+
+# analyzer.parse("Light water and minerals and carbon-dioxide all mix together. This mixture forms glucose.")
 analyzer.parse("Chloroplasts in the leaf of the plant traps light from the sun. "
                "The roots absorb water and minerals from the soil. "
                "This combination of water and minerals flows from the stem into the leaf. "
                "Carbon-dioxide enters the leaf. "
+               "Light water and minerals and carbon-dioxide all mix together. "
                "This mixture forms glucose. "
                "Oxygen goes out of the leaf through the stomata.")
+
+directory = "/Users/mackie/Documents/Research/mental_map"
+filename = "test_converter5.csv"
+converter = Converter(analyzer, dir=directory, filename=filename)
+converter.convert()
