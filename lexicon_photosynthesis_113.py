@@ -9,6 +9,7 @@
 
 ################################################################################
 from analyzer import Request, Packet, Analyzer
+from converter import Converter
 
 lex = dict()
 lex["*START*"] = Packet([Request(text="start parsing", test_flag=True,
@@ -172,3 +173,8 @@ analyzer.parse("Chloroplasts in the leaf of the plant traps light from the sun. 
                "Light water and minerals and carbon-dioxide all mix together. "
                "This mixture forms glucose. "
                "Oxygen goes out of the leaf through the stomata.")
+
+directory = "/Users/mackie/Documents/Research/mental_map"
+filename = "test_converter5.csv"
+converter = Converter(analyzer, dir=directory, filename=filename)
+converter.convert()

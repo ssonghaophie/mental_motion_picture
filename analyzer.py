@@ -27,6 +27,7 @@ class Packet:
 class Analyzer:
     model = MentalMotionPicture()
     cur_word = None
+    cur_sentence = None
 
     # to keep track of the parsing progress of the analyzer
     # vars = {"CD": None, "PART-OF-SPEECH": None, "SUBJECT": None, "OBJECT": None}
@@ -76,9 +77,12 @@ class Analyzer:
             if not self.model.cur.empty:
                 self.model.advance_time()
 
-            sentence = self.paragraph.pop(0)
-            self.split_sentence(sentence)
-            print("\n", self.sentence)
+            self.cur_sentence = self.paragraph.pop(0)
+            self.model.cur_sentence = self.cur_sentence
+            self.model.cur.sentence = self.cur_sentence
+
+            self.split_sentence(self.cur_sentence)
+            print("\n", self.cur_sentence)
             print("--------------------------------------------------------")
             print("SENTENCE:", end=" ")
             for word in self.sentence[1:]:

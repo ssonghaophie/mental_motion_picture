@@ -2,6 +2,7 @@
 
 ################################################################################
 from analyzer import Request, Packet, Analyzer
+from converter import Converter
 
 lex = dict()
 lex["*START*"] = Packet([Request(text="start parsing", test_flag=True,
@@ -54,3 +55,8 @@ lex["SOIL"] = Packet([Request(text="noun SOIL", test_flag=True,
 ################################################################################
 analyzer = Analyzer(lexicon=lex)
 analyzer.parse("The roots absorb water and minerals from the soil.")
+
+directory = "/Users/mackie/Documents/Research/mental_map"
+filename = "test_converter3.csv"
+converter = Converter(analyzer, dir=directory, filename=filename)
+converter.convert()

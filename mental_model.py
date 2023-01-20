@@ -19,9 +19,12 @@ class Frame:
                                 "INGEST": [], "EXPEL": [], "STATECHANGE": []}
         self.next = None
         self.empty = True  # only the initial state is empty
+        self.sentence = None
 
 
 class MentalMotionPicture:
+    cur_sentence = None
+
     def __init__(self):
         self.head = Frame(Containment(), Space(), Touching())
         self.count = 1  # number of Frames in this model
@@ -51,6 +54,7 @@ class MentalMotionPicture:
         new_node.empty = self.cur.empty
         self.cur.next = new_node
         self.cur = self.cur.next
+        self.cur.sentence = self.cur_sentence
 
         print(" - ADVANCE TO FRAME", self.count)
 
@@ -150,6 +154,7 @@ class MentalMotionPicture:
         print("\nSTATECHANGE: ", end="")
         for act in frame.actions_by_type["STATECHANGE"]:
             print(str(act), end=" ")
+        print("")
 
     def print_latest(self):
         self.print(self.count)
