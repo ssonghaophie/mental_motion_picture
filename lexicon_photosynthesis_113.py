@@ -174,7 +174,8 @@ analyzer.parse("Chloroplasts in the leaf of the plant traps light from the sun. 
                "This mixture forms glucose. "
                "Oxygen goes out of the leaf through the stomata.")
 
-directory = "/Users/mackie/Documents/Research/mental_map"
-filename = "test_converter5.csv"
-converter = Converter(analyzer, dir=directory, filename=filename)
-converter.convert()
+directory = "~/Documents/honors/convert_to_csv"
+filename = "test_converter1_f.csv"
+converter = Converter(analyzer)
+# converter.convert(filename=filename, date=True, dir=directory)
+converter.convert_propara_format(filename=filename, date=True, dir=directory)
