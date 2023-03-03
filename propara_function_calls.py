@@ -1,4 +1,4 @@
-from mental_model import *
+from mental_motion_picture import *
 from converter import Converter
 
 model = MentalMotionPicture()

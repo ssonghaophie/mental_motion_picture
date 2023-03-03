@@ -1,26 +1,7 @@
-from mental_model import MentalMotionPicture
+from mental_motion_picture import MentalMotionPicture
+from packet import Packet
+from request import Request
 import re  # regular expression
-
-
-# Each word entry in the lexicon is a word packet,
-# which is a list of Request objects with some flags
-class Request:
-
-    def __init__(self, text=None, test_flag=False, tests=None, assigns=None, calls=None, next=None):
-        self.TEXT = text  # short explanation of the Request
-        self.TEST_FLAG = test_flag  # boolean
-        self.TESTS = tests  # if all evaluations pass, set test to be True
-        self.ASSIGNS = assigns  # assignments to complete if test==True
-        self.CALLS = calls  # mental model function calls
-        self.NEXT_PACKET = next
-
-
-class Packet:
-
-    def __init__(self, requests: [Request], keep=False, one_time=False):
-        self.requests = requests
-        self.keep = keep
-        self.one_time = one_time  # doc for one_time
 
 
 # the ELI analyzer
@@ -82,7 +63,6 @@ class Analyzer:
             self.model.cur.sentence = self.cur_sentence
 
             self.split_sentence(self.cur_sentence)
-            print("\n", self.cur_sentence)
             print("--------------------------------------------------------")
             print("SENTENCE:", end=" ")
             for word in self.sentence[1:]:
@@ -293,9 +273,10 @@ class Analyzer:
 
             elif call[0] == "STATECHANGE":
                 print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-                obj1 = self.model.cur.space.noun_dict[self.vars["SUBJECT"]]
-                obj2 = self.model.cur.space.noun_dict[self.vars["CD"]]
-                obj2.combo = obj1.combo
+                if self.vars["SUBJECT"]:
+                    obj1 = self.model.cur.space.noun_dict[self.vars["SUBJECT"]]
+                    obj2 = self.model.cur.space.noun_dict[self.vars["CD"]]
+                    obj2.combo = obj1.combo
                 self.model.state_change(obj=self.vars["SUBJECT"], to=self.vars["CD"])
 
             elif call[0] == "ABOVE":

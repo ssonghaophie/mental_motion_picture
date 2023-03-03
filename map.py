@@ -41,6 +41,7 @@ class Containment(Graph):
         return Containment(new_graph_dict, new_noun_dict)
 
 
+# todo: update to "Position" map
 class Space(Graph):
     """A simple graph class that represents spatial relationship
     """
@@ -77,6 +78,7 @@ class Space(Graph):
         return Space(new_graph_dict, new_noun_dict)
 
 
+# todo: update to "Contact" map
 class Touching(Graph):
     """A simple graph class that represents touching relationship
     """

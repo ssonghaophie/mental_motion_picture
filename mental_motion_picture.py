@@ -1,25 +1,12 @@
 from map import Containment, Space, Touching
 from noun_phrase import NounPhrase
 from primitive_acts import *
+from frame import Frame
 
 """
 The Mental_map class is adapted from the linked_list class from
 https://github.com/bfaure/Python3_Data_Structures/blob/master/Linked_List/main.py
 """
-
-
-class Frame:
-
-    def __init__(self, containment: Containment, space: Space, touching: Touching):
-        self.containment = containment
-        self.space = space
-        self.touching = touching
-        self.actions = []
-        self.actions_by_type = {"PTRANS": [], "PSTOP": [],
-                                "INGEST": [], "EXPEL": [], "STATECHANGE": []}
-        self.next = None
-        self.empty = True  # only the initial state is empty
-        self.sentence = None
 
 
 class MentalMotionPicture:

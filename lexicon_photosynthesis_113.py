@@ -1,4 +1,5 @@
-# 113
+# 113 What happens during photosynthesis?
+
 # Chloroplasts in the leaf of the plant traps light from the sun.
 # The roots absorb water and minerals from the soil.
 # This combination of water and minerals flows from the stem into the leaf.
@@ -8,8 +9,11 @@
 # Oxygen goes out of the leaf through the stomata.
 
 ################################################################################
-from analyzer import Request, Packet, Analyzer
+from analyzer import Analyzer
 from converter import Converter
+from packet import Packet
+from request import Request
+
 
 lex = dict()
 lex["*START*"] = Packet([Request(text="start parsing", test_flag=True,
