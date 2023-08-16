@@ -17,6 +17,16 @@ class MentalMotionPicture:
         self.count = 1  # number of Frames in this model
         self.cur = self.head  # the latest node
 
+    # todo: add function to check for containment relationship in previous frames
+    def check_containment_exist(self):
+        a = self.count
+        while a >= 1:
+            result = self.get_containment(a)
+            a = a - 1
+            print("CHECKING: \nCHECKING IS HERE ")
+            print(result)
+            return result
+
     def advance_time(self):
         """copy the current Frame to a new Frame"""
         self.count += 1
@@ -72,6 +82,8 @@ class MentalMotionPicture:
 
     def contain(self, edge: [str]):
         """add an edge to the containment map of the last Frame"""
+        self.add_to_graph(edge[0])
+        self.add_to_graph(edge[1])
         self.cur.containment.contain(edge)
         self.cur.empty = False
 
@@ -193,11 +205,11 @@ class MentalMotionPicture:
 
         self.cur.empty = False
 
-    def expel(self, obj: str, container: str):
-        for thing in [obj, container]:
+    def expel(self, obj: str, container: str, expel_to: str):
+        for thing in [obj, container, expel_to]:
             self.add_to_graph(thing)
 
-        act = Expel(obj, container=container)
+        act = Expel(obj, container=container, act_to=expel_to)
         self.cur.actions_by_type["EXPEL"].append(act)
         self.cur.actions.append(act)
 
