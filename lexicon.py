@@ -79,7 +79,9 @@ analyzer = Analyzer(lexicon=lex)
 # print(analyzer.parse("plants absorb water"))
 # analyzer.parse("The carbon-dioxide turns into acid.")
 # analyzer.parse("Jack and Susan have a ball. The rain falls on the soil from the cloud.")
-analyzer.parse("Jack and Susan have a ball. The ball falls.")
+# analyzer.parse("Jack and Susan have a ball. The ball falls.")
+analyzer.parse("Jack goes a ball.")
+
 # analyzer.parse("The rain falls on the soil from the cloud.")
 # analyzer.parse("Jack and Susan have a ball.")
 

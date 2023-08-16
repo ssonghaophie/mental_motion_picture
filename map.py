@@ -26,6 +26,7 @@ class Containment(Graph):
         """ edge is an array like (obj1, obj2)
             in this case, obj1 contains obj2
         """
+        # Zoie: one way to solve
         obj0, obj1 = self.noun_dict[edge[0]], self.noun_dict[edge[1]]
         self.graph_dict[obj0].append(obj1)
 
