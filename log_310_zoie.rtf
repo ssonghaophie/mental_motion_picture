@@ -1,0 +1,634 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2709
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 /usr/bin/python3 /Users/zoiezhao/Desktop/mental_motion_picture_zoie/lexicon_310_zoie.py \
+['Blood enters the right side of your heart', 'Blood travels to the lungs', 'Carbon-dioxide is removed from the blood', 'Oxygen is added to your blood', 'Blood returns to left side of your heart.']\
+--------------------------------------------------------\
+SENTENCE: BLOOD ENTERS THE RIGHT SIDE OF YOUR HEART \
+--------------------------------------------------------\
+READ WORD: *START*\
+\
+REQUEST TRIGGERED: start parsing\
+--------------------------------------------------------\
+READ WORD: BLOOD\
+\
+REQUEST TRIGGERED: noun BLOOD\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO BLOOD\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET SUBJECT TO CD(=BLOOD)\
+--------------------------------------------------------\
+READ WORD: ENTERS\
+\
+REQUEST TRIGGERED: verb ENTERS\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO ENTERS\
+ - SET PART-OF-SPEECH TO verb\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - BLOOD MOVE(s) FROM None TO None\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is verb\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CONCEPT TO CD(=ENTERS)\
+--------------------------------------------------------\
+READ WORD: THE\
+\
+REQUEST TRIGGERED: definite article THE\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO THE\
+ - SET PART-OF-SPEECH TO definite-article\
+--------------------------------------------------------\
+READ WORD: RIGHT\
+\
+REQUEST TRIGGERED: adjective RIGHT\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO RIGHT\
+ - SET PART-OF-SPEECH TO adjective\
+--------------------------------------------------------\
+READ WORD: SIDE\
+\
+REQUEST TRIGGERED: noun SIDE\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO SIDE\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+Checking for exist containment\
+CHECKING: \
+CHECKING IS HERE \
+objects: BLOOD SIDE \
+edges: \
+objects: BLOOD SIDE \
+edges: \
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - UPDATE ACT PTRANS\
+ - BLOOD STOP(S) MOVING...\
+ - SIDE CONTAIN(S) BLOOD\
+ - BLOOD INGEST(S) SIDE FROM None\
+--------------------------------------------------------\
+READ WORD: OF\
+\
+REQUEST TRIGGERED: prep OF\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET SUBJECT TO CD(=SIDE)\
+ - SET CD TO OF\
+ - SET PART-OF-SPEECH TO preposition\
+--------------------------------------------------------\
+READ WORD: YOUR\
+\
+REQUEST TRIGGERED: possessive adjective YOUR\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO YOUR\
+ - SET PART-OF-SPEECH TO possessive adjective\
+--------------------------------------------------------\
+READ WORD: HEART\
+\
+REQUEST TRIGGERED: noun HEART\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO HEART\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase from lex OF\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - HEART CONTAIN(S) SIDE\
+ - SIDE INGEST(S) HEART FROM None\
+\
+--------------------------------------------------------\
+mental model generated:\
+\
+(Frame #1)\
+\
+CONTAINMENT RELATIONSHIP -------------------------------\
+objects: BLOOD SIDE HEART \
+edges: (SIDE BLOOD) (HEART SIDE) \
+\
+SPATIAL RELATIONSHIP -----------------------------------\
+objects: BLOOD SIDE HEART \
+edges: \
+\
+TOUCHING RELATIONSHIP ----------------------------------\
+objects: BLOOD SIDE HEART \
+edges: \
+\
+PRIMITIVE ACTIONS --------------------------------------\
+PTRANS: (objects: ['BLOOD'], from: None, to: SIDE) \
+PSTOP: (objects: ['BLOOD']) \
+INGEST: (objects: ['SIDE'], container: None, from: None) (objects: ['HEART'], container: None, from: None) \
+EXPEL: \
+STATECHANGE: \
+ - ADVANCE TO FRAME 2\
+--------------------------------------------------------\
+SENTENCE: BLOOD TRAVELS TO THE LUNGS \
+--------------------------------------------------------\
+READ WORD: *START*\
+\
+REQUEST TRIGGERED: start parsing\
+--------------------------------------------------------\
+READ WORD: BLOOD\
+\
+REQUEST TRIGGERED: noun BLOOD\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO BLOOD\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET SUBJECT TO CD(=BLOOD)\
+--------------------------------------------------------\
+READ WORD: TRAVELS\
+\
+REQUEST TRIGGERED: verb TRAVELS\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO TRAVELS\
+ - SET PART-OF-SPEECH TO verb\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - BLOOD MOVE(s) FROM None TO None\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is verb\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CONCEPT TO CD(=TRAVELS)\
+--------------------------------------------------------\
+READ WORD: TO\
+\
+REQUEST TRIGGERED: prep TO\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO TO\
+ - SET PART-OF-SPEECH TO preposition\
+\
+REQUEST TRIGGERED: CD is TO\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - ADVANCE TO FRAME 3\
+--------------------------------------------------------\
+READ WORD: THE\
+\
+REQUEST TRIGGERED: definite article THE\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO THE\
+ - SET PART-OF-SPEECH TO definite-article\
+--------------------------------------------------------\
+READ WORD: LUNGS\
+\
+REQUEST TRIGGERED: noun LUNGS\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO LUNGS\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: update a PTRANS; PART-OF-SPEECH is noun-phrase\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - UPDATE ACT PTRANS\
+ - BLOOD STOP(S) MOVING...\
+ - LUNGS CONTAIN(S) BLOOD\
+ - BLOOD INGEST(S) LUNGS FROM None\
+\
+--------------------------------------------------------\
+mental model generated:\
+\
+(Frame #3)\
+\
+CONTAINMENT RELATIONSHIP -------------------------------\
+objects: BLOOD SIDE HEART LUNGS \
+edges: (SIDE BLOOD) (HEART SIDE) (LUNGS BLOOD) \
+\
+SPATIAL RELATIONSHIP -----------------------------------\
+objects: BLOOD SIDE HEART LUNGS \
+edges: \
+\
+TOUCHING RELATIONSHIP ----------------------------------\
+objects: BLOOD SIDE HEART LUNGS \
+edges: \
+\
+PRIMITIVE ACTIONS --------------------------------------\
+PTRANS: (objects: ['BLOOD'], from: None, to: LUNGS) \
+PSTOP: (objects: ['BLOOD']) \
+INGEST: (objects: ['LUNGS'], container: None, from: None) \
+EXPEL: \
+STATECHANGE: \
+ - ADVANCE TO FRAME 4\
+--------------------------------------------------------\
+SENTENCE: CARBON-DIOXIDE IS REMOVED FROM THE BLOOD \
+--------------------------------------------------------\
+READ WORD: *START*\
+\
+REQUEST TRIGGERED: start parsing\
+--------------------------------------------------------\
+READ WORD: CARBON-DIOXIDE\
+\
+REQUEST TRIGGERED: noun CARBON-DIOXIDE\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO CARBON-DIOXIDE\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET SUBJECT TO CD(=CARBON-DIOXIDE)\
+--------------------------------------------------------\
+READ WORD: IS\
+\
+REQUEST TRIGGERED: helping verb IS\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO IS\
+ - SET PART-OF-SPEECH TO helping verb\
+--------------------------------------------------------\
+READ WORD: REMOVED\
+\
+REQUEST TRIGGERED: verb REMOVED\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO REMOVED\
+ - SET PART-OF-SPEECH TO verb\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - None EXPEL(S) CARBON-DIOXIDE TO None\
+\
+REQUEST TRIGGERED: expecting a past participle of the main verb\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is verb\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CONCEPT TO CD(=REMOVED)\
+--------------------------------------------------------\
+READ WORD: FROM\
+\
+REQUEST TRIGGERED: prep FROM\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO FROM\
+ - SET PART-OF-SPEECH TO preposition\
+\
+REQUEST TRIGGERED: CD is FROM\
+--------------------------------------------------------\
+READ WORD: THE\
+\
+REQUEST TRIGGERED: definite article THE\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO THE\
+ - SET PART-OF-SPEECH TO definite-article\
+--------------------------------------------------------\
+READ WORD: BLOOD\
+\
+REQUEST TRIGGERED: noun BLOOD\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO BLOOD\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - UPDATE ACT EXPEL\
+ - BLOOD CONTAIN(S) CARBON-DIOXIDE\
+ - CARBON-DIOXIDE INGEST(S) BLOOD FROM None\
+\
+--------------------------------------------------------\
+mental model generated:\
+\
+(Frame #4)\
+\
+CONTAINMENT RELATIONSHIP -------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE \
+edges: (BLOOD CARBON-DIOXIDE) (SIDE BLOOD) (HEART SIDE) (LUNGS BLOOD) \
+\
+SPATIAL RELATIONSHIP -----------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE \
+edges: \
+\
+TOUCHING RELATIONSHIP ----------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE \
+edges: \
+\
+PRIMITIVE ACTIONS --------------------------------------\
+PTRANS: \
+PSTOP: \
+INGEST: (objects: ['BLOOD'], container: None, from: None) \
+EXPEL: (objects: ['CARBON-DIOXIDE'], container: BLOOD, to: None) \
+STATECHANGE: \
+ - ADVANCE TO FRAME 5\
+--------------------------------------------------------\
+SENTENCE: OXYGEN IS ADDED TO YOUR BLOOD \
+--------------------------------------------------------\
+READ WORD: *START*\
+\
+REQUEST TRIGGERED: start parsing\
+--------------------------------------------------------\
+READ WORD: OXYGEN\
+\
+REQUEST TRIGGERED: noun OXYGEN\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO OXYGEN\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET SUBJECT TO CD(=OXYGEN)\
+--------------------------------------------------------\
+READ WORD: IS\
+\
+REQUEST TRIGGERED: helping verb IS\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO IS\
+ - SET PART-OF-SPEECH TO helping verb\
+--------------------------------------------------------\
+READ WORD: ADDED\
+\
+REQUEST TRIGGERED: verb ADDED\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO ADDED\
+ - SET PART-OF-SPEECH TO verb\
+\
+REQUEST TRIGGERED: expecting a past participle of the main verb\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is verb\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CONCEPT TO CD(=ADDED)\
+--------------------------------------------------------\
+READ WORD: TO\
+\
+REQUEST TRIGGERED: prep TO\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO TO\
+ - SET PART-OF-SPEECH TO preposition\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+--------------------------------------------------------\
+READ WORD: YOUR\
+\
+REQUEST TRIGGERED: possessive adjective YOUR\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO YOUR\
+ - SET PART-OF-SPEECH TO possessive adjective\
+--------------------------------------------------------\
+READ WORD: BLOOD\
+\
+REQUEST TRIGGERED: noun BLOOD\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO BLOOD\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+--------------------------------------------------------\
+mental model generated:\
+\
+(Frame #5)\
+\
+CONTAINMENT RELATIONSHIP -------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: (BLOOD CARBON-DIOXIDE) (SIDE BLOOD) (HEART SIDE) (LUNGS BLOOD) \
+\
+SPATIAL RELATIONSHIP -----------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: \
+\
+TOUCHING RELATIONSHIP ----------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: \
+\
+PRIMITIVE ACTIONS --------------------------------------\
+PTRANS: \
+PSTOP: \
+INGEST: \
+EXPEL: \
+STATECHANGE: \
+ - ADVANCE TO FRAME 6\
+--------------------------------------------------------\
+SENTENCE: BLOOD RETURNS TO LEFT SIDE OF YOUR HEART \
+--------------------------------------------------------\
+READ WORD: *START*\
+\
+REQUEST TRIGGERED: start parsing\
+--------------------------------------------------------\
+READ WORD: BLOOD\
+\
+REQUEST TRIGGERED: noun BLOOD\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO BLOOD\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET SUBJECT TO CD(=BLOOD)\
+--------------------------------------------------------\
+READ WORD: RETURNS\
+\
+REQUEST TRIGGERED: verb RETURNS\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO RETURNS\
+ - SET PART-OF-SPEECH TO verb\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - BLOOD MOVE(s) FROM None TO None\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is verb\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CONCEPT TO CD(=RETURNS)\
+--------------------------------------------------------\
+READ WORD: TO\
+\
+REQUEST TRIGGERED: prep TO\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO TO\
+ - SET PART-OF-SPEECH TO preposition\
+\
+REQUEST TRIGGERED: CD is TO from lex RETURNS\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - ADVANCE TO FRAME 7\
+Checking for exist containment\
+CHECKING: \
+CHECKING IS HERE \
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: (BLOOD CARBON-DIOXIDE) (SIDE BLOOD) (HEART SIDE) (LUNGS BLOOD) \
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: (BLOOD CARBON-DIOXIDE) (SIDE BLOOD) (HEART SIDE) (LUNGS BLOOD) \
+--------------------------------------------------------\
+READ WORD: LEFT\
+\
+REQUEST TRIGGERED: adjective LEFT\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO LEFT\
+ - SET PART-OF-SPEECH TO adjective\
+--------------------------------------------------------\
+READ WORD: SIDE\
+\
+REQUEST TRIGGERED: noun SIDE\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO SIDE\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+Checking for exist containment\
+CHECKING: \
+CHECKING IS HERE \
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: (BLOOD CARBON-DIOXIDE) (SIDE BLOOD) (HEART SIDE) (LUNGS BLOOD) \
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: (BLOOD CARBON-DIOXIDE) (SIDE BLOOD) (HEART SIDE) (LUNGS BLOOD) \
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase from lex LEFT\
+\
+REQUEST TRIGGERED: update a PTRANS; PART-OF-SPEECH is noun-phrase\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - UPDATE ACT PTRANS\
+ - BLOOD STOP(S) MOVING...\
+ - SIDE CONTAIN(S) BLOOD\
+ - BLOOD INGEST(S) SIDE FROM None\
+\
+REQUEST TRIGGERED: update a PTRANS; PART-OF-SPEECH is noun-phrase\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - UPDATE ACT PTRANS\
+ - BLOOD STOP(S) MOVING...\
+ - SIDE CONTAIN(S) BLOOD\
+ - BLOOD INGEST(S) SIDE FROM None\
+\
+REQUEST TRIGGERED: contained\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - SIDE CONTAIN(S) BLOOD\
+ - BLOOD INGEST(S) SIDE FROM None\
+--------------------------------------------------------\
+READ WORD: OF\
+\
+REQUEST TRIGGERED: prep OF\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET SUBJECT TO CD(=SIDE)\
+ - SET CD TO OF\
+ - SET PART-OF-SPEECH TO preposition\
+--------------------------------------------------------\
+READ WORD: YOUR\
+\
+REQUEST TRIGGERED: possessive adjective YOUR\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO YOUR\
+ - SET PART-OF-SPEECH TO possessive adjective\
+--------------------------------------------------------\
+READ WORD: HEART\
+\
+REQUEST TRIGGERED: noun HEART\
+\
+ASSIGNMENT(S) EXECUTED:\
+ - SET CD TO HEART\
+ - SET PART-OF-SPEECH TO noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase\
+\
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase from lex OF\
+\
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:\
+ - HEART CONTAIN(S) SIDE\
+ - SIDE INGEST(S) HEART FROM None\
+\
+--------------------------------------------------------\
+mental model generated:\
+\
+(Frame #7)\
+\
+CONTAINMENT RELATIONSHIP -------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: (BLOOD CARBON-DIOXIDE) (SIDE BLOOD) (SIDE BLOOD) (SIDE BLOOD) (SIDE BLOOD) (HEART SIDE) (HEART SIDE) (LUNGS BLOOD) \
+\
+SPATIAL RELATIONSHIP -----------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: \
+\
+TOUCHING RELATIONSHIP ----------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: \
+\
+PRIMITIVE ACTIONS --------------------------------------\
+PTRANS: (objects: ['BLOOD'], from: None, to: LUNGS) \
+PSTOP: (objects: ['BLOOD']) (objects: ['BLOOD']) \
+INGEST: (objects: ['SIDE'], container: None, from: None) (objects: ['SIDE'], container: None, from: None) (objects: ['SIDE'], container: None, from: None) (objects: ['HEART'], container: None, from: None) \
+EXPEL: \
+STATECHANGE: \
+\
+--------------------------------------------------------\
+|||||||||||||||||||||| THE END |||||||||||||||||||||||||\
+--------------------------------------------------------\
+\
+0 word packet(s) left on STACK:\
+\
+--------------------------------------------------------\
+mental model generated:\
+\
+(Frame #7)\
+\
+CONTAINMENT RELATIONSHIP -------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: (BLOOD CARBON-DIOXIDE) (SIDE BLOOD) (SIDE BLOOD) (SIDE BLOOD) (SIDE BLOOD) (HEART SIDE) (HEART SIDE) (LUNGS BLOOD) \
+\
+SPATIAL RELATIONSHIP -----------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: \
+\
+TOUCHING RELATIONSHIP ----------------------------------\
+objects: BLOOD SIDE HEART LUNGS CARBON-DIOXIDE OXYGEN \
+edges: \
+\
+PRIMITIVE ACTIONS --------------------------------------\
+PTRANS: (objects: ['BLOOD'], from: None, to: LUNGS) \
+PSTOP: (objects: ['BLOOD']) (objects: ['BLOOD']) \
+INGEST: (objects: ['SIDE'], container: None, from: None) (objects: ['SIDE'], container: None, from: None) (objects: ['SIDE'], container: None, from: None) (objects: ['HEART'], container: None, from: None) \
+EXPEL: \
+STATECHANGE: \
+\
+Process finished with exit code 0\
+}
