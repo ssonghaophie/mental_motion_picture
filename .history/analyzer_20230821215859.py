@@ -265,6 +265,7 @@ class Analyzer:
         act_container = None
         act_to = None
         act_from = None
+        obj_changed = None
         calls = req.CALLS
         print("\nFUNCTION CALL(S) TO MENTAL MOTION PICTURE:")
         for call in calls:
@@ -333,14 +334,6 @@ class Analyzer:
             #     print(" - %s EXPEL(S) %s TO %s" % (expel_from, self.vars["SUBJECT"], expel_to))
             #     self.model.expel(obj=self.vars["SUBJECT"], container=expel_from, expel_to=expel_to)
 
-            # elif call[0] == "STATECHANGE":
-            #     print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-            #     if self.vars["SUBJECT"]:
-            #         obj1 = self.model.cur.space.noun_dict[self.vars["SUBJECT"]]
-            #         obj2 = self.model.cur.space.noun_dict[self.vars["CD"]]
-            #         obj2.combo = obj1.combo
-            #     self.model.state_change(obj=self.vars["SUBJECT"], to=self.vars["CD"])
-
             elif call[0] == "STATECHANGE":
                 if call[1]:
                     act_obj=self.vars[call[1]]
@@ -348,14 +341,14 @@ class Analyzer:
                     if call[2] == "SUBJECT" or call[2] == "CD":
                         obj_changed = self.vars[call[2]]
                     else:
-                        obj_changed = call[2]
-                print(" - %s BECOME(S) %s" % (act_obj, obj_changed))
-                self.model.state_change(obj=act_obj, to=obj_changed)
-                if act_obj:
-                    obj1 = self.model.cur.space.noun_dict[act_obj]
-                    obj2 = self.model.cur.space.noun_dict[obj_changed]
+                        
+                print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+                if self.vars["SUBJECT"]:
+                    obj1 = self.model.cur.space.noun_dict[self.vars["SUBJECT"]]
+                    obj2 = self.model.cur.space.noun_dict[self.vars["CD"]]
                     obj2.combo = obj1.combo
-                
+                self.model.state_change(obj=self.vars["SUBJECT"], to=self.vars["CD"])
+
             elif call[0] == "ABOVE":
                 print(" - %s IS/ARE ABOVE %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.above((self.vars["SUBJECT"], self.vars["CD"]))

@@ -76,11 +76,11 @@ lex["WATER"] = Packet([Request(text="noun WATER", test_flag=True,
                                  assigns={"CD": "WATER", "PART-OF-SPEECH": "noun-phrase"})])
 lex["EVAPORATES"] = Packet([Request(text="verb EVAPORATES", test_flag=True, 
                                 assigns={"CD": "EVAPORATES", "PART-OF-SPEECH": "verb"},
-                                calls=[["PTRANS", "SUBJECT", None, None], ["STATECHANGE", "SUBJECT", "VAPOR"]],
+                                calls=[["PTRANS", "SUBJECT", None, None], ["STATECHAGE", "SUBJECT", "VAPOR"]],
                                 next=Packet([Request(text="CD is FROM",
                                                      tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"}),
                                              Request(text="CD is TO",
-                                                     tests={"CD": "TO", "PART-OF-SPEECH": "preposition"})]))])
+                                                     tests={"CD": "TO", "PART-OF-SPEECH": "preposition"})]))]))])
 # lex["EVAPORATES"] = Packet([Request(text="verb EVAPORATES", test_flag=True, 
 #                                 assigns={"CD": "EVAPORATES", "PART-OF-SPEECH": "verb"},
 #                                 calls=[["PTRANS", "SUBJECT", None, None]],

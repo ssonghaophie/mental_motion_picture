@@ -73,7 +73,11 @@ lex["OCEANS"] = Packet([Request(text="noun OCEANS", test_flag=True,
 ################################################################################
 # Water evaporates to the sky.
 lex["WATER"] = Packet([Request(text="noun WATER", test_flag=True,
-                                 assigns={"CD": "WATER", "PART-OF-SPEECH": "noun-phrase"})])
+                                 assigns={"CD": "WATER", "PART-OF-SPEECH": "noun-phrase"},
+                                 next=Packet([Request(text="CD is EVAPORATES",
+                                                     tests={"CD": "EVAPORATES"},
+                                                     assigns={"CD": "VAPOR"},
+                                                     calls=[["STATECHANGE"]])]))])
 lex["EVAPORATES"] = Packet([Request(text="verb EVAPORATES", test_flag=True, 
                                 assigns={"CD": "EVAPORATES", "PART-OF-SPEECH": "verb"},
                                 calls=[["PTRANS", "SUBJECT", None, None], ["STATECHANGE", "SUBJECT", "VAPOR"]],
@@ -81,16 +85,6 @@ lex["EVAPORATES"] = Packet([Request(text="verb EVAPORATES", test_flag=True,
                                                      tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"}),
                                              Request(text="CD is TO",
                                                      tests={"CD": "TO", "PART-OF-SPEECH": "preposition"})]))])
-# lex["EVAPORATES"] = Packet([Request(text="verb EVAPORATES", test_flag=True, 
-#                                 assigns={"CD": "EVAPORATES", "PART-OF-SPEECH": "verb"},
-#                                 calls=[["PTRANS", "SUBJECT", None, None]],
-#                                 next=Packet([Request(text="CD is FROM",
-#                                                      tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"}),
-#                                              Request(text="CD is TO",
-#                                                      tests={"CD": "TO", "PART-OF-SPEECH": "preposition"},
-#                                                      next=Packet([Request(text="PART-OF-SPEECH is noun",
-#                                                                           tests={"PART-OF-SPEECH": "noun-phrase"},
-#                                                                           calls=[["STATECHANGE"]])]))]))])
 lex["TO"] = Packet([Request(text="prep TO", test_flag=True, assigns={"CD": "TO", "PART-OF-SPEECH": "preposition"},
                               next=Packet([Request(text="update a PTRANS",
                                                    tests={"PART-OF-SPEECH": "noun-phrase", "PTRANS": ""},
@@ -132,5 +126,5 @@ lex["AIR"] = Packet([Request(text="noun AIR", test_flag=True,
 # As enough water condenses, clouds are formed.
 
 analyzer = Analyzer(lexicon=lex)
-#analyzer.parse("Sunlight enters the atmosphere. Sunlight reaches the oceans. Water vapor accumulates in the air.")
-analyzer.parse("Water evaporates to the sky.")
+analyzer.parse("Sunlight enters the atmosphere. Sunlight reaches the oceans. Water vapor accumulates in the air.")
+# analyzer.parse("Water evaporates to the sky.")

@@ -355,7 +355,8 @@ class Analyzer:
                     obj1 = self.model.cur.space.noun_dict[act_obj]
                     obj2 = self.model.cur.space.noun_dict[obj_changed]
                     obj2.combo = obj1.combo
-                
+                self.model.state_change(obj=act_obj, to=obj_changed)
+
             elif call[0] == "ABOVE":
                 print(" - %s IS/ARE ABOVE %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.above((self.vars["SUBJECT"], self.vars["CD"]))
