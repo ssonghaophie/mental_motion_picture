@@ -13,3 +13,6 @@ class NounPhrase:
                 res += "+" + noun.noun
             res += ")"
         return res
+    
+    def print(self):
+        return self.noun

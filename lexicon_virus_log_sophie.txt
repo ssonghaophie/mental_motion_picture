@@ -1,0 +1,780 @@
+[Running] python -u "/Users/song/Desktop/mental_motion_picture-main/lexicon_virus_381_sophie.py"
+['A virus enters a host body', 'The virus reaches an animal cell', 'The cell swallows the virus', "The virus' RNA is released into the cell", 'The replicated RNA and proteins form the new viruses', 'The animal cell releases the new viruses', 'The new viruses enter more cells.']
+--------------------------------------------------------
+SENTENCE: A VIRUS ENTERS A HOST BODY 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: A
+
+REQUEST TRIGGERED: indefinite article A
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO A
+ - SET PART-OF-SPEECH TO indefinite-article
+--------------------------------------------------------
+READ WORD: VIRUS
+
+REQUEST TRIGGERED: noun VIRUS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO VIRUS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=VIRUS)
+--------------------------------------------------------
+READ WORD: ENTERS
+
+REQUEST TRIGGERED: verb ENTERS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=VIRUS)
+ - SET CD TO ENTERS
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - None INGEST(S) VIRUS FROM None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=ENTERS)
+--------------------------------------------------------
+READ WORD: A
+
+REQUEST TRIGGERED: indefinite article A
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO A
+ - SET PART-OF-SPEECH TO indefinite-article
+--------------------------------------------------------
+READ WORD: HOST
+
+REQUEST TRIGGERED: noun HOST
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO HOST
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - HOST CONTAIN(S) VIRUS
+--------------------------------------------------------
+READ WORD: BODY
+
+REQUEST TRIGGERED: noun BODY
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO BODY
+ - SET PART-OF-SPEECH TO noun-phrase
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #1)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: VIRUS HOST BODY 
+edges: (HOST VIRUS) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: VIRUS HOST BODY 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: VIRUS HOST BODY 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: 
+PSTOP: 
+INGEST: (objects: ['VIRUS'], container: HOST, from: None) 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 2
+--------------------------------------------------------
+SENTENCE: THE VIRUS REACHES AN ANIMAL CELL 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: VIRUS
+
+REQUEST TRIGGERED: noun VIRUS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO VIRUS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=VIRUS)
+--------------------------------------------------------
+READ WORD: REACHES
+
+REQUEST TRIGGERED: verb REACHES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=VIRUS)
+ - SET CD TO REACHES
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - VIRUS MOVE(s) FROM None TO None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=REACHES)
+--------------------------------------------------------
+READ WORD: AN
+
+REQUEST TRIGGERED: indefinite article AN
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AN
+ - SET PART-OF-SPEECH TO indefinite-article
+--------------------------------------------------------
+READ WORD: ANIMAL
+
+REQUEST TRIGGERED: noun ANIMAL
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ANIMAL
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT PTRANS
+--------------------------------------------------------
+READ WORD: CELL
+
+REQUEST TRIGGERED: noun CELL
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CELL
+ - SET PART-OF-SPEECH TO noun-phrase
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #2)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL 
+edges: (HOST VIRUS) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['VIRUS'], from: HOST, to: ANIMAL) 
+PSTOP: 
+INGEST: 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 3
+--------------------------------------------------------
+SENTENCE: THE CELL SWALLOWS THE VIRUS 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: CELL
+
+REQUEST TRIGGERED: noun CELL
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CELL
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=CELL)
+--------------------------------------------------------
+READ WORD: SWALLOWS
+
+REQUEST TRIGGERED: verb SWALLOWS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=CELL)
+ - SET CD TO SWALLOWS
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - CELL INGEST(S) None FROM None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=SWALLOWS)
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: VIRUS
+
+REQUEST TRIGGERED: noun VIRUS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO VIRUS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - CELL CONTAIN(S) VIRUS
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #3)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL 
+edges: (HOST VIRUS) (CELL VIRUS) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['VIRUS'], from: HOST, to: ANIMAL) 
+PSTOP: 
+INGEST: (objects: ['VIRUS'], container: CELL, from: None) 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 4
+--------------------------------------------------------
+SENTENCE: THE VIRUS' RNA IS RELEASED INTO THE CELL 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: VIRUS'
+
+REQUEST TRIGGERED: possesive VIRUS'
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO VIRUS
+ - SET SUBJECT TO CD(=VIRUS)
+ - SET PART-OF-SPEECH TO noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - VIRUS INGEST(S) None FROM None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=VIRUS)
+--------------------------------------------------------
+READ WORD: RNA
+
+REQUEST TRIGGERED: noun RNA
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO RNA
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - VIRUS CONTAIN(S) RNA
+ - UPDATE ACT INGEST
+--------------------------------------------------------
+READ WORD: IS
+
+REQUEST TRIGGERED: verb IS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=RNA)
+ - SET CD TO IS
+ - SET PART-OF-SPEECH TO verb
+--------------------------------------------------------
+READ WORD: RELEASED
+
+REQUEST TRIGGERED: verb RELEASED
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO RELEASED
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - None EXPEL(S) RNA TO None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=RELEASED)
+--------------------------------------------------------
+READ WORD: INTO
+
+REQUEST TRIGGERED: prep INTO
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO INTO
+ - SET PART-OF-SPEECH TO preposition
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: CELL
+
+REQUEST TRIGGERED: noun CELL
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CELL
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT EXPEL
+ - CELL CONTAIN(S) RNA
+ - None INGEST(S) CELL FROM None
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #4)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA 
+edges: (HOST VIRUS) (CELL VIRUS) (CELL RNA) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['VIRUS'], from: HOST, to: ANIMAL) 
+PSTOP: 
+INGEST: (objects: ['RNA'], container: VIRUS, from: None) (objects: ['CELL'], container: None, from: None) 
+EXPEL: (objects: ['RNA'], container: VIRUS, to: CELL) 
+STATECHANGE: 
+ - ADVANCE TO FRAME 5
+--------------------------------------------------------
+SENTENCE: THE REPLICATED RNA AND PROTEINS FORM THE NEW VIRUSES 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: REPLICATED
+
+REQUEST TRIGGERED: adjective REPLICATED
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO REPLICATED
+ - SET PART-OF-SPEECH TO adjective-phrase
+--------------------------------------------------------
+READ WORD: RNA
+
+REQUEST TRIGGERED: noun RNA
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO RNA
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=RNA)
+--------------------------------------------------------
+READ WORD: AND
+
+REQUEST TRIGGERED: conjunction AND
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AND
+
+REQUEST TRIGGERED: check parallel noun-phrases
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT & ADD OBJECT
+--------------------------------------------------------
+READ WORD: PROTEINS
+
+REQUEST TRIGGERED: noun PROTEINS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO PROTEINS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: check parallel noun-phrases
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT & ADD OBJECT
+--------------------------------------------------------
+READ WORD: FORM
+
+REQUEST TRIGGERED: verb FORM
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO FORM
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - ['RNA', 'PROTEINS'] is a noun phrase combination
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: NEW
+
+REQUEST TRIGGERED: adjective NEW
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO NEW
+ - SET PART-OF-SPEECH TO adj-phrase
+--------------------------------------------------------
+READ WORD: VIRUSES
+
+REQUEST TRIGGERED: noun VIRUSES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO VIRUSES
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - VIRUSES equals combination ['RNA', 'PROTEINS']
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #5)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) 
+edges: (HOST VIRUS) (CELL VIRUS) (CELL RNA) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['VIRUS'], from: HOST, to: ANIMAL) 
+PSTOP: 
+INGEST: 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 6
+--------------------------------------------------------
+SENTENCE: THE ANIMAL CELL RELEASES THE NEW VIRUSES 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: ANIMAL
+
+REQUEST TRIGGERED: noun ANIMAL
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ANIMAL
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=ANIMAL)
+--------------------------------------------------------
+READ WORD: CELL
+
+REQUEST TRIGGERED: noun CELL
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CELL
+ - SET PART-OF-SPEECH TO noun-phrase
+--------------------------------------------------------
+READ WORD: RELEASES
+
+REQUEST TRIGGERED: verb RELEASES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=CELL)
+ - SET CD TO RELEASES
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - CELL EXPEL(S) None TO None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=RELEASES)
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=RELEASES)
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: NEW
+
+REQUEST TRIGGERED: adjective NEW
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO NEW
+ - SET PART-OF-SPEECH TO adj-phrase
+--------------------------------------------------------
+READ WORD: VIRUSES
+
+REQUEST TRIGGERED: noun VIRUSES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO VIRUSES
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT EXPEL
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #6)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) 
+edges: (HOST VIRUS) (CELL VIRUS) (CELL RNA) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['VIRUS'], from: HOST, to: ANIMAL) 
+PSTOP: 
+INGEST: 
+EXPEL: (objects: ['VIRUSES'], container: CELL, to: None) 
+STATECHANGE: 
+ - ADVANCE TO FRAME 7
+--------------------------------------------------------
+SENTENCE: THE NEW VIRUSES ENTER MORE CELLS 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: NEW
+
+REQUEST TRIGGERED: adjective NEW
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO NEW
+ - SET PART-OF-SPEECH TO adj-phrase
+--------------------------------------------------------
+READ WORD: VIRUSES
+
+REQUEST TRIGGERED: noun VIRUSES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO VIRUSES
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=VIRUSES)
+--------------------------------------------------------
+READ WORD: ENTER
+
+REQUEST TRIGGERED: verb ENTER
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=VIRUSES)
+ - SET CD TO ENTER
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - None INGEST(S) VIRUSES FROM None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=ENTER)
+--------------------------------------------------------
+READ WORD: MORE
+
+REQUEST TRIGGERED: adjective MORE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO MORE
+ - SET PART-OF-SPEECH TO adjective-phrase
+--------------------------------------------------------
+READ WORD: CELLS
+
+REQUEST TRIGGERED: noun CELLS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CELLS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - CELLS CONTAIN(S) VIRUSES
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #7)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) CELLS 
+edges: (HOST VIRUS) (CELL VIRUS) (CELL RNA) (CELLS VIRUSES) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) CELLS 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) CELLS 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['VIRUS'], from: HOST, to: ANIMAL) 
+PSTOP: 
+INGEST: (objects: ['VIRUSES'], container: CELLS, from: None) 
+EXPEL: 
+STATECHANGE: 
+
+--------------------------------------------------------
+|||||||||||||||||||||| THE END |||||||||||||||||||||||||
+--------------------------------------------------------
+
+0 word packet(s) left on STACK:
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #7)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) CELLS 
+edges: (HOST VIRUS) (CELL VIRUS) (CELL RNA) (CELLS VIRUSES) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) CELLS 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: VIRUS HOST BODY ANIMAL CELL RNA PROTEINS VIRUSES=(RNA+PROTEINS) CELLS 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['VIRUS'], from: HOST, to: ANIMAL) 
+PSTOP: 
+INGEST: (objects: ['VIRUSES'], container: CELLS, from: None) 
+EXPEL: 
+STATECHANGE: 

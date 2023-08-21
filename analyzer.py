@@ -127,10 +127,12 @@ class Analyzer:
                         self.noun_parallel.append([self.cur_word])
                     else:  # it is a noun but not the first one of a group of parallel noun phrases
                         self.noun_parallel[-1].append(self.cur_word)
-
+                        
+            # CHANGE: print the mental model generated for every frame
             print("\n--------------------------------------------------------")
             print("mental model generated:")
             self.model.print_latest()
+
         self.print_results()
 
     def print_results(self):
@@ -253,73 +255,83 @@ class Analyzer:
             # check if "PART-OF-SPEECH" is "noun-phrase" and update self.noun
             if var == "PART-OF-SPEECH" and req.ASSIGNS[var] == "noun-phrase":
                 self.noun = True
+    
     def check_containment(self):
-        print("Checking for exist containment")
-        return self.model.check_containment_exist()
+            print("Checking for exist containment")
+            return self.model.check_containment_exist()
 
     def function_call(self, req: Request):
+        act_obj = None
+        act_container = None
+        act_to = None
+        act_from = None
         calls = req.CALLS
         print("\nFUNCTION CALL(S) TO MENTAL MOTION PICTURE:")
         for call in calls:
-            '''if call[0] == "CONTAIN":  # active
-                print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-                self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))'''
 
-            if call[0] == "CONTAIN":  # active changed
+            if call[0] == "CONTAIN":  # active
                 print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
+
+            elif call[0] == "CONTAINED":  # passive!
+                print(" - %s CONTAIN(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
+                self.model.contain((self.vars["CD"], self.vars["SUBJECT"]))
 
             elif call[0] == "CHECK CONTAIN":  # todo: new added!
                 print("Checking for exist containment")
                 result = self.model.check_containment_exist()
                 print(result)
 
-            elif call[0] == "CONTAINED":  # passive!
-                print(" - %s CONTAIN(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
-                self.model.contain((self.vars["CD"], self.vars["SUBJECT"]))
-
-            # elif call[0] == "INGEST":  # active
-            #     print(" - %s INGEST(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-            #     self.model.ingest(obj=self.vars["CD"], container=self.vars["SUBJECT"])
-            elif call[0] == "INGEST":  # active\
-                # todo: add from and to. DONE.
+            # CHANGE: make INGEST and INGESTED be able to be updated
+            elif call[0] == "INGEST":  # active
                 global ingest_obj
                 global ingest_container
-                ingest_from = call[1]
-                ingest_to = call[2]
-                print(" - %s INGEST(S) %s FROM %s" % (self.vars["SUBJECT"], self.vars["CD"], ingest_from))
-                self.model.ingest(obj=self.vars["CD"], container=ingest_to, ingest_from=ingest_from)
-                #print(" - %s INGEST(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
+                if call[1]:
+                    act_obj=self.vars[call[1]]
+                if call[2]:
+                    act_container = self.vars[call[2]]
+                if call[3]:
+                    act_from = self.vars[call[3]]
+                ingest_to = self.vars["SUBJECT"]
                 ingest_obj=self.vars["CD"]
-                ingest_container=self.vars["SUBJECT"]
+                ingest_container=ingest_to
+                print(" - %s INGEST(S) %s FROM %s" % (act_container, act_obj, act_from))
+                self.model.ingest(obj=act_obj, container=act_container, ingest_from=act_from)
+                #print(" - %s INGEST(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 #self.model.ingest(obj=ingest_obj, container=ingest_container)
-                print(ingest_container)
-                print(ingest_obj)
 
-            elif call[0] == "INGESTED":  # passive! Changed
-                # todo: add from and to. DONE.
-                ingest_to = call[1]
-                ingest_from = call[2]
-                print(" - %s INGEST(S) %s FROM %s" % (self.vars["SUBJECT"], self.vars["CD"], ingest_from))
-                self.model.ingest(obj=self.vars["CD"], container=ingest_to, ingest_from=ingest_from)
+            # elif call[0] == "INGESTED":  # passive!
+            #     if call[1]:
+            #         act_obj=self.vars[call[1]]
+            #     if call[2]:
+            #         act_container = self.vars[call[2]]
+            #     if call[3]:
+            #         act_from = self.vars[call[3]]
+            #     print(" - %s INGEST(S) %s FROM %s" % (act_container, act_obj, act_from))
+            #     self.model.ingest(obj=act_obj, container=act_container, ingest_from=act_from)
 
+            # CHANGE: make EXPEL and EXPELED be able to be updated, and add container if there exist containment relationship
             elif call[0] == "EXPEL":  # active
-                expel_from=call[2]
-                expel_to=call[1]
-                if 'ingest_obj' in globals():
-                    if self.vars["SUBJECT"] == ingest_obj:
-                        expel_from=ingest_container
-                print(" - %s EXPEL(S) %s TO %s" % (self.vars["SUBJECT"], self.vars["CD"], expel_to))
-                self.model.expel(obj=self.vars["CD"], container=expel_from, expel_to=expel_to)
+                if call[1]:
+                    act_obj=self.vars[call[1]]
+                if call[2]:
+                    act_from = self.vars[call[2]]
+                if call[3]:
+                    act_to = self.vars[call[3]]
+                # if 'ingest_obj' in globals():
+                #     if self.vars["SUBJECT"] == ingest_obj:
+                #         expel_from=ingest_container
+                print(" - %s EXPEL(S) %s TO %s" % (act_from, act_obj, act_to))
+                self.model.expel(obj=act_obj, container=act_from, expel_to=act_to)
 
-            elif call[0] == "EXPELED":  # passive
-                expel_from=call[1]
-                expel_to=call[2]
-                if 'ingest_obj' in globals():
-                    if self.vars["SUBJECT"] == ingest_obj:
-                        expel_from=ingest_container
-                print(" - %s EXPEL(S) %s TO %s" % (expel_from, self.vars["SUBJECT"], expel_to))
-                self.model.expel(obj=self.vars["SUBJECT"], container=expel_from, expel_to=expel_to)
+            # elif call[0] == "EXPELED":  # passive
+            #     expel_from=call[1]
+            #     expel_to=call[2]
+            #     if 'ingest_obj' in globals():
+            #         if self.vars["SUBJECT"] == ingest_obj:
+            #             expel_from=ingest_container
+            #     print(" - %s EXPEL(S) %s TO %s" % (expel_from, self.vars["SUBJECT"], expel_to))
+            #     self.model.expel(obj=self.vars["SUBJECT"], container=expel_from, expel_to=expel_to)
 
             elif call[0] == "STATECHANGE":
                 print(" - %s BECOME(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
@@ -337,17 +349,15 @@ class Analyzer:
                 print(" - %s IS/ARE UNDER %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.under((self.vars["SUBJECT"], self.vars["CD"]))
 
-            # elif call[0] == "PTRANS":
-            #     ptrans_to = call[1]
-            #     ptrans_from = call[2]
-            #     print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], ptrans_from, ptrans_to))
-            #     self.model.ptrans(obj=self.vars["SUBJECT"], to=ptrans_to, act_from=ptrans_from)
-
             elif call[0] == "PTRANS":
-                ptrans_to = call[1]
-                ptrans_from = call[2]
-                print(" - %s MOVE(s) FROM %s TO %s" % (self.vars["SUBJECT"], ptrans_from, ptrans_to))
-                self.model.ptrans(obj=self.vars["SUBJECT"], to=ptrans_to, act_from=ptrans_from)
+                if call[1]:
+                    act_obj=self.vars[call[1]]
+                if call[2]:
+                    act_to = self.vars[call[2]]
+                if call[3]:
+                    act_from = self.vars[call[3]]
+                print(" - %s MOVE(s) FROM %s TO %s" % (act_obj, act_from, act_to))
+                self.model.ptrans(obj=act_obj, to=act_to, act_from=act_from)
 
             elif call[0] == "PSTOP":
                 print(" - %s STOP(S) MOVING..." % self.vars["SUBJECT"])
@@ -356,7 +366,7 @@ class Analyzer:
             elif call[0] == "ADVANCE TIME":
                 self.model.advance_time()
 
-            elif call[0] == "UPDATEACT": # changed
+            elif call[0] == "UPDATEACT":
                 print(" - UPDATE ACT", call[1])
                 if call[3] == "CD":
                     call[3] = self.vars["CD"]
@@ -403,32 +413,3 @@ class Analyzer:
 
             else:
                 print("Invalid function call to mental motion picture!")
-
-'''Before changed: '''
-            # elif call[0] == "EXPEL":  # active
-            #     print(" - %s EXPEL(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-            #     self.model.expel(obj=self.vars["CD"], container=self.vars["SUBJECT"])
-            #
-            # elif call[0] == "EXPELED":  # passive
-            #     print(" - %s EXPEL(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
-            #     self.model.expel(obj=self.vars["SUBJECT"], container=self.vars["CD"])
-
-            # elif call[0] == "UPDATEACT": # changed
-            #     print(" - UPDATE ACT", call[1])
-            #     if call[3] == "CD":
-            #         call[3] = self.vars["CD"]
-            #     self.model.update_act_by_type(call[1], call[2], call[3], call[4])
-            # elif call[0] == "INGEST":  # active\
-            # global ingest_obj
-            # global ingest_container
-            # print(" - %s INGEST(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
-            # ingest_obj = self.vars["CD"]
-            # ingest_container = self.vars["SUBJECT"]
-            # self.model.ingest(obj=ingest_obj, container=ingest_container)
-            # print(ingest_container)
-            # print(ingest_obj)
-            # elif call[0] == "INGESTED":  # passive! Changed
-            # # todo: add from and to
-            #
-            # print(" - %s INGEST(S) %s" % (self.vars["CD"], self.vars["SUBJECT"]))
-            # self.model.ingest(obj=self.vars["SUBJECT"], container=self.vars["CD"])

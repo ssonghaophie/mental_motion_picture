@@ -24,7 +24,9 @@ class Graph(object):
 
     def all_edges(self):
         """ returns the edges of a graph """
+        #edge_list = self.__generate_edges()
         return self.__generate_edges()
+
 
     def all_objects(self):
         """ returns the vertices of a graph as a set """
@@ -58,7 +60,7 @@ class Graph(object):
         new_graph_dict = self.graph_dict.copy()
         new_noun_dict = self.noun_dict.copy()
         return Graph(new_graph_dict, new_noun_dict)
-
+    
     def __generate_edges(self):
         """ A static method generating the edges of the
             graph "graph". Edges are represented as sets
@@ -85,6 +87,6 @@ class Graph(object):
         for k in self.noun_dict:
             res += str(self.noun_dict[k]) + " "
         res += "\nedges: "
-        for edge in self.__generate_edges():
+        for edge in self.all_edges():
             res += "(" + edge[0].noun + " " + edge[1].noun + ") "
         return res

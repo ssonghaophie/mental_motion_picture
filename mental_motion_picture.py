@@ -48,6 +48,7 @@ class MentalMotionPicture:
                     if action_t.object == action_s.object:
                         new_node.actions_by_type["PTRANS"].remove(action_t)
                         break
+
         new_node.empty = self.cur.empty
         self.cur.next = new_node
         self.cur = self.cur.next
@@ -179,6 +180,10 @@ class MentalMotionPicture:
 
     def ptrans(self, obj: str, to=None, act_from=None):
         self.add_to_graph(obj)
+        containment_frame = self.get_containment(self.count)
+        for edge in containment_frame.all_edges():
+            if str(edge[1]) == obj:
+                act_from = str(edge[0])
 
         act = Ptrans(obj, act_from=act_from, act_to=to)
         self.cur.actions_by_type["PTRANS"].append(act)
@@ -205,15 +210,42 @@ class MentalMotionPicture:
 
         self.cur.empty = False
 
+        # frame = self.get(self.count)
+        # print(frame.containment)
+
+
+    # if a thing is already ingested, set it as the container of expel function 
+    # Virus ingests RNA, object:RNA, container:VIRUS
+    # Virus expels RNA object:RNA, container: VIRUS
     def expel(self, obj: str, container: str, expel_to: str):
         for thing in [obj, container, expel_to]:
             self.add_to_graph(thing)
+        containment_frame = self.get_containment(self.count)
+        for edge in containment_frame.all_edges():
+            if str(edge[1]) == obj:
+                container = str(edge[0])  
 
         act = Expel(obj, container=container, act_to=expel_to)
         self.cur.actions_by_type["EXPEL"].append(act)
         self.cur.actions.append(act)
 
         self.cur.empty = False
+
+        # CHANGE: delete containment when EXPEL gets called
+        if container and obj:
+            self.delete_contain(container,obj)
+
+    # CHANGE: delete the containment relationship if it existed before and got expeled   
+    def delete_contain(self, container: str, obj: str):
+        #print(container, obj)
+        con_relationship = "("+ container + " " + obj + ")"
+        containment_frame = self.get_containment(self.count)
+        #print("HI UPDATE EXPEL works")
+        if con_relationship in str(containment_frame):
+            for edge in containment_frame.all_edges():
+                if str(edge[0]) == container and str(edge[1]) == obj:
+                    #print("HI I delete containment")
+                    containment_frame.x_contain([str(edge[0]),str(edge[1])])
 
     def state_change(self, obj: str, to: str):
         for thing in [obj, to]:
@@ -253,6 +285,15 @@ class MentalMotionPicture:
             node.actions_by_type[act_type][-1].act_to = val
         elif key == "container":
             node.actions_by_type[act_type][-1].container = val
+        
+        #print(node.actions_by_type[act_type][-1].object)
+        # CHANGE: delete containment when EXPEL gets updated
+        container = node.actions_by_type[act_type][-1].container
+        #print(node.actions_by_type[act_type][-1].object)
+        obj = node.actions_by_type[act_type][-1].object[0]
+
+        if act_type == "EXPEL" and container and obj:
+            self.delete_contain(container, obj)
 
     def update_act(self, key: str, val: str):
         """
@@ -284,3 +325,5 @@ class MentalMotionPicture:
         """
         if self.cur.actions:
             self.cur.actions[-1].object.append(val)
+        
+        #self.add_to_graph(val)

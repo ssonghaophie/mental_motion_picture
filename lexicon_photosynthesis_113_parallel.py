@@ -56,7 +56,7 @@ lex["SOIL"] = Packet([Request(text="noun SOIL", test_flag=True,
 analyzer = Analyzer(lexicon=lex)
 analyzer.parse("The roots absorb water and minerals from the soil.")
 
-directory = "/Users/mackie/Documents/Research/mental_map"
+directory = "/Desktop/mental_motion_picture-main"
 filename = "test_converter3.csv"
 converter = Converter(analyzer, dir=directory, filename=filename)
 converter.convert()
