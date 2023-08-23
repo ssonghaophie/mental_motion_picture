@@ -97,7 +97,11 @@ lex["TO"] = Packet([Request(text="prep TO", test_flag=True, assigns={"CD": "TO",
                                                    calls=[["UPDATEACT", "PTRANS", "to", "CD", None]]),
                                            Request(text="update an INGEST",
                                                    tests={"PART-OF-SPEECH": "noun-phrase", "INGEST": ""},
-                                                   calls=[["UPDATEACT", "INGEST", "to", "CD", None]])]))])
+                                                   calls=[["UPDATEACT", "INGEST", "to", "CD", None], ["CONTAIN"]]),
+                                           Request(text="update an EXPEL",
+                                                   tests={"PART-OF-SPEECH": "noun-phrase", "EXPEL": ""},
+                                                   calls=[["UPDATEACT", "EXPEL", "to", "CD", None]])
+                                                   ]))])
 
 lex["SKY"] = Packet([Request(text="noun SKY", test_flag=True,
                                  assigns={"CD": "SKY", "PART-OF-SPEECH": "noun-phrase"})])
@@ -126,11 +130,53 @@ lex["AIR"] = Packet([Request(text="noun AIR", test_flag=True,
 
 
 ################################################################################
-# As it cools, water condenses onto particles of dust in the air.
+# As it cools, water condenses onto the dust particles in the air.
+lex["AS"] = Packet([Request(text="prep AS", test_flag=True,
+                                 assigns={"CD": "AS", "PART-OF-SPEECH": "preposition"})])
+lex["IT"] = Packet([Request(text="pronoun IT", test_flag=True,
+                                 assigns={"CD": "IT", "PART-OF-SPEECH": "pronoun"})])
+# warms, cools, where do they fit into?
+lex["COOLS"] = Packet([Request(text="verb COOLS", test_flag=True,
+                                 assigns={"CD": "COOLS", "PART-OF-SPEECH": "verb"})])
+lex["CONDENSES"] = Packet([Request(text="verb CONDENSES", test_flag=True, 
+                                assigns={"CD": "CONDENSES", "PART-OF-SPEECH": "verb"},
+                                calls=[["STATECHANGE", "VAPOR", "WATER"]],
+                                next=Packet([Request(text="CD is TO",
+                                                     tests={"CD": "TO", "PART-OF-SPEECH": "preposition"}),
+                                             Request(text="CD is ONTO",
+                                                     tests={"CD": "ONTO", "PART-OF-SPEECH": "preposition"}),
+                                             Request(text="CD is FROM",
+                                                     tests={"CD": "FROM", "PART-OF-SPEECH": "preposition"})]))])
+# TODO: is it a right choice to call ingest when ONTO is parsed if the verb parsed before it doesn't have ingest call?
+lex["ONTO"] = Packet([Request(text="prep ONTO", test_flag=True, assigns={"CD": "ONTO", "PART-OF-SPEECH": "preposition"},
+                              calls=[["INGEST", "SUBJECT", None, None]],
+                              next=Packet([Request(text="PART-OF-SPEECH is noun",
+                                                   tests={"PART-OF-SPEECH": "noun-phrase"},
+                                                   calls=[["UPDATEACT","INGEST", "container", "CD", None], ["CONTAINED"]])]))])
+lex["DUST"] = Packet([Request(text="noun DUST", test_flag=True,
+                                 assigns={"CD": "DUST", "PART-OF-SPEECH": "noun-phrase"})])
+lex["PARTICLES"] = Packet([Request(text="noun PARTICLES", test_flag=True,
+                                 assigns={"SUBJECT":"*CD", "CD": "PARTICLES", "PART-OF-SPEECH": "noun-phrase"},
+                                 next=Packet([Request(text="CD is IN",
+                                                   tests={"CD": "IN", "PART-OF-SPEECH": "preposition"},
+                                                   calls=[["INGEST", "SUBJECT", None, None]])]))])
+
+lex["AIR"] = Packet([Request(text="noun AIR", test_flag=True,
+                                 assigns={"CD": "AIR", "PART-OF-SPEECH": "noun-phrase"})])
 
 ################################################################################
 # As enough water condenses, clouds are formed.
+lex["ENOUGH"] = Packet([Request(text="adjective ENOUGH", test_flag=True,
+                                 assigns={"CD": "ENOUGH", "PART-OF-SPEECH": "adjective"})])
+lex["CLOUDS"] = Packet([Request(text="noun CLOUDS", test_flag=True,
+                                 assigns={"CD": "CLOUDS", "OBJECT":"*CD", "PART-OF-SPEECH": "noun-phrase"})])
+lex["ARE"] = Packet([Request(text="be-verb ARE", test_flag=True,
+                             assigns={"CD": "ARE", "PART-OF-SPEECH": "verb"})])
+lex["FORMED"] = Packet([Request(text="verb FORMED", test_flag=True, 
+                                assigns={"CD": "FORMED", "PART-OF-SPEECH": "verb"},
+                                calls=[["STATECHANGE", "SUBJECT", "OBJECT"]])])
+
 
 analyzer = Analyzer(lexicon=lex)
-#analyzer.parse("Sunlight enters the atmosphere. Sunlight reaches the oceans. Water vapor accumulates in the air.")
-analyzer.parse("Water evaporates to the sky.")
+analyzer.parse("Sunlight enters the atmosphere. Sunlight reaches the oceans. Water evaporates to the sky. Water vapor accumulates in the air. As it cools water condenses onto the dust particles in the air. As enough water condenses clouds are formed.")
+#analyzer.parse("As enough water condenses clouds are formed.")

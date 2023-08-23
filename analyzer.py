@@ -265,10 +265,11 @@ class Analyzer:
         act_container = None
         act_to = None
         act_from = None
+        obj_changed = None
         calls = req.CALLS
         print("\nFUNCTION CALL(S) TO MENTAL MOTION PICTURE:")
         for call in calls:
-
+            # TODO: merge contain and contained to be one category
             if call[0] == "CONTAIN":  # active
                 print(" - %s CONTAIN(S) %s" % (self.vars["SUBJECT"], self.vars["CD"]))
                 self.model.contain((self.vars["SUBJECT"], self.vars["CD"]))
@@ -343,15 +344,23 @@ class Analyzer:
 
             elif call[0] == "STATECHANGE":
                 if call[1]:
-                    act_obj=self.vars[call[1]]
+                    if call[1] == "SUBJECT" or call[1] =="CD" or call[1] == "OBJECT":
+                        act_obj=self.vars[call[1]]
+                    else:
+                        act_obj = call[1]
                 if call[2]:
-                    if call[2] == "SUBJECT" or call[2] == "CD":
+                    if call[2] == "SUBJECT" or call[2] == "CD" or call[2] == "OBJECT":
                         obj_changed = self.vars[call[2]]
                     else:
                         obj_changed = call[2]
+                # if self.noun_parallel[-1]:
+                #     if act_obj in self.noun_parallel[-1]:
+                #         act_obj = self.noun_parallel[-1]
                 print(" - %s BECOME(S) %s" % (act_obj, obj_changed))
                 self.model.state_change(obj=act_obj, to=obj_changed)
-                if act_obj:
+                # for obj in act_obj:
+                #     self.model.state_change(obj=obj, to=obj_changed)
+                if act_obj and obj_changed:
                     obj1 = self.model.cur.space.noun_dict[act_obj]
                     obj2 = self.model.cur.space.noun_dict[obj_changed]
                     obj2.combo = obj1.combo

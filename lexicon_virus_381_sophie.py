@@ -157,9 +157,9 @@ lex["CELLS"] = Packet([Request(text="noun CELLS", test_flag=True,
                               assigns={"CD": "CELLS", "PART-OF-SPEECH": "noun-phrase"})])
 
 analyzer = Analyzer(lexicon=lex)
-analyzer.parse("A virus enters a host body. The virus reaches an animal cell. The cell swallows the virus. The virus' RNA is released into the cell. The replicated RNA and proteins form the new viruses. The animal cell releases the new viruses. The new viruses enter more cells.")
 #analyzer.parse("A virus enters a host body. The virus reaches an animal cell. The cell swallows the virus. The virus' RNA is released into the cell. The replicated RNA and proteins form the new viruses. The animal cell releases the new viruses. The new viruses enter more cells.")
+analyzer.parse("A virus enters a host body. The virus reaches an animal cell. The cell swallows the virus. The virus' RNA is released into the cell. The replicated RNA and proteins form the new viruses. The animal cell releases the new viruses. The new viruses enter more cells.")
 #A virus enters a host body. The virus reaches an animal cell. The cell swallows the virus. 
 # The replicated RNA and proteins form the new viruses. The animal cell releases the new viruses. The new viruses enter more cells.
-
+#analyzer.parse("The replicated RNA and proteins form the new viruses.")
 #virus expel rna (rna in virus) to cell

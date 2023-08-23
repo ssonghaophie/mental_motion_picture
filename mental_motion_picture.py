@@ -250,7 +250,7 @@ class MentalMotionPicture:
     def state_change(self, obj: str, to: str):
         for thing in [obj, to]:
             self.add_to_graph(thing)
-
+        
         act = StateChange(obj, act_to=to)
         self.cur.actions_by_type["STATECHANGE"].append(act)
         self.cur.actions.append(act)
