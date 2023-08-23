@@ -1,0 +1,656 @@
+[Running] python -u "/Users/song/Desktop/mental_motion_picture/lexicon_cloud_720_sophie.py"
+['Sunlight enters the atmosphere', 'Sunlight reaches the oceans', 'Water evaporates to the sky', 'Water vapor accumulates in the air', 'As it cools water condenses onto the dust particles in the air', 'As enough water condenses clouds are formed.']
+--------------------------------------------------------
+SENTENCE: SUNLIGHT ENTERS THE ATMOSPHERE 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: SUNLIGHT
+
+REQUEST TRIGGERED: noun SUNLIGHT
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO SUNLIGHT
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=SUNLIGHT)
+--------------------------------------------------------
+READ WORD: ENTERS
+
+REQUEST TRIGGERED: verb ENTERS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ENTERS
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - None INGEST(S) SUNLIGHT FROM None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=ENTERS)
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: ATMOSPHERE
+
+REQUEST TRIGGERED: noun ATMOSPHERE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ATMOSPHERE
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - ATMOSPHERE CONTAIN(S) SUNLIGHT
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #1)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: SUNLIGHT ATMOSPHERE 
+edges: (ATMOSPHERE SUNLIGHT) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: SUNLIGHT ATMOSPHERE 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: SUNLIGHT ATMOSPHERE 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: 
+PSTOP: 
+INGEST: (objects: ['SUNLIGHT'], container: ATMOSPHERE, from: None) 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 2
+--------------------------------------------------------
+SENTENCE: SUNLIGHT REACHES THE OCEANS 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: SUNLIGHT
+
+REQUEST TRIGGERED: noun SUNLIGHT
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO SUNLIGHT
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=SUNLIGHT)
+--------------------------------------------------------
+READ WORD: REACHES
+
+REQUEST TRIGGERED: verb REACHES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO REACHES
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - SUNLIGHT MOVE(s) FROM None TO None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=REACHES)
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: OCEANS
+
+REQUEST TRIGGERED: noun OCEANS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO OCEANS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT PTRANS
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #2)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS 
+edges: (ATMOSPHERE SUNLIGHT) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['SUNLIGHT'], from: ATMOSPHERE, to: OCEANS) 
+PSTOP: 
+INGEST: 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 3
+--------------------------------------------------------
+SENTENCE: WATER EVAPORATES TO THE SKY 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: WATER
+
+REQUEST TRIGGERED: noun WATER
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO WATER
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=WATER)
+--------------------------------------------------------
+READ WORD: EVAPORATES
+
+REQUEST TRIGGERED: verb EVAPORATES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO EVAPORATES
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - WATER MOVE(s) FROM None TO None
+ - WATER BECOME(S) VAPOR
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=EVAPORATES)
+--------------------------------------------------------
+READ WORD: TO
+
+REQUEST TRIGGERED: prep TO
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO TO
+ - SET PART-OF-SPEECH TO preposition
+
+REQUEST TRIGGERED: CD is TO
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: SKY
+
+REQUEST TRIGGERED: noun SKY
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO SKY
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: update a PTRANS
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT PTRANS
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #3)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY 
+edges: (ATMOSPHERE SUNLIGHT) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['SUNLIGHT'], from: ATMOSPHERE, to: OCEANS) (objects: ['WATER'], from: None, to: SKY) 
+PSTOP: 
+INGEST: 
+EXPEL: 
+STATECHANGE: (objects: ['WATER'], to: VAPOR) 
+ - ADVANCE TO FRAME 4
+--------------------------------------------------------
+SENTENCE: WATER VAPOR ACCUMULATES IN THE AIR 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: WATER
+
+REQUEST TRIGGERED: noun WATER
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO WATER
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=WATER)
+--------------------------------------------------------
+READ WORD: VAPOR
+
+REQUEST TRIGGERED: noun VAPOR
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO VAPOR
+ - SET PART-OF-SPEECH TO noun-phrase
+--------------------------------------------------------
+READ WORD: ACCUMULATES
+
+REQUEST TRIGGERED: verb ACCUMULATES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ACCUMULATES
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - None INGEST(S) WATER FROM None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=ACCUMULATES)
+--------------------------------------------------------
+READ WORD: IN
+
+REQUEST TRIGGERED: prep IN
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO IN
+ - SET PART-OF-SPEECH TO preposition
+
+REQUEST TRIGGERED: CD is IN
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: AIR
+
+REQUEST TRIGGERED: noun AIR
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AIR
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - AIR CONTAIN(S) WATER
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #4)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR 
+edges: (ATMOSPHERE SUNLIGHT) (AIR WATER) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['SUNLIGHT'], from: ATMOSPHERE, to: OCEANS) (objects: ['WATER'], from: None, to: SKY) 
+PSTOP: 
+INGEST: (objects: ['WATER'], container: AIR, from: None) 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 5
+--------------------------------------------------------
+SENTENCE: AS IT COOLS WATER CONDENSES ONTO THE DUST PARTICLES IN THE AIR 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: AS
+
+REQUEST TRIGGERED: prep AS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AS
+ - SET PART-OF-SPEECH TO preposition
+--------------------------------------------------------
+READ WORD: IT
+
+REQUEST TRIGGERED: pronoun IT
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO IT
+ - SET PART-OF-SPEECH TO pronoun
+--------------------------------------------------------
+READ WORD: COOLS
+
+REQUEST TRIGGERED: verb COOLS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO COOLS
+ - SET PART-OF-SPEECH TO verb
+--------------------------------------------------------
+READ WORD: WATER
+
+REQUEST TRIGGERED: noun WATER
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO WATER
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=WATER)
+--------------------------------------------------------
+READ WORD: CONDENSES
+
+REQUEST TRIGGERED: verb CONDENSES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CONDENSES
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - VAPOR BECOME(S) WATER
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=CONDENSES)
+--------------------------------------------------------
+READ WORD: ONTO
+
+REQUEST TRIGGERED: prep ONTO
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ONTO
+ - SET PART-OF-SPEECH TO preposition
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - None INGEST(S) WATER FROM None
+
+REQUEST TRIGGERED: CD is ONTO
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: DUST
+
+REQUEST TRIGGERED: noun DUST
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO DUST
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - DUST CONTAIN(S) WATER
+--------------------------------------------------------
+READ WORD: PARTICLES
+
+REQUEST TRIGGERED: noun PARTICLES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=DUST)
+ - SET CD TO PARTICLES
+ - SET PART-OF-SPEECH TO noun-phrase
+--------------------------------------------------------
+READ WORD: IN
+
+REQUEST TRIGGERED: prep IN
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO IN
+ - SET PART-OF-SPEECH TO preposition
+
+REQUEST TRIGGERED: CD is IN
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - None INGEST(S) DUST FROM None
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: AIR
+
+REQUEST TRIGGERED: noun AIR
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AIR
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - AIR CONTAIN(S) DUST
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #5)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES 
+edges: (ATMOSPHERE SUNLIGHT) (AIR WATER) (AIR DUST) (DUST WATER) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['SUNLIGHT'], from: ATMOSPHERE, to: OCEANS) (objects: ['WATER'], from: None, to: SKY) 
+PSTOP: 
+INGEST: (objects: ['WATER'], container: DUST, from: None) (objects: ['DUST'], container: AIR, from: None) 
+EXPEL: 
+STATECHANGE: (objects: ['VAPOR'], to: WATER) 
+ - ADVANCE TO FRAME 6
+--------------------------------------------------------
+SENTENCE: AS ENOUGH WATER CONDENSES CLOUDS ARE FORMED 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: AS
+
+REQUEST TRIGGERED: prep AS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AS
+ - SET PART-OF-SPEECH TO preposition
+--------------------------------------------------------
+READ WORD: ENOUGH
+
+REQUEST TRIGGERED: adjective ENOUGH
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ENOUGH
+ - SET PART-OF-SPEECH TO adjective
+--------------------------------------------------------
+READ WORD: WATER
+
+REQUEST TRIGGERED: noun WATER
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO WATER
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=WATER)
+--------------------------------------------------------
+READ WORD: CONDENSES
+
+REQUEST TRIGGERED: verb CONDENSES
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CONDENSES
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - VAPOR BECOME(S) WATER
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=CONDENSES)
+--------------------------------------------------------
+READ WORD: CLOUDS
+
+REQUEST TRIGGERED: noun CLOUDS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CLOUDS
+ - SET OBJECT TO CD(=CLOUDS)
+ - SET PART-OF-SPEECH TO noun-phrase
+--------------------------------------------------------
+READ WORD: ARE
+
+REQUEST TRIGGERED: be-verb ARE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ARE
+ - SET PART-OF-SPEECH TO verb
+--------------------------------------------------------
+READ WORD: FORMED
+
+REQUEST TRIGGERED: verb FORMED
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO FORMED
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - WATER BECOME(S) CLOUDS
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #6)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES CLOUDS 
+edges: (ATMOSPHERE SUNLIGHT) (AIR WATER) (AIR DUST) (DUST WATER) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES CLOUDS 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES CLOUDS 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['SUNLIGHT'], from: ATMOSPHERE, to: OCEANS) (objects: ['WATER'], from: None, to: SKY) 
+PSTOP: 
+INGEST: 
+EXPEL: 
+STATECHANGE: (objects: ['VAPOR'], to: WATER) (objects: ['WATER'], to: CLOUDS) 
+
+--------------------------------------------------------
+|||||||||||||||||||||| THE END |||||||||||||||||||||||||
+--------------------------------------------------------
+
+1 word packet(s) left on STACK:
+ - CD is TO
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #6)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES CLOUDS 
+edges: (ATMOSPHERE SUNLIGHT) (AIR WATER) (AIR DUST) (DUST WATER) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES CLOUDS 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: SUNLIGHT ATMOSPHERE OCEANS WATER VAPOR SKY AIR DUST PARTICLES CLOUDS 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: (objects: ['SUNLIGHT'], from: ATMOSPHERE, to: OCEANS) (objects: ['WATER'], from: None, to: SKY) 
+PSTOP: 
+INGEST: 
+EXPEL: 
+STATECHANGE: (objects: ['VAPOR'], to: WATER) (objects: ['WATER'], to: CLOUDS) 
+
+[Done] exited with code=0 in 0.076 seconds

@@ -1,0 +1,426 @@
+[Running] python -u "/Users/song/Desktop/mental_motion_picture/lexicon_respiration_293_sophie.py"
+['Cells obtain glucose and oxygen', 'The glucose and oxygen create carbon-dioxide', 'The cells release energy', 'The cells obtain more oxygen from the air.']
+--------------------------------------------------------
+SENTENCE: CELLS OBTAIN GLUCOSE AND OXYGEN 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: CELLS
+
+REQUEST TRIGGERED: noun CELLS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CELLS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=CELLS)
+--------------------------------------------------------
+READ WORD: OBTAIN
+
+REQUEST TRIGGERED: verb OBTAIN
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO OBTAIN
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - CELLS INGEST(S) None FROM None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=OBTAIN)
+--------------------------------------------------------
+READ WORD: GLUCOSE
+
+REQUEST TRIGGERED: noun GLUCOSE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO GLUCOSE
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - CELLS CONTAIN(S) GLUCOSE
+--------------------------------------------------------
+READ WORD: AND
+
+REQUEST TRIGGERED: conjunction AND
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AND
+--------------------------------------------------------
+READ WORD: OXYGEN
+
+REQUEST TRIGGERED: noun OXYGEN
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO OXYGEN
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: check parallel noun-phrases
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT & ADD OBJECT
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #1)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: CELLS GLUCOSE OXYGEN 
+edges: (CELLS GLUCOSE) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: CELLS GLUCOSE OXYGEN 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: CELLS GLUCOSE OXYGEN 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: 
+PSTOP: 
+INGEST: (objects: ['GLUCOSE', 'OXYGEN'], container: CELLS, from: None) 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 2
+--------------------------------------------------------
+SENTENCE: THE GLUCOSE AND OXYGEN CREATE CARBON-DIOXIDE 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: GLUCOSE
+
+REQUEST TRIGGERED: noun GLUCOSE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO GLUCOSE
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=GLUCOSE)
+--------------------------------------------------------
+READ WORD: AND
+
+REQUEST TRIGGERED: conjunction AND
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AND
+--------------------------------------------------------
+READ WORD: OXYGEN
+
+REQUEST TRIGGERED: noun OXYGEN
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO OXYGEN
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: check parallel noun-phrases
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT & ADD OBJECT
+--------------------------------------------------------
+READ WORD: CREATE
+
+REQUEST TRIGGERED: verb CREATE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CREATE
+ - SET PART-OF-SPEECH TO verb
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=CREATE)
+--------------------------------------------------------
+READ WORD: CARBON-DIOXIDE
+
+REQUEST TRIGGERED: noun CARBON-DIOXIDE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CARBON-DIOXIDE
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - CARBON-DIOXIDE equals combination ['GLUCOSE', 'OXYGEN']
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #2)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) 
+edges: (CELLS GLUCOSE) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: 
+PSTOP: 
+INGEST: 
+EXPEL: 
+STATECHANGE: 
+ - ADVANCE TO FRAME 3
+--------------------------------------------------------
+SENTENCE: THE CELLS RELEASE ENERGY 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: CELLS
+
+REQUEST TRIGGERED: noun CELLS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CELLS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=CELLS)
+--------------------------------------------------------
+READ WORD: RELEASE
+
+REQUEST TRIGGERED: verb RELEASE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO RELEASE
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - CELLS EXPEL(S) None TO None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=RELEASE)
+--------------------------------------------------------
+READ WORD: ENERGY
+
+REQUEST TRIGGERED: noun ENERGY
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO ENERGY
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT EXPEL
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #3)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY 
+edges: (CELLS GLUCOSE) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: 
+PSTOP: 
+INGEST: 
+EXPEL: (objects: ['ENERGY'], container: CELLS, to: None) 
+STATECHANGE: 
+ - ADVANCE TO FRAME 4
+--------------------------------------------------------
+SENTENCE: THE CELLS OBTAIN MORE OXYGEN FROM THE AIR 
+--------------------------------------------------------
+READ WORD: *START*
+
+REQUEST TRIGGERED: start parsing
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: CELLS
+
+REQUEST TRIGGERED: noun CELLS
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO CELLS
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+ASSIGNMENT(S) EXECUTED:
+ - SET SUBJECT TO CD(=CELLS)
+--------------------------------------------------------
+READ WORD: OBTAIN
+
+REQUEST TRIGGERED: verb OBTAIN
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO OBTAIN
+ - SET PART-OF-SPEECH TO verb
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - CELLS INGEST(S) None FROM None
+
+REQUEST TRIGGERED: PART-OF-SPEECH is verb
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CONCEPT TO CD(=OBTAIN)
+--------------------------------------------------------
+READ WORD: MORE
+
+REQUEST TRIGGERED: adjective MORE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO MORE
+ - SET PART-OF-SPEECH TO adjective-phrase
+--------------------------------------------------------
+READ WORD: OXYGEN
+
+REQUEST TRIGGERED: noun OXYGEN
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO OXYGEN
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+ - CELLS CONTAIN(S) OXYGEN
+--------------------------------------------------------
+READ WORD: FROM
+
+REQUEST TRIGGERED: prep FROM
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO FROM
+ - SET PART-OF-SPEECH TO preposition
+--------------------------------------------------------
+READ WORD: THE
+
+REQUEST TRIGGERED: definite article THE
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO THE
+ - SET PART-OF-SPEECH TO definite-article
+--------------------------------------------------------
+READ WORD: AIR
+
+REQUEST TRIGGERED: noun AIR
+
+ASSIGNMENT(S) EXECUTED:
+ - SET CD TO AIR
+ - SET PART-OF-SPEECH TO noun-phrase
+
+REQUEST TRIGGERED: PART-OF-SPEECH is noun-phrase
+
+FUNCTION CALL(S) TO MENTAL MOTION PICTURE:
+ - UPDATE ACT INGEST
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #4)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY AIR 
+edges: (CELLS GLUCOSE) (CELLS OXYGEN) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY AIR 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY AIR 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: 
+PSTOP: 
+INGEST: (objects: ['GLUCOSE'], container: CELLS, from: AIR) 
+EXPEL: 
+STATECHANGE: 
+
+--------------------------------------------------------
+|||||||||||||||||||||| THE END |||||||||||||||||||||||||
+--------------------------------------------------------
+
+0 word packet(s) left on STACK:
+
+--------------------------------------------------------
+mental model generated:
+
+(Frame #4)
+
+CONTAINMENT RELATIONSHIP -------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY AIR 
+edges: (CELLS GLUCOSE) (CELLS OXYGEN) 
+
+SPATIAL RELATIONSHIP -----------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY AIR 
+edges: 
+
+TOUCHING RELATIONSHIP ----------------------------------
+objects: CELLS GLUCOSE OXYGEN CARBON-DIOXIDE=(GLUCOSE+OXYGEN) ENERGY AIR 
+edges: 
+
+PRIMITIVE ACTIONS --------------------------------------
+PTRANS: 
+PSTOP: 
+INGEST: (objects: ['GLUCOSE'], container: CELLS, from: AIR) 
+EXPEL: 
+STATECHANGE: 
+
+[Done] exited with code=0 in 0.07 seconds
+
